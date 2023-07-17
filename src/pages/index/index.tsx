@@ -17,13 +17,16 @@ export default class Index extends Component<PropsWithChildren<any>> {
   render () {
     return (
       <View className='index'>
-        <Text>He!</Text>
+        <Text>Hello!</Text>
         <AtButton type='primary'>I need Taro UI</AtButton>
         <Text>Taro UI 支持 Vue 了吗？</Text>
         <AtButton type='primary' circle={true}>支持</AtButton>
-        <Text>共建？</Text>
-        <AtButton type='secondary' circle={true}>来</AtButton>
+        <AtButton type='secondary' circle={true} onClick={sayhi}>click</AtButton>
       </View>
     )
   }
+}
+
+function sayhi() {
+  console.log('hi')
 }
