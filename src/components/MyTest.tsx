@@ -1,9 +1,7 @@
 import { Component, PropsWithChildren } from 'react'
 import { View, Text } from '@tarojs/components'
-//自定义组件
-import MyTest from '$/components/MyTest'
 
-export default class FindCard extends Component<PropsWithChildren<any>> {
+export default class MyTest extends Component<PropsWithChildren<any>> {
   componentDidMount () { }
 
   componentWillUnmount () { }
@@ -15,8 +13,7 @@ export default class FindCard extends Component<PropsWithChildren<any>> {
   render () {
     return (
       <View className='index'>
-        <Text>find student's card</Text>
-        <MyTest />
+        <Text>test component</Text>
       </View>
     )
   }
