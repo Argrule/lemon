@@ -20,7 +20,11 @@
     "resolveJsonModule": true,
     "typeRoots": [
       "node_modules/@types"
-    ]
+    ],
+    // 使编辑器能够识别路径别名，不报错
+    "paths": {
+      "$/*": ["./src/*"]
+    }
   },
   "include": ["./src", "./types"],
   "compileOnSave": false
