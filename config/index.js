@@ -1,4 +1,9 @@
+const path = require('path')
 const config = {
+  //配置webpack路径别名
+  alias: {
+    '$/components': path.resolve(__dirname, '..', 'src/components'),
+  },
   projectName: 'lemon',
   date: '2023-7-8',
   designWidth: 750,
