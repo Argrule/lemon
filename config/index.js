@@ -3,6 +3,7 @@ const config = {
   //配置webpack路径别名
   alias: {
     '$/components': path.resolve(__dirname, '..', 'src/components'),
+    '$/utils': path.resolve(__dirname, '..', 'src/utils'),
   },
   projectName: 'lemon',
   date: '2023-7-8',
