@@ -1,4 +1,3 @@
-import { Component, PropsWithChildren } from 'react'
 import { View, Text, Button } from '@tarojs/components'
 import Taro from '@tarojs/taro'
 import './index.scss'
@@ -7,19 +6,11 @@ import o from '$/utils/request'
 // import { AtButton } from 'taro-ui'
 // import "taro-ui/dist/style/components/button.scss" // 按需引入
 
-export default class Index extends Component<PropsWithChildren<any>> {
-  componentDidMount () { }
-
-  componentWillUnmount () { }
-
-  componentDidShow () { }
-
-  componentDidHide () { }
-
-  render () {
+export default function Index() {
     return (
       <View className='index'>
-        <Text>use text</Text>
+        <Text>首页</Text>
+        <View>use function component</View>
         <Button onClick={sayhi} className='sayhi'>
           Hello Index
         </Button>
@@ -29,7 +20,6 @@ export default class Index extends Component<PropsWithChildren<any>> {
         <AtButton type='secondary' circle={true} onClick={sayhi}>click</AtButton> */}
       </View>
     )
-  }
 }
 
 function sayhi() {
