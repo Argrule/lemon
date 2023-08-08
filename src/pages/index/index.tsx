@@ -3,6 +3,7 @@ import { View, Text, Button } from '@tarojs/components'
 import Taro from '@tarojs/taro'
 import './index.scss'
 
+import o from '$/utils/request'
 // import { AtButton } from 'taro-ui'
 // import "taro-ui/dist/style/components/button.scss" // 按需引入
 
@@ -20,7 +21,7 @@ export default class Index extends Component<PropsWithChildren<any>> {
       <View className='index'>
         <Text>use text</Text>
         <Button onClick={sayhi} className='sayhi'>
-          Hello
+          Hello Index
         </Button>
         {/* <AtButton type='primary'>I need Taro UI</AtButton>
         <Text>Taro UI 支持 Vue 了吗？</Text>
@@ -33,5 +34,8 @@ export default class Index extends Component<PropsWithChildren<any>> {
 
 function sayhi() {
   console.log('hi')
-  Taro.navigateTo({url:'/pages/findCard/fc'})
+  o.get('/dev/getHaoKanVideo?page=0&size=1').then(res => {
+    console.log(res[0])
+  })
+  Taro.navigateTo({url:'/pages/login/login'})
 }
