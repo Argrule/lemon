@@ -1,5 +1,5 @@
-const base_url_api="http://localhost:8080/api/"
-const base_url_dev="http://localhost:8080/iatadatabase/"
+const base_url_api="http://localhost:3000"
+const base_url_dev="https://api.apiopen.top"
 
 const getBaseUrl = (url) => {
     let BASE_URL = '';
