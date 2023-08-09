@@ -37,7 +37,7 @@ pages
 - request.ts: 封装了请求方法，使用时直接引入即可，如：
     
     ```js
-    import o from '$/utils/request'
+    import o from '$/utils/request' // $是src的别名
 
     const res = await o.get('/api/xxx')
     console.log(res)

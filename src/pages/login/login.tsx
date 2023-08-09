@@ -1,7 +1,7 @@
 import { View, Text } from '@tarojs/components'
 import Taro,{useLoad} from '@tarojs/taro'
 import { AtButton } from 'taro-ui'
-import o from '../../utils/request'
+import o from '$/utils/request'
 import "taro-ui/dist/style/components/button.scss" // 按需引入
 import './login.scss'
 
