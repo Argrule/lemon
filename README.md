@@ -12,6 +12,14 @@ pnpm nw //不开启热更新
 
 ## 页面结构
 
+````md
+pages
+├── index //首页
+├── login //登录
+├── forum //论坛
+├── gather //攒局
+├── personalCenter //个人中心
+
 ```md
 pages
 └──index //首页
@@ -26,12 +34,24 @@ pages
 
 ## utils
 
-- request.ts: 封装了请求方法，使用时直接引入即可
+- request.ts: 封装了请求方法，使用时直接引入即可，如：
+    
+    ```js
+    import o from '$/utils/request'
+
+    const res = await o.get('/api/xxx')
+    console.log(res)
+
+    o.post('/api/xxx', {post_data: 'xxx'})
+    o.put('/api/xxx', {put_data: 'xxx'})
+    o.delete('/api/xxx', {delete_data: 'xxx'})
+    ```
+
 
 ## 调试
 
 - 热重载：微信开发者工具关闭热重载，否则热重载会失效
-- 谨慎使用原生HTML：之前报错了，修改其他部分代码，能看到更新起作用，但是错误却一直没有消去，原因是使用了button而非taro提供的Button组件，所以时好时坏，所以建议使用taro提供的组件，
+- 谨慎使用原生HTML：之前报错了，修改其他部分代码，能看到更新起作用，但是错误却一直没有消去，原因是使用了button而非taro提供的Button组件，所以时好时坏，所以建议使用taro提供的组件
 
 ## 问题
 
