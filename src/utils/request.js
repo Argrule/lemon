@@ -18,7 +18,8 @@ class httpRequest {
       method: method,
       header: {
         'content-type': contentType,
-        'Authorization': Taro.getStorageSync('Authorization')
+        // ## token已在拦截器中实现
+        // 'Authorization': Taro.getStorageSync('Authorization')
       }
     };
     return Taro.request(option);

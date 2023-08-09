@@ -1,6 +1,7 @@
 import { View, Text } from '@tarojs/components'
 import Taro,{useLoad} from '@tarojs/taro'
 import { AtButton } from 'taro-ui'
+import o from '../../utils/request'
 import "taro-ui/dist/style/components/button.scss" // 按需引入
 import './login.scss'
 
@@ -19,18 +20,14 @@ export default function Login() {
 
 function sayhi() {
   Taro.login({
-    success: function (res) {
+    success: async function (res) {
       if (res.code) {
         console.log("get jscode =======:",res.code)
         //发起网络请求
-        // Taro.request({
-        //   url: 'https://test.com/onLogin',
-        //   data: {
-        //     code: res.code
-        //   }
-        // })
+        const res_data = await o.post('/dev/sign/in',{code: res.code})
+        Taro.setStorageSync("Authorization", res_data?.[1])
       } else {
-        console.log('登录失败！' + res.errMsg)
+        console.log('登录失败！' + res)
       }
     }
   })
