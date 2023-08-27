@@ -2,35 +2,21 @@ import { Component } from "react";
 import { View, Text, Button, Input, BaseEventOrig } from "@tarojs/components";
 import "./forum.scss";
 import { InputEventDetail } from "taro-ui/types/input";
-import { getForumList } from "$/api/forum";
-
-interface Post {
-  id: number;
-  content: string;
-  comments: string[];
-  likes: number;
-  collected: boolean;
-}
-
-interface State {
-  posts: Post[];
-  newPostContent: string;
-  likedPosts: number[];
-  collectedPosts: number[];
-}
+import { getForumList, publishPost } from "$/api/forum";
+import { Item, Post, State } from "./data";
 
 class Forum extends Component<{}, State> {
   state: State = {
-    posts: [],
-    newPostContent: "",
-    likedPosts: [],
-    collectedPosts: [],
+    posts: [], // 帖子列表
+    newPostContent: "", // 新帖子内容
+    likedPosts: [], // 已点赞的帖子id列表
+    collectedPosts: [], // 已收藏的帖子id列表
   };
   async componentDidMount() {
-    const res = await getForumList({
+    const res = (await getForumList({
       pageNum: 1,
       pageSize: 10,
-    });
+    })) as { list: Item[] };
     console.log(res);
   }
   /**
@@ -38,13 +24,12 @@ class Forum extends Component<{}, State> {
    * @param event
    */
   handleNewPostChange = (event: BaseEventOrig<InputEventDetail>) => {
-    // console.log(event.detail);
     this.setState({ newPostContent: event.detail.value as string });
   };
   /**
    * @description 发布新帖子
    */
-  handleNewPostSubmit = () => {
+  handleNewPostSubmit = async () => {
     const { newPostContent, posts } = this.state;
     const newPost: Post = {
       id: Date.now(),
@@ -53,6 +38,11 @@ class Forum extends Component<{}, State> {
       likes: 0,
       collected: false,
     };
+    const res = await publishPost({
+      content: newPostContent,
+      tagIds: [1, 2],
+    });
+    console.log(res);
     this.setState({
       posts: [newPost, ...posts],
       newPostContent: "",
@@ -61,7 +51,6 @@ class Forum extends Component<{}, State> {
   /**
    * @description 点赞及取消点赞
    * @param postId 帖子id
-   * @returns
    */
   handleLikePost = (postId: number) => {
     const { posts, likedPosts } = this.state;
