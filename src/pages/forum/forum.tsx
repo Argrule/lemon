@@ -2,6 +2,7 @@ import { Component } from "react";
 import { View, Text, Button, Input, BaseEventOrig } from "@tarojs/components";
 import "./forum.scss";
 import { InputEventDetail } from "taro-ui/types/input";
+import { getForumList } from "$/api/forum";
 
 interface Post {
   id: number;
@@ -25,6 +26,13 @@ class Forum extends Component<{}, State> {
     likedPosts: [],
     collectedPosts: [],
   };
+  async componentDidMount() {
+    const res = await getForumList({
+      pageNum: 1,
+      pageSize: 10,
+    });
+    console.log(res);
+  }
   /**
    * @description 输入框内容变化
    * @param event
