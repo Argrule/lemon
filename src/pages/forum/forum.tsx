@@ -8,6 +8,8 @@ import {
   publishPost,
   likePost,
   cancelLikePost,
+  collectPost,
+  cancelCollectPost,
 } from "$/api/forum";
 import { Item, State } from "./data";
 
@@ -42,10 +44,12 @@ class Forum extends Component<{}, State> {
       console.log("请输入内容");
       return;
     }
-    const newPost: Item = {
+    // ## 假冒的帖子
+    const newMockPost: Item = {
       id: Date.now(),
+      uid: 1,
+      schoolId: 1,
       content: newPostContent,
-      comments: [],
       likeNum: 0,
       readNum: 0,
       collectNum: 0,
@@ -62,7 +66,7 @@ class Forum extends Component<{}, State> {
       return;
     }
     this.setState({
-      posts: [newPost, ...posts],
+      posts: [newMockPost, ...posts],
       newPostContent: "",
     });
   };
@@ -91,7 +95,7 @@ class Forum extends Component<{}, State> {
     }
     const { posts } = this.state;
     const newPosts = posts.map((post) =>
-      post.id === postId ? ((post.likeStatus = !post.likeStatus), post) : post
+      post.id === postId ? { ...post, likeStatus: !post.likeStatus } : post
     );
     this.setState({
       posts: newPosts,
@@ -102,29 +106,35 @@ class Forum extends Component<{}, State> {
    * @param postId 帖子id
    * @param collected 是否已收藏
    */
-  handleCollectPost = (postId: number, collected: boolean) => {
-    const { posts, collectedPosts } = this.state;
-    if (collected) {
-      // 取消收藏
-      const updatedPosts = posts.map((post) =>
-        post.id === postId ? { ...post, collected: false } : post
-      );
-      // 从收藏列表中删除
-      this.setState({
-        posts: updatedPosts,
-        collectedPosts: collectedPosts.filter((id) => id !== postId),
-      });
+  handleCollectPost = async (postId: number, collectStatus: boolean) => {
+    // let successMessage = "";
+    let errorMessage = "";
+    let res: any = null;
+    if (collectStatus) {
+      res = await cancelCollectPost(postId);
+      // successMessage = "取消收藏成功";
+      errorMessage = "取消收藏失败";
     } else {
-      // 收藏
-      const updatedPosts = posts.map((post) =>
-        post.id === postId ? { ...post, collected: true } : post
-      );
-      // 添加到收藏列表
-      this.setState({
-        posts: updatedPosts,
-        collectedPosts: [...collectedPosts, postId],
-      });
+      res = await collectPost(postId);
+      // successMessage = "收藏成功";
+      errorMessage = "收藏失败";
     }
+
+    if (res.code !== "00000") {
+      console.log(errorMessage);
+      return;
+    }
+
+    const { posts } = this.state;
+    const newPosts = posts.map((post) =>
+      post.id === postId
+        ? { ...post, collectStatus: !post.collectStatus }
+        : post
+    );
+
+    this.setState({
+      posts: newPosts,
+    });
   };
 
   handleDeletePost = async (postId: number) => {

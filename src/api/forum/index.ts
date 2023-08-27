@@ -62,3 +62,19 @@ export const cancelLikePost = async (postId: number): Promise<BaseResponse> => {
   const res = (await o.post("/post/cancelLike", { postId })) as any;
   return res;
 };
+/**
+ * @description 收藏帖子
+ * @param postId 帖子id
+ */
+export const collectPost = async (postId: number): Promise<BaseResponse> => {
+  const res = (await o.post("/post/collect", { postId })) as any;
+  return res;
+}
+/**
+ * @description 取消收藏帖子
+ * @param postId 帖子id
+ */
+export const cancelCollectPost = async (postId: number): Promise<BaseResponse> => {
+  const res = (await o.post("/post/cancelCollect", { postId })) as any;
+  return res;
+}
