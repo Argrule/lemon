@@ -26,7 +26,7 @@ export const getForumList = async (params: {
  * @description 发布帖子
  * @param data.content 帖子内容
  * @param data.tagIds 帖子标签
- * @returns
+ * @abstract tagIds由请求获取，描述帖子的tag
  */
 export const publishPost = async (data: {
   content: string;
@@ -42,5 +42,23 @@ export const publishPost = async (data: {
  */
 export const deletePost = async (postId: number): Promise<BaseResponse> => {
   const res = (await o.delete("/post/delete" + `?postId=${postId}`)) as any;
+  return res;
+};
+
+/**
+ * @description 点赞帖子
+ * @param postId 帖子id
+ */
+export const likePost = async (postId: number): Promise<BaseResponse> => {
+  const res = (await o.post("/post/like", { postId })) as any;
+  return res;
+};
+/**
+ * @description 取消点赞帖子
+ * @param postId 帖子id
+ */
+export const cancelLikePost = async (postId: number): Promise<BaseResponse> => {
+  console.log("cancel like...");
+  const res = (await o.post("/post/cancelLike", { postId })) as any;
   return res;
 };

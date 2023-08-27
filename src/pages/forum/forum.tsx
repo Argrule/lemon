@@ -2,15 +2,20 @@ import { Component } from "react";
 import { View, Text, Button, Input, BaseEventOrig } from "@tarojs/components";
 import "./forum.scss";
 import { InputEventDetail } from "taro-ui/types/input";
-import { deletePost, getForumList, publishPost } from "$/api/forum";
-import { Item, Post, State } from "./data";
+import {
+  deletePost,
+  getForumList,
+  publishPost,
+  likePost,
+  cancelLikePost,
+} from "$/api/forum";
+import { Item, State } from "./data";
 
 class Forum extends Component<{}, State> {
   /* 状态 */
   state: State = {
     posts: [], // 帖子列表
     newPostContent: "", // 新帖子内容
-    likedPosts: [], // 已点赞的帖子id列表
     collectedPosts: [], // 已收藏的帖子id列表
   };
   /* 生命周期 */
@@ -19,16 +24,7 @@ class Forum extends Component<{}, State> {
       pageNum: 1,
       pageSize: 10,
     })) as { list: Item[] };
-    const posts = res.list.map((item) => ({
-      id: item.id,
-      isDeleted: item.isDeleted,
-      content: item.content,
-      comments: [],
-      likes: 0,
-      collected: false,
-    }));
-    // this.setState({ posts:res.list });
-    this.setState({ posts });
+    this.setState({ posts: res.list });
   }
   /**
    * @description 输入框内容变化
@@ -46,13 +42,16 @@ class Forum extends Component<{}, State> {
       console.log("请输入内容");
       return;
     }
-    const newPost: Post = {
+    const newPost: Item = {
       id: Date.now(),
-      isDeleted: 0,
       content: newPostContent,
       comments: [],
-      likes: 0,
-      collected: false,
+      likeNum: 0,
+      readNum: 0,
+      collectNum: 0,
+      collectStatus: false,
+      likeStatus: false,
+      createTime: Date(),
     };
     const res = await publishPost({
       content: newPostContent,
@@ -71,26 +70,32 @@ class Forum extends Component<{}, State> {
    * @description 点赞及取消点赞
    * @param postId 帖子id
    */
-  handleLikePost = (postId: number) => {
-    const { posts, likedPosts } = this.state;
-    let updatedPosts: Post[] = [];
-    if (likedPosts.includes(postId)) {
-      updatedPosts = posts.map((post) =>
-        post.id === postId ? { ...post, likes: post.likes - 1 } : post
-      );
-      this.setState({
-        posts: updatedPosts,
-        likedPosts: likedPosts.filter((id) => id !== postId),
-      });
-    } else {
-      updatedPosts = posts.map((post) =>
-        post.id === postId ? { ...post, likes: post.likes + 1 } : post
-      );
-      this.setState({
-        posts: updatedPosts,
-        likedPosts: [...likedPosts, postId],
-      });
+  handleLikePost = async (postId: number, likeStatus: boolean) => {
+    switch (likeStatus) {
+      case true: {
+        //取消
+        const res = await cancelLikePost(postId);
+        if (res.code != "00000") {
+          console.log("取消点赞失败");
+          return;
+        }
+      }
+      case false: {
+        //点赞
+        const res = await likePost(postId);
+        if (res.code != "00000") {
+          console.log("点赞失败");
+          return;
+        }
+      }
     }
+    const { posts } = this.state;
+    const newPosts = posts.map((post) =>
+      post.id === postId ? ((post.likeStatus = !post.likeStatus), post) : post
+    );
+    this.setState({
+      posts: newPosts,
+    });
   };
   /**
    * @description 收藏帖子及取消收藏
@@ -136,7 +141,7 @@ class Forum extends Component<{}, State> {
   };
 
   render() {
-    const { posts, newPostContent, likedPosts } = this.state;
+    const { posts, newPostContent } = this.state;
 
     return (
       <View className="forum">
@@ -150,33 +155,30 @@ class Forum extends Component<{}, State> {
         </View>
         <View className="posts">
           {posts.map((post) => (
-            // 条件判断
-            // post.isDeleted ? (
-            //   <></>
-            // ) :
             <View className="post" key={post.id}>
               <Text className="post-content">{post.content}</Text>
               <View className="interaction-buttons">
                 <Button
-                  onClick={() => this.handleLikePost(post.id)}
+                  onClick={() => this.handleLikePost(post.id, post.likeStatus)}
                   className="interaction-button like-button"
                 >
-                  {likedPosts.includes(post.id) ? "取消赞" : "赞"}
-                  {post.likes}
+                  {post.likeStatus ? "取消赞" : "赞"}
+                  {post.likeNum}
                 </Button>
                 <Button
                   className="interaction-button collect-button"
                   onClick={() =>
-                    this.handleCollectPost(post.id, post.collected)
+                    this.handleCollectPost(post.id, post.collectStatus)
                   }
                 >
-                  {post.collected ? "已收藏" : "收藏"}
+                  {post.collectStatus ? "已收藏" : "收藏"}
+                  {post.collectNum}
                 </Button>
                 <Button
                   type="primary"
                   className="interaction-button collect-button"
                   onClick={() =>
-                    this.handleCollectPost(post.id, post.collected)
+                    this.handleCollectPost(post.id, post.collectStatus)
                   }
                 >
                   评论
