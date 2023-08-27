@@ -1,11 +1,14 @@
 import { View } from '@tarojs/components';
-import { AtButton, AtTag,AtFab,AtIcon } from 'taro-ui';
-import { useState } from 'react';
+import { AtButton, AtTag,AtFab,AtIcon,AtProgress } from 'taro-ui';
+import { useState,useEffect } from 'react';
+
+import request from '$/utils/request'
 
 import 'taro-ui/dist/style/components/button.scss';
 import 'taro-ui/dist/style/components/tag.scss';
 import "taro-ui/dist/style/components/fab.scss";
 import "taro-ui/dist/style/components/icon.scss";
+import "taro-ui/dist/style/components/progress.scss"
 import './gather.scss';
 
 
@@ -29,6 +32,11 @@ export default function Gather() {
     { name: '其他', checked: false },
   ]);
 
+
+  useEffect(() => {
+    getGatherList();
+  }, []);
+
   const tagClick = (index: number) => {
     if (classification[index].name === '空位') {
       const updatedClassification = classification.map((item, i) => ({
@@ -48,6 +56,17 @@ export default function Gather() {
   const fixedButtonClick = () => {
     console.log('fixedButtonClick');
   };
+
+  const getGatherList = async () => {
+    console.log('进来了');
+    try {
+      const res = await request.get('/team/show');
+      console.log('res', res);
+    } catch (error) {
+      console.error('Error', error);
+    }
+  };
+
 
   return (
     <View className='container'>
@@ -89,7 +108,89 @@ export default function Gather() {
             <View>拼</View>
             <View>单</View>
           </View>
-          <View className='content'></View>
+          <View className='text'>
+            <View className='content'>
+              <View className='description'>
+                奥本海默，想去激光 IMAX 厅看最好的效果，有没有一起冲的，时间可以商量
+              </View>
+              <View className='others'>
+                <View className='director'>局长：热带风味</View>
+                <View className='time'>2023-08-24 17:42:16</View>
+              </View>
+
+            </View>
+            <View className='schedule'>
+                <AtProgress percent={25} />
+              </View>
+          </View>
+
+        </View>
+
+        <View className='card'>
+          <View className='side'>
+            <View>拼</View>
+            <View>单</View>
+          </View>
+          <View className='text'>
+            <View className='content'>
+              <View className='description'>
+                奥本海默，想去激光 IMAX 厅看最好的效果，有没有一起冲的，时间可以商量
+              </View>
+              <View className='others'>
+                <View className='director'>局长：热带风味</View>
+                <View className='time'>2023-08-24 17:42:16</View>
+              </View>
+
+            </View>
+            <View className='schedule'>
+                <AtProgress percent={25} />
+              </View>
+          </View>
+
+        </View>
+        <View className='card'>
+          <View className='side'>
+            <View>拼</View>
+            <View>单</View>
+          </View>
+          <View className='text'>
+            <View className='content'>
+              <View className='description'>
+                奥本海默，想去激光 IMAX 厅看最好的效果，有没有一起冲的，时间可以商量
+              </View>
+              <View className='others'>
+                <View className='director'>局长：热带风味</View>
+                <View className='time'>2023-08-24 17:42:16</View>
+              </View>
+
+            </View>
+            <View className='schedule'>
+                <AtProgress percent={25} />
+              </View>
+          </View>
+
+        </View>
+        <View className='card'>
+          <View className='side'>
+            <View>拼</View>
+            <View>单</View>
+          </View>
+          <View className='text'>
+            <View className='content'>
+              <View className='description'>
+                奥本海默，想去激光 IMAX 厅看最好的效果，有没有一起冲的，时间可以商量
+              </View>
+              <View className='others'>
+                <View className='director'>局长：热带风味</View>
+                <View className='time'>2023-08-24 17:42:16</View>
+              </View>
+
+            </View>
+            <View className='schedule'>
+                <AtProgress percent={25} />
+              </View>
+          </View>
+
         </View>
       </View>
     </View>
