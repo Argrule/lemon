@@ -1,5 +1,10 @@
 import o from "$/utils/request";
 
+interface BaseResponse {
+  code: string;
+  data: any;
+  message: string;
+}
 /**
  * @description 获取帖子列表
  * @param {number} params.pageNum
@@ -26,7 +31,16 @@ export const getForumList = async (params: {
 export const publishPost = async (data: {
   content: string;
   tagIds: number[];
-}) => {
-  const res = await o.post("/post/publish", data);
-  return res.data;
+}): Promise<BaseResponse> => {
+  const res = (await o.post("/post/publish", data)) as any;
+  return res;
+};
+
+/**
+ * @description 删除帖子
+ * @param data.postId 帖子id
+ */
+export const deletePost = async (postId: number): Promise<BaseResponse> => {
+  const res = (await o.delete("/post/delete" + `?postId=${postId}`)) as any;
+  return res;
 };

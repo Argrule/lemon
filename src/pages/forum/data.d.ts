@@ -25,6 +25,7 @@ export interface Item {
  */
 export interface Post {
   id: number;
+  isDeleted: number;
   content: string;
   comments: string[];
   likes: number;

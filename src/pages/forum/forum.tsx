@@ -2,22 +2,33 @@ import { Component } from "react";
 import { View, Text, Button, Input, BaseEventOrig } from "@tarojs/components";
 import "./forum.scss";
 import { InputEventDetail } from "taro-ui/types/input";
-import { getForumList, publishPost } from "$/api/forum";
+import { deletePost, getForumList, publishPost } from "$/api/forum";
 import { Item, Post, State } from "./data";
 
 class Forum extends Component<{}, State> {
+  /* 状态 */
   state: State = {
     posts: [], // 帖子列表
     newPostContent: "", // 新帖子内容
     likedPosts: [], // 已点赞的帖子id列表
     collectedPosts: [], // 已收藏的帖子id列表
   };
+  /* 生命周期 */
   async componentDidMount() {
     const res = (await getForumList({
       pageNum: 1,
       pageSize: 10,
     })) as { list: Item[] };
-    console.log(res);
+    const posts = res.list.map((item) => ({
+      id: item.id,
+      isDeleted: item.isDeleted,
+      content: item.content,
+      comments: [],
+      likes: 0,
+      collected: false,
+    }));
+    // this.setState({ posts:res.list });
+    this.setState({ posts });
   }
   /**
    * @description 输入框内容变化
@@ -31,8 +42,13 @@ class Forum extends Component<{}, State> {
    */
   handleNewPostSubmit = async () => {
     const { newPostContent, posts } = this.state;
+    if (!newPostContent) {
+      console.log("请输入内容");
+      return;
+    }
     const newPost: Post = {
       id: Date.now(),
+      isDeleted: 0,
       content: newPostContent,
       comments: [],
       likes: 0,
@@ -42,7 +58,10 @@ class Forum extends Component<{}, State> {
       content: newPostContent,
       tagIds: [1, 2],
     });
-    console.log(res);
+    if (res.code != "00000") {
+      console.log("发布失败");
+      return;
+    }
     this.setState({
       posts: [newPost, ...posts],
       newPostContent: "",
@@ -103,6 +122,19 @@ class Forum extends Component<{}, State> {
     }
   };
 
+  handleDeletePost = async (postId: number) => {
+    const { posts } = this.state;
+    const res = await deletePost(postId);
+    if (res.code != "00000") {
+      console.log("删除失败");
+      return;
+    }
+    const updatedPosts = posts.filter((post) => post.id !== postId);
+    this.setState({
+      posts: updatedPosts,
+    });
+  };
+
   render() {
     const { posts, newPostContent, likedPosts } = this.state;
 
@@ -118,6 +150,10 @@ class Forum extends Component<{}, State> {
         </View>
         <View className="posts">
           {posts.map((post) => (
+            // 条件判断
+            // post.isDeleted ? (
+            //   <></>
+            // ) :
             <View className="post" key={post.id}>
               <Text className="post-content">{post.content}</Text>
               <View className="interaction-buttons">
@@ -135,6 +171,22 @@ class Forum extends Component<{}, State> {
                   }
                 >
                   {post.collected ? "已收藏" : "收藏"}
+                </Button>
+                <Button
+                  type="primary"
+                  className="interaction-button collect-button"
+                  onClick={() =>
+                    this.handleCollectPost(post.id, post.collected)
+                  }
+                >
+                  评论
+                </Button>
+                <Button
+                  type="primary"
+                  className="interaction-button collect-button"
+                  onClick={() => this.handleDeletePost(post.id)}
+                >
+                  删除
                 </Button>
               </View>
             </View>
