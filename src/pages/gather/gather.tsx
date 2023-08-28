@@ -2,7 +2,9 @@ import { View } from '@tarojs/components';
 import { AtButton, AtTag,AtFab,AtIcon,AtProgress } from 'taro-ui';
 import { useState,useEffect } from 'react';
 
-import request from '$/utils/request'
+import { getGatherList,getTagList } from "$/api/gather";
+
+// import request from '$/utils/request'
 
 import 'taro-ui/dist/style/components/button.scss';
 import 'taro-ui/dist/style/components/tag.scss';
@@ -34,7 +36,11 @@ export default function Gather() {
 
 
   useEffect(() => {
-    getGatherList();
+    getTagList({});
+    getGatherList({
+      pageNum: 1,
+      tagId:0
+    });
   }, []);
 
   const tagClick = (index: number) => {
@@ -57,15 +63,15 @@ export default function Gather() {
     console.log('fixedButtonClick');
   };
 
-  const getGatherList = async () => {
-    console.log('进来了');
-    try {
-      const res = await request.get('/team/show');
-      console.log('res', res);
-    } catch (error) {
-      console.error('Error', error);
-    }
-  };
+  // const getGatherList = async () => {
+  //   console.log('进来了');
+  //   try {
+  //     const res = await request.get('/team/show');
+  //     console.log('res', res);
+  //   } catch (error) {
+  //     console.error('Error', error);
+  //   }
+  // };
 
 
   return (
