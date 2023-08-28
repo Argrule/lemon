@@ -75,10 +75,12 @@ class Forum extends Component<{}, State> {
    * @param postId 帖子id
    */
   handleLikePost = async (postId: number, likeStatus: boolean) => {
+    let addNum = 0;
     switch (likeStatus) {
       case true: {
         //取消
         const res = await cancelLikePost(postId);
+        addNum = -1;
         if (res.code != "00000") {
           console.log("取消点赞失败");
           return;
@@ -87,6 +89,7 @@ class Forum extends Component<{}, State> {
       case false: {
         //点赞
         const res = await likePost(postId);
+        addNum = 1;
         if (res.code != "00000") {
           console.log("点赞失败");
           return;
@@ -95,7 +98,13 @@ class Forum extends Component<{}, State> {
     }
     const { posts } = this.state;
     const newPosts = posts.map((post) =>
-      post.id === postId ? { ...post, likeStatus: !post.likeStatus } : post
+      post.id === postId
+        ? {
+            ...post,
+            likeStatus: !post.likeStatus,
+            likeNum: post.likeNum + addNum,
+          }
+        : post
     );
     this.setState({
       posts: newPosts,
@@ -109,15 +118,18 @@ class Forum extends Component<{}, State> {
   handleCollectPost = async (postId: number, collectStatus: boolean) => {
     // let successMessage = "";
     let errorMessage = "";
+    let addNum = 0;
     let res: any = null;
     if (collectStatus) {
       res = await cancelCollectPost(postId);
       // successMessage = "取消收藏成功";
       errorMessage = "取消收藏失败";
+      addNum = -1;
     } else {
       res = await collectPost(postId);
       // successMessage = "收藏成功";
       errorMessage = "收藏失败";
+      addNum = 1;
     }
 
     if (res.code !== "00000") {
@@ -128,7 +140,11 @@ class Forum extends Component<{}, State> {
     const { posts } = this.state;
     const newPosts = posts.map((post) =>
       post.id === postId
-        ? { ...post, collectStatus: !post.collectStatus }
+        ? {
+            ...post,
+            collectStatus: !post.collectStatus,
+            collectNum: post.collectNum + addNum,
+          }
         : post
     );
 
