@@ -1,0 +1,21 @@
+@import "~taro-ui/dist/style/components/textarea.scss";
+@import "~taro-ui/dist/style/components/message.scss";
+button {
+  line-height: 1.5;
+}
+.comment-input {
+  margin: 20px auto;
+  width: 90%;
+  // border: 1px solid #ecc745;
+  border-radius: 5px;
+  font-size: 16px;
+  .textarea {
+    color: #ffaa00;
+  }
+}
+.publish-button {
+  margin-top: 20px;
+  width: 50%;
+  background-color: #ffc701;
+  color: #fff;
+}

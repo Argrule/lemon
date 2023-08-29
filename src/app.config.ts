@@ -7,6 +7,7 @@ export default defineAppConfig({
     'pages/forum/forum',
     'pages/personalCenter/pc',
     'pages/gather/gather',
+    'pages/sendPost/sp',
   ],
   window: {
     backgroundTextStyle: 'light',
