@@ -8,6 +8,7 @@ export default defineAppConfig({
     'pages/personalCenter/pc',
     'pages/gather/gather',
     'pages/sendPost/sp',
+    'pages/comment/c',
   ],
   window: {
     backgroundTextStyle: 'light',
