@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { View, Button } from "@tarojs/components";
-// import { Input,Textarea } from "@tarojs/components";
-import { AtTextarea, AtMessage } from "taro-ui";
+import { Textarea } from "@tarojs/components";
+import { AtMessage } from "taro-ui";
 import Taro from "@tarojs/taro";
 import { publishPost } from "$/api/forum";
 
@@ -47,9 +47,17 @@ function CommentInput() {
         onInput={(e) => setCommentText(e.detail.value)}
         placeholder="请输入评论内容"
       /> */}
-      {/* <Textarea style='background:#fff;width:100%;min-height:80px;padding:0 30rpx;' autoHeight/> */}
+      <Textarea
+        value={commentText}
+        maxlength={200}
+        placeholder="请输入帖子内容..."
+        className="textarea"
+        onInput={(e) => setCommentText(e.detail.value)}
+        style="min-height:200rpx"
+        autoHeight
+      />
       <AtMessage />
-      <AtTextarea
+      {/* <AtTextarea
         className="textarea"
         count={true}
         value={commentText}
@@ -57,7 +65,7 @@ function CommentInput() {
         onChange={(value) => setCommentText(value)}
         maxLength={200}
         placeholder="请输入帖子内容..."
-      />
+      /> */}
       <Button className="publish-button" onClick={handlePublish}>
         发布
       </Button>
