@@ -1,5 +1,7 @@
 import { Component } from "react";
 import { View, Text, Button, Input, BaseEventOrig } from "@tarojs/components";
+import { AtIcon } from "taro-ui";
+import Taro from "@tarojs/taro";
 import "./forum.scss";
 import { InputEventDetail } from "taro-ui/types/input";
 import {
@@ -10,6 +12,8 @@ import {
   cancelLikePost,
   collectPost,
   cancelCollectPost,
+  getComment,
+  // publishComment,
 } from "$/api/forum";
 import { Item, State } from "./data";
 
@@ -18,10 +22,12 @@ class Forum extends Component<{}, State> {
   state: State = {
     posts: [], // 帖子列表
     newPostContent: "", // 新帖子内容
-    collectedPosts: [], // 已收藏的帖子id列表
+    commentsList: [], // 评论列表
+
+    showComment: false, // 是否展示评论
   };
-  /* 生命周期 */
-  async componentDidMount() {
+  /* 非生命周期，onShow */
+  async componentDidShow() {
     const res = (await getForumList({
       pageNum: 1,
       pageSize: 10,
@@ -85,6 +91,7 @@ class Forum extends Component<{}, State> {
           console.log("取消点赞失败");
           return;
         }
+        break;
       }
       case false: {
         //点赞
@@ -94,6 +101,7 @@ class Forum extends Component<{}, State> {
           console.log("点赞失败");
           return;
         }
+        break;
       }
     }
     const { posts } = this.state;
@@ -165,12 +173,46 @@ class Forum extends Component<{}, State> {
       posts: updatedPosts,
     });
   };
+  /**
+   * @description 展示评论
+   * @param postId 帖子id
+   */
+  handleShowComments = async (postId: number) => {
+    const res = await getComment(postId);
+    if (res.code != "00000") {
+      console.log("展示评论失败");
+      return;
+    }
+    console.log(res);
+    this.setState({
+      showComment: true,
+    });
 
+    const { commentsList } = this.state;
+    commentsList[0] = res.data;
+    // const newPosts = comments.map((post) =>
+
+    //   post.id === postId
+    // )
+  };
+  //跳转到发布帖子页面
+  goToPutPost = () => {
+    Taro.navigateTo({
+      url: "/pages/sendPost/sp",
+    });
+  };
   render() {
-    const { posts, newPostContent } = this.state;
-
+    const { posts, newPostContent, commentsList } = this.state;
+    const { showComment } = this.state;
     return (
       <View className="forum">
+        <AtIcon
+          className="plus"
+          value="add-circle"
+          size="30"
+          color="#FFC701"
+          onClick={this.goToPutPost}
+        ></AtIcon>
         <View className="new-post">
           <Input
             value={newPostContent}
@@ -181,43 +223,64 @@ class Forum extends Component<{}, State> {
         </View>
         <View className="posts">
           {posts.map((post) => (
-            <View className="post" key={post.id}>
-              <Text className="post-content">{post.content}</Text>
-              <View className="interaction-buttons">
-                <Button
-                  onClick={() => this.handleLikePost(post.id, post.likeStatus)}
-                  className="interaction-button like-button"
-                >
-                  {post.likeStatus ? "取消赞" : "赞"}
-                  {post.likeNum}
-                </Button>
-                <Button
-                  className="interaction-button collect-button"
-                  onClick={() =>
-                    this.handleCollectPost(post.id, post.collectStatus)
-                  }
-                >
-                  {post.collectStatus ? "已收藏" : "收藏"}
-                  {post.collectNum}
-                </Button>
-                <Button
-                  type="primary"
-                  className="interaction-button collect-button"
-                  onClick={() =>
-                    this.handleCollectPost(post.id, post.collectStatus)
-                  }
-                >
-                  评论
-                </Button>
-                <Button
-                  type="primary"
-                  className="interaction-button collect-button"
-                  onClick={() => this.handleDeletePost(post.id)}
-                >
-                  删除
-                </Button>
+            <>
+              <View className="post" key={post.id}>
+                <Text className="post-content">{post.content}</Text>
+                <View className="interaction-buttons">
+                  <Button
+                    onClick={() =>
+                      this.handleLikePost(post.id, post.likeStatus)
+                    }
+                    className="interaction-button like-button"
+                  >
+                    {post.likeStatus ? "取消赞" : "赞"}
+                    {post.likeNum}
+                  </Button>
+                  <Button
+                    className="interaction-button collect-button"
+                    onClick={() =>
+                      this.handleCollectPost(post.id, post.collectStatus)
+                    }
+                  >
+                    {post.collectStatus ? "已收藏" : "收藏"}
+                    {post.collectNum}
+                  </Button>
+                  <Button
+                    type="primary"
+                    className="interaction-button collect-button"
+                    onClick={() =>
+                      this.handleCollectPost(post.id, post.collectStatus)
+                    }
+                  >
+                    评论
+                  </Button>
+                  <Button
+                    type="primary"
+                    className="interaction-button collect-button"
+                    onClick={() => this.handleDeletePost(post.id)}
+                  >
+                    删除
+                  </Button>
+                </View>
               </View>
-            </View>
+              <Button
+                type="primary"
+                className="interaction-button comment-button"
+                onClick={() => this.handleShowComments(post.id)}
+              >
+                查看评论
+              </Button>
+              {/* 评论展示区域 */}
+              {showComment && (
+                <View className="comments">
+                  {commentsList[0].list.map((comment) => (
+                    <View className="comment" key={comment.id}>
+                      <Text className="comment-content">{comment.content}</Text>
+                    </View>
+                  ))}
+                </View>
+              )}
+            </>
           ))}
         </View>
       </View>

@@ -1,7 +1,17 @@
+@import "~taro-ui/dist/style/components/icon.scss";
 $forum-fontSize: 25rpx; //input,button,post-content,interaction-button
 $forum-fontSize-b: 30rpx; //content
+$button-color: #ffc701;
+$btn-color: #ffaa00;
 button {
   line-height: 1.5;
+}
+.plus {
+  position: fixed;
+  bottom: 8%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 999;
 }
 .forum {
   padding: 20px;
@@ -11,9 +21,14 @@ button {
 
   .new-post {
     height: 60px;
+    width: 90%;
     display: flex;
     align-items: center;
-    margin-bottom: 20px;
+    padding: 20px;
+    position: fixed;
+    bottom: 0;
+    background-color: #fff;
+    z-index: 100;
 
     input {
       flex: 1;
@@ -26,7 +41,7 @@ button {
     button {
       margin-left: 10px;
       padding: 10px 20px;
-      background-color: #ecc745;
+      background-color: $button-color;
       color: #fff;
       border: none;
       border-radius: 20px; /* Increase the border radius for a more rounded button */
@@ -41,6 +56,21 @@ button {
   }
 
   .posts {
+    .comments {
+      margin-top: 10px; // 调整评论区域与上方内容的间距
+      padding: 10px; // 添加内边距，美化样式
+
+      .comment {
+        background-color: #f5f5f5; // 评论区域背景颜色
+        padding: 8px;
+        border-radius: 5px;
+        margin-bottom: 5px; // 调整每个评论之间的间距
+
+        .comment-content {
+          font-size: $forum-fontSize; // 调整评论内容的字体大小
+        }
+      }
+    }
     .post {
       background-color: #fff;
       border: 1px solid #ccc;
@@ -74,7 +104,7 @@ button {
           }
 
           &.collect-button {
-            background-color: #ffaa00; /* QQ's collect button color */
+            background-color: $btn-color; /* QQ's collect button color */
             color: #fff;
           }
 
