@@ -42,5 +42,27 @@ export interface Post {
 export interface State {
   posts: Item[];
   newPostContent: string;
-  collectedPosts: number[];
+  commentsList: CommentData[];
+
+  // 是否展开评论
+  showComment: boolean;
+}
+
+interface Reply {
+  uid: number;
+  content: string;
+  createTime: string;
+}
+
+interface Comment {
+  id: number;
+  uid: number;
+  content: string;
+  createTime: string;
+  replyList: Reply[];
+}
+
+interface CommentData {
+  postId: number;
+  list: Comment[];
 }

@@ -59,7 +59,7 @@ export const likePost = async (postId: number): Promise<BaseResponse> => {
  */
 export const cancelLikePost = async (postId: number): Promise<BaseResponse> => {
   console.log("cancel like...");
-  const res = (await o.post("/post/cancelLike", { postId })) as any;
+  const res = (await o.post("/post/dislike", { postId })) as any;
   return res;
 };
 /**
@@ -69,12 +69,32 @@ export const cancelLikePost = async (postId: number): Promise<BaseResponse> => {
 export const collectPost = async (postId: number): Promise<BaseResponse> => {
   const res = (await o.post("/post/collect", { postId })) as any;
   return res;
-}
+};
 /**
  * @description 取消收藏帖子
  * @param postId 帖子id
  */
-export const cancelCollectPost = async (postId: number): Promise<BaseResponse> => {
+export const cancelCollectPost = async (
+  postId: number
+): Promise<BaseResponse> => {
   const res = (await o.post("/post/cancelCollect", { postId })) as any;
   return res;
-}
+};
+/**
+ * @description 展示评论
+ * @param postId 帖子id
+ */
+export const getComment = async (postId: number): Promise<BaseResponse> => {
+  const res = (await o.get("/post/comment/show" + `?postId=${postId}`)) as any;
+  return res;
+};
+/**
+ * @description 发布评论
+ */
+export const publishComment = async (data: {
+  postId: number;
+  content: string;
+}): Promise<BaseResponse> => {
+  const res = (await o.post("/post/comment/publish", data)) as any;
+  return res;
+};
