@@ -42,10 +42,6 @@ export interface Post {
 export interface State {
   posts: Item[];
   newPostContent: string;
-  commentsList: CommentData[];
-
-  // 是否展开评论
-  showComment: boolean;
 }
 
 interface Reply {
@@ -54,7 +50,7 @@ interface Reply {
   createTime: string;
 }
 
-interface Comment {
+export interface Comment {
   id: number;
   uid: number;
   content: string;
@@ -62,7 +58,11 @@ interface Comment {
   replyList: Reply[];
 }
 
-interface CommentData {
-  postId: number;
-  list: Comment[];
+export interface CommentData {
+  code: string;
+  data: {
+    postId: number;
+    list: Comment[];
+  };
+  message: string;
 }

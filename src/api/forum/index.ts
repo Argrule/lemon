@@ -1,3 +1,4 @@
+import { CommentData } from "$/pages/forum/data";
 import o from "$/utils/request";
 
 interface BaseResponse {
@@ -84,7 +85,7 @@ export const cancelCollectPost = async (
  * @description 展示评论
  * @param postId 帖子id
  */
-export const getComment = async (postId: number): Promise<BaseResponse> => {
+export const getComment = async (postId: number): Promise<CommentData> => {
   const res = (await o.get("/post/comment/show" + `?postId=${postId}`)) as any;
   return res;
 };
@@ -95,6 +96,6 @@ export const publishComment = async (data: {
   postId: number;
   content: string;
 }): Promise<BaseResponse> => {
-  const res = (await o.post("/post/comment/publish", data)) as any;
+  const res = (await o.post("/post/comment", data)) as any;
   return res;
 };

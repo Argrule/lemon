@@ -12,8 +12,6 @@ import {
   cancelLikePost,
   collectPost,
   cancelCollectPost,
-  getComment,
-  // publishComment,
 } from "$/api/forum";
 import { Item, State } from "./data";
 
@@ -22,9 +20,6 @@ class Forum extends Component<{}, State> {
   state: State = {
     posts: [], // 帖子列表
     newPostContent: "", // 新帖子内容
-    commentsList: [], // 评论列表
-
-    showComment: false, // 是否展示评论
   };
   /* 非生命周期，onShow */
   async componentDidShow() {
@@ -177,23 +172,11 @@ class Forum extends Component<{}, State> {
    * @description 展示评论
    * @param postId 帖子id
    */
-  handleShowComments = async (postId: number) => {
-    const res = await getComment(postId);
-    if (res.code != "00000") {
-      console.log("展示评论失败");
-      return;
-    }
-    console.log(res);
-    this.setState({
-      showComment: true,
+  handleShowComments = async (postItem: Item) => {
+    // redux存储当前帖子，跳转到评论页面
+    Taro.navigateTo({
+      url: `/pages/comment/c?post=${JSON.stringify(postItem)}`,
     });
-
-    const { commentsList } = this.state;
-    commentsList[0] = res.data;
-    // const newPosts = comments.map((post) =>
-
-    //   post.id === postId
-    // )
   };
   //跳转到发布帖子页面
   goToPutPost = () => {
@@ -202,8 +185,7 @@ class Forum extends Component<{}, State> {
     });
   };
   render() {
-    const { posts, newPostContent, commentsList } = this.state;
-    const { showComment } = this.state;
+    const { posts, newPostContent } = this.state;
     return (
       <View className="forum">
         <AtIcon
@@ -266,20 +248,10 @@ class Forum extends Component<{}, State> {
               <Button
                 type="primary"
                 className="interaction-button comment-button"
-                onClick={() => this.handleShowComments(post.id)}
+                onClick={() => this.handleShowComments(post)}
               >
                 查看评论
               </Button>
-              {/* 评论展示区域 */}
-              {showComment && (
-                <View className="comments">
-                  {commentsList[0].list.map((comment) => (
-                    <View className="comment" key={comment.id}>
-                      <Text className="comment-content">{comment.content}</Text>
-                    </View>
-                  ))}
-                </View>
-              )}
             </>
           ))}
         </View>
