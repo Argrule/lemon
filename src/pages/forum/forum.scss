@@ -1,4 +1,5 @@
 @import "~taro-ui/dist/style/components/icon.scss";
+@import "~taro-ui/dist/style/components/tag.scss";
 $forum-fontSize: 25rpx; //input,button,post-content,interaction-button
 $forum-fontSize-b: 30rpx; //content
 $button-color: #ffc701;
@@ -18,6 +19,7 @@ button {
   height: 100%;
   display: flex;
   flex-direction: column;
+  padding-bottom: 100px;
 
   .new-post {
     height: 60px;
@@ -83,6 +85,12 @@ button {
 
       .post-content {
         font-size: $forum-fontSize-b; /* Larger font size for post content */
+      }
+      .post-tags{
+        .tagList{
+          color: $btn-color;
+          // border: $btn-color 1px solid;
+        }
       }
 
       .interaction-buttons {

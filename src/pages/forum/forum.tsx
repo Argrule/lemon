@@ -1,6 +1,7 @@
 import { Component } from "react";
 import { View, Text, Button, Input, BaseEventOrig } from "@tarojs/components";
 import { AtIcon } from "taro-ui";
+import { AtTag } from "taro-ui";
 import Taro from "@tarojs/taro";
 import "./forum.scss";
 import { InputEventDetail } from "taro-ui/types/input";
@@ -208,6 +209,13 @@ class Forum extends Component<{}, State> {
             <>
               <View className="post" key={post.id}>
                 <Text className="post-content">{post.content}</Text>
+                <View className="post-tags">
+                  {post.tagName?.map((tag) => (
+                    <AtTag size="small" className="tagList" circle>
+                      {tag}
+                    </AtTag>
+                  ))}
+                </View>
                 <View className="interaction-buttons">
                   <Button
                     onClick={() =>
