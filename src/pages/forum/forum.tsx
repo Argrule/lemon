@@ -1,5 +1,6 @@
 import { Component } from "react";
-import { View, Text, Button, Input, BaseEventOrig } from "@tarojs/components";
+import { View, Text, Button, BaseEventOrig } from "@tarojs/components";
+// import { Input } from "@tarojs/components";
 import { AtIcon } from "taro-ui";
 import { AtTag } from "taro-ui";
 import Taro from "@tarojs/taro";
@@ -186,24 +187,25 @@ class Forum extends Component<{}, State> {
     });
   };
   render() {
-    const { posts, newPostContent } = this.state;
+    const { posts } = this.state;
+    // const { newPostContent } = this.state;
     return (
       <View className="forum">
         <AtIcon
           className="plus"
           value="add-circle"
-          size="30"
-          color="#FFC701"
+          size="40"
+          color="#f4ea2a"
           onClick={this.goToPutPost}
         ></AtIcon>
-        <View className="new-post">
+        {/* <View className="new-post">
           <Input
             value={newPostContent}
             onInput={this.handleNewPostChange}
             placeholder="发布新帖子"
           />
           <Button onClick={this.handleNewPostSubmit}>发布</Button>
-        </View>
+        </View> */}
         <View className="posts">
           {posts.map((post) => (
             <>
@@ -238,9 +240,7 @@ class Forum extends Component<{}, State> {
                   <Button
                     type="primary"
                     className="interaction-button collect-button"
-                    onClick={() =>
-                      this.handleCollectPost(post.id, post.collectStatus)
-                    }
+                    onClick={() => this.handleShowComments(post)}
                   >
                     评论
                   </Button>
@@ -253,13 +253,13 @@ class Forum extends Component<{}, State> {
                   </Button>
                 </View>
               </View>
-              <Button
+              {/* <Button
                 type="primary"
                 className="interaction-button comment-button"
                 onClick={() => this.handleShowComments(post)}
               >
                 查看评论
-              </Button>
+              </Button> */}
             </>
           ))}
         </View>
