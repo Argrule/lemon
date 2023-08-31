@@ -27,18 +27,6 @@ export interface Item {
 }
 
 /**
- * @description: 帖子列表
- */
-export interface Post {
-  id: number;
-  isDeleted: number;
-  content: string;
-  comments: string[];
-  likes: number;
-  collected: boolean;
-}
-
-/**
  * @description: 状态列表
  */
 export interface State {

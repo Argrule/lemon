@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { getComment, publishComment } from "$/api/forum";
 import Taro, { getCurrentInstance, useDidShow } from "@tarojs/taro";
 import { AtMessage } from "taro-ui";
-import { AtTag } from "taro-ui";
+// import { AtTag } from "taro-ui";
 import { Item, Comment } from "../forum/data";
 import {
   deletePost,
@@ -13,6 +13,7 @@ import {
   collectPost,
   cancelCollectPost,
 } from "$/api/forum";
+import PostComponent from "$/components/post/post";
 import "./c.scss";
 
 export default function CommentDetail() {
@@ -194,46 +195,13 @@ export default function CommentDetail() {
   return (
     <View>
       <AtMessage />
-      <View className="post" key={post.id}>
-        <Text className="post-content">{post.content}</Text>
-        <View className="post-tags">
-          {post.tagName?.map((tag) => (
-            <AtTag size="small" className="tagList" circle>
-              {tag}
-            </AtTag>
-          ))}
-        </View>
-        <View className="interaction-buttons">
-          <Button
-            onClick={() => handleLikePost(post.id, post.likeStatus)}
-            className="interaction-button like-button"
-          >
-            {post.likeStatus ? "取消赞" : "赞"}
-            {post.likeNum}
-          </Button>
-          <Button
-            className="interaction-button collect-button"
-            onClick={() => handleCollectPost(post.id, post.collectStatus)}
-          >
-            {post.collectStatus ? "已收藏" : "收藏"}
-            {post.collectNum}
-          </Button>
-          <Button
-            type="primary"
-            className="interaction-button collect-button"
-            onClick={() => handleCollectPost(post.id, post.collectStatus)}
-          >
-            评论
-          </Button>
-          <Button
-            type="primary"
-            className="interaction-button collect-button"
-            onClick={() => handleDeletePost(post.id)}
-          >
-            删除
-          </Button>
-        </View>
-      </View>
+      {/* 帖子 */}
+      <PostComponent
+        post={post}
+        onLike={handleLikePost}
+        onDelete={handleDeletePost}
+        onCollect={handleCollectPost}
+      />
       <View>comment</View>
       {/* 评论展示区域 */}
       <View className="comments">
