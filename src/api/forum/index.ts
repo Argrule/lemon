@@ -78,7 +78,7 @@ export const collectPost = async (postId: number): Promise<BaseResponse> => {
 export const cancelCollectPost = async (
   postId: number
 ): Promise<BaseResponse> => {
-  const res = (await o.post("/post/cancelCollect", { postId })) as any;
+  const res = (await o.post("/post/disCollect", { postId })) as any;
   return res;
 };
 /**
