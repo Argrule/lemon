@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { getComment, publishComment } from "$/api/forum";
 import Taro, { getCurrentInstance, useDidShow } from "@tarojs/taro";
 import { AtMessage } from "taro-ui";
+import { AtTag } from "taro-ui";
 import { Item, Comment } from "../forum/data";
 import {
   deletePost,
@@ -195,6 +196,13 @@ export default function CommentDetail() {
       <AtMessage />
       <View className="post" key={post.id}>
         <Text className="post-content">{post.content}</Text>
+        <View className="post-tags">
+          {post.tagName?.map((tag) => (
+            <AtTag size="small" className="tagList" circle>
+              {tag}
+            </AtTag>
+          ))}
+        </View>
         <View className="interaction-buttons">
           <Button
             onClick={() => handleLikePost(post.id, post.likeStatus)}
