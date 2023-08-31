@@ -1,0 +1,66 @@
+@import "~taro-ui/dist/style/components/tag.scss";
+@import "~taro-ui/dist/style/components/avatar.scss";
+$forum-fontSize: 25rpx; //input,button,post-content,interaction-button
+$forum-fontSize-b: 30rpx; //content
+$forum-fontSize-author: 35rpx; //author
+$button-color: #ffc701;
+$btn-color: #ffaa00;
+
+.post {
+  background-color: #fff;
+  border-bottom: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  .post-author {
+    display: flex;
+    align-items: center;
+    gap: 50rpx;
+    font-size: $forum-fontSize-author;
+    color: $btn-color;
+  }
+  .post-content {
+    font-size: $forum-fontSize-b;
+  }
+  .post-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    .tagList {
+      color: $btn-color;
+    }
+  }
+
+  .interaction-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .interaction-button {
+      padding: 8px 15px;
+      border: none;
+      border-radius: 20px;
+      font-size: $forum-fontSize;
+      cursor: pointer;
+      transition: background-color 0.3s;
+
+      &.like-button {
+        background-color: #e0245e; /* Twitter's like button color */
+        color: #fff;
+      }
+
+      &.collect-button {
+        background-color: $btn-color; /* QQ's collect button color */
+        color: #fff;
+      }
+
+      &:hover {
+        opacity: 0.8;
+      }
+    }
+  }
+}
