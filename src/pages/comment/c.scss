@@ -64,5 +64,11 @@ button {
     .comment-content {
       font-size: $forum-fontSize; // 调整评论内容的字体大小
     }
+    .comment-reply{
+      font-size: $forum-fontSize; // 调整评论内容的字体大小
+      margin-left: 10px;
+      background-color: $button-color;
+      color: #fff;
+    }
   }
 }

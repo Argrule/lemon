@@ -99,3 +99,30 @@ export const publishComment = async (data: {
   const res = (await o.post("/post/comment", data)) as any;
   return res;
 };
+
+/**
+ * @description 回复评论
+ */
+export const replyComment = async (data: {
+  content: string;
+  commentId: number;
+}): Promise<BaseResponse> => {
+  const res = (await o.post("/post/comment/reply", data)) as any;
+  return res;
+};
+
+/**
+ * @description 删除评论
+ */
+// export const deleteComment = async (commentId: number): Promise<BaseResponse> => {
+//   const res = (await o.delete("/post/comment/delete" + `?commentId=${commentId}`)) as any;
+//   return res;
+// }
+
+/**
+ * @description 点赞评论
+ */
+// export const likeComment = async (commentId: number): Promise<BaseResponse> => {
+//   const res = (await o.post("/post/comment/like", { commentId })) as any;
+//   return res;
+// }

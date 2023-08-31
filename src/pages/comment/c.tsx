@@ -1,6 +1,6 @@
 import { View, Text, Button, Input } from "@tarojs/components";
 // import { useDidShow } from "@tarojs/taro";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getComment, publishComment } from "$/api/forum";
 import Taro, { getCurrentInstance, useDidShow } from "@tarojs/taro";
 import { AtMessage } from "taro-ui";
@@ -32,6 +32,9 @@ export default function CommentDetail() {
 
   const [commentsList, setCommentsList] = useState<Comment[]>([]);
   const [newCommentContent, setNewCommentContent] = useState<string>("");
+
+  const inputRef = useRef(null);
+  const [placeholderStr, setPlaceholderStr] = useState("发布新评论");
 
   useDidShow(async () => {
     const instance = getCurrentInstance();
@@ -191,6 +194,14 @@ export default function CommentDetail() {
     // };
     // setCommentsList([newComment, ...commentsList]);
   };
+  const handleInputBlur = () => {
+    console.log("blur");
+    setPlaceholderStr("发送你的回复哦~");
+    /**
+     * 这个方案不太对啊，切换输入的内容万一不想发回复，又想发新评论怎么办
+     */
+    (inputRef.current as any).focus();
+  };
 
   return (
     <View>
@@ -202,21 +213,25 @@ export default function CommentDetail() {
         onDelete={handleDeletePost}
         onCollect={handleCollectPost}
       />
-      <View>comment</View>
+      <View style={"color:#ffaa00"}>comment</View>
       {/* 评论展示区域 */}
       <View className="comments">
         {commentsList.map((comment) => (
           <View className="comment" key={comment.id}>
             <Text className="comment-content">{comment.content}</Text>
+            <Button className="comment-reply" onClick={handleInputBlur}>
+              回复
+            </Button>
           </View>
         ))}
       </View>
       {/* 评论输入区域 */}
       <View className="new-post">
         <Input
+          ref={inputRef}
           value={newCommentContent}
           onInput={handleNewCommentChange}
-          placeholder="发布评论"
+          placeholder={placeholderStr}
         />
         <Button onClick={handleNewCommentSubmit}>发布</Button>
       </View>
