@@ -1,0 +1,32 @@
+// @import "~taro-ui/dist/style/components/textarea.scss";
+@import "~taro-ui/dist/style/components/message.scss";
+button {
+  line-height: 1.5;
+}
+.comment-input {
+  margin: 20px auto;
+  width: 90%;
+  // border: 1px solid #ecc745;
+  border-radius: 5px;
+  font-size: 16px;
+  padding: 10rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  .textarea {
+    color: #ffaa00;
+    border: #ffaa00;
+    font-size: 30rpx;
+    background: #fff;
+    width: 100%;
+    // min-height: 80rpx;//无效
+    padding: 0 30rpx;
+  }
+}
+.publish-button {
+  margin-top: 20px;
+  width: 50%;
+  background-color: #ffc701;
+  color: #fff;
+}
