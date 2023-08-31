@@ -34,6 +34,7 @@ interface GatherItemType {
 }
 
 export default function Gather() {
+  const [selectedTagIndex, setSelectedTagIndex] = useState<number>(0);
   const [gatherList, setGatherList] = useState<GatherItemType[]>([]); // 初始化为空数组
   const [classification, setClassification] = useState<ClassificationItem[]>([
     { name: '空位', checked: false },
@@ -51,16 +52,25 @@ export default function Gather() {
 
   useEffect(() => {
     getTagList({});
-    fetchGatherList()
+    fetchGatherList(0)
 
   }, []);
 
-  const fetchGatherList = async () => {
+  const fetchGatherList = async (tagId) => {
     try {
-      let response = await getGatherList({
-        pageNum: 1,
-        tagId: 0
-      });
+      let response;
+      if(tagId){
+        response = await getGatherList({
+          pageNum: 1,
+          tagId: tagId
+        });
+      } else {
+        response = await getGatherList({
+          pageNum: 1,
+          tagId: selectedTagIndex
+        });
+      }
+
 
       console.log('res',response);
       // const list = response.list.map(item => ({
@@ -89,13 +99,20 @@ export default function Gather() {
         checked: i === index ? !item.checked : item.checked,
       }));
       setClassification(updatedClassification);
+      console.log('index',index);
+      setSelectedTagIndex(index); // 更新选中的标签索引
+      fetchGatherList(index); // 重新获取数据
     } else {
       const updatedClassification = classification.map((item, i) => ({
         ...item,
         checked: item.name === '空位' ? item.checked : (i === index ? !item.checked : false),
       }));
       setClassification(updatedClassification);
+      console.log('index',index);
+      setSelectedTagIndex(index); // 更新选中的标签索引
+      fetchGatherList(index); // 重新获取数据
     }
+
   };
 
   const fixedButtonClick = () => {
