@@ -219,9 +219,10 @@ export default function CommentDetail() {
         {commentsList.map((comment) => (
           <View className="comment" key={comment.id}>
             <Text className="comment-content">{comment.content}</Text>
-            <Button className="comment-reply" onClick={handleInputBlur}>
+            {/* ###### 暂时注释掉因为太丑了 ###### */}
+            {/* <Button className="comment-reply" onClick={handleInputBlur}>
               回复
-            </Button>
+            </Button> */}
           </View>
         ))}
       </View>

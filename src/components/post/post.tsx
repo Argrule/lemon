@@ -61,13 +61,13 @@ const PostComponent: FunctionComponent<PostComponentProps> = ({
           {post.collectStatus ? "已收藏" : "收藏"}
           {post.collectNum}
         </Button>
-        <Button
+        {/* <Button
           type="primary"
           className="interaction-button collect-button"
           onClick={() => onCollect(post.id, post.collectStatus)}
         >
           评论
-        </Button>
+        </Button> */}
         <Button
           type="primary"
           className="interaction-button collect-button"
