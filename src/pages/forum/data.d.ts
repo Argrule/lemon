@@ -10,6 +10,7 @@
  * @param {number} likeStatus 点赞状态
  * @param {number} collectStatus 收藏状态
  * @param {string} createTime 创建时间
+ * @param {string[]} tagNames 标签名
  */
 export interface Item {
   id: number;
@@ -22,18 +23,7 @@ export interface Item {
   likeStatus: boolean;
   collectStatus: boolean;
   createTime: string;
-}
-
-/**
- * @description: 帖子列表
- */
-export interface Post {
-  id: number;
-  isDeleted: number;
-  content: string;
-  comments: string[];
-  likes: number;
-  collected: boolean;
+  tagName?: string[];
 }
 
 /**
@@ -42,5 +32,27 @@ export interface Post {
 export interface State {
   posts: Item[];
   newPostContent: string;
-  collectedPosts: number[];
+}
+
+interface Reply {
+  uid: number;
+  content: string;
+  createTime: string;
+}
+
+export interface Comment {
+  id: number;
+  uid: number;
+  content: string;
+  createTime: string;
+  replyList: Reply[];
+}
+
+export interface CommentData {
+  code: string;
+  data: {
+    postId: number;
+    list: Comment[];
+  };
+  message: string;
 }

@@ -1,5 +1,8 @@
 import { Component } from "react";
 import { View, Text, Button, Input, BaseEventOrig } from "@tarojs/components";
+import { AtIcon } from "taro-ui";
+import { AtTag } from "taro-ui";
+import Taro from "@tarojs/taro";
 import "./forum.scss";
 import { InputEventDetail } from "taro-ui/types/input";
 import {
@@ -18,10 +21,9 @@ class Forum extends Component<{}, State> {
   state: State = {
     posts: [], // 帖子列表
     newPostContent: "", // 新帖子内容
-    collectedPosts: [], // 已收藏的帖子id列表
   };
-  /* 生命周期 */
-  async componentDidMount() {
+  /* 非生命周期，onShow */
+  async componentDidShow() {
     const res = (await getForumList({
       pageNum: 1,
       pageSize: 10,
@@ -75,27 +77,38 @@ class Forum extends Component<{}, State> {
    * @param postId 帖子id
    */
   handleLikePost = async (postId: number, likeStatus: boolean) => {
+    let addNum = 0;
     switch (likeStatus) {
       case true: {
         //取消
         const res = await cancelLikePost(postId);
+        addNum = -1;
         if (res.code != "00000") {
           console.log("取消点赞失败");
           return;
         }
+        break;
       }
       case false: {
         //点赞
         const res = await likePost(postId);
+        addNum = 1;
         if (res.code != "00000") {
           console.log("点赞失败");
           return;
         }
+        break;
       }
     }
     const { posts } = this.state;
     const newPosts = posts.map((post) =>
-      post.id === postId ? { ...post, likeStatus: !post.likeStatus } : post
+      post.id === postId
+        ? {
+            ...post,
+            likeStatus: !post.likeStatus,
+            likeNum: post.likeNum + addNum,
+          }
+        : post
     );
     this.setState({
       posts: newPosts,
@@ -109,15 +122,18 @@ class Forum extends Component<{}, State> {
   handleCollectPost = async (postId: number, collectStatus: boolean) => {
     // let successMessage = "";
     let errorMessage = "";
+    let addNum = 0;
     let res: any = null;
     if (collectStatus) {
       res = await cancelCollectPost(postId);
       // successMessage = "取消收藏成功";
       errorMessage = "取消收藏失败";
+      addNum = -1;
     } else {
       res = await collectPost(postId);
       // successMessage = "收藏成功";
       errorMessage = "收藏失败";
+      addNum = 1;
     }
 
     if (res.code !== "00000") {
@@ -128,7 +144,11 @@ class Forum extends Component<{}, State> {
     const { posts } = this.state;
     const newPosts = posts.map((post) =>
       post.id === postId
-        ? { ...post, collectStatus: !post.collectStatus }
+        ? {
+            ...post,
+            collectStatus: !post.collectStatus,
+            collectNum: post.collectNum + addNum,
+          }
         : post
     );
 
@@ -149,12 +169,33 @@ class Forum extends Component<{}, State> {
       posts: updatedPosts,
     });
   };
-
+  /**
+   * @description 展示评论
+   * @param postId 帖子id
+   */
+  handleShowComments = async (postItem: Item) => {
+    // redux存储当前帖子，跳转到评论页面
+    Taro.navigateTo({
+      url: `/pages/comment/c?post=${JSON.stringify(postItem)}`,
+    });
+  };
+  //跳转到发布帖子页面
+  goToPutPost = () => {
+    Taro.navigateTo({
+      url: "/pages/sendPost/sp",
+    });
+  };
   render() {
     const { posts, newPostContent } = this.state;
-
     return (
       <View className="forum">
+        <AtIcon
+          className="plus"
+          value="add-circle"
+          size="30"
+          color="#FFC701"
+          onClick={this.goToPutPost}
+        ></AtIcon>
         <View className="new-post">
           <Input
             value={newPostContent}
@@ -165,43 +206,61 @@ class Forum extends Component<{}, State> {
         </View>
         <View className="posts">
           {posts.map((post) => (
-            <View className="post" key={post.id}>
-              <Text className="post-content">{post.content}</Text>
-              <View className="interaction-buttons">
-                <Button
-                  onClick={() => this.handleLikePost(post.id, post.likeStatus)}
-                  className="interaction-button like-button"
-                >
-                  {post.likeStatus ? "取消赞" : "赞"}
-                  {post.likeNum}
-                </Button>
-                <Button
-                  className="interaction-button collect-button"
-                  onClick={() =>
-                    this.handleCollectPost(post.id, post.collectStatus)
-                  }
-                >
-                  {post.collectStatus ? "已收藏" : "收藏"}
-                  {post.collectNum}
-                </Button>
-                <Button
-                  type="primary"
-                  className="interaction-button collect-button"
-                  onClick={() =>
-                    this.handleCollectPost(post.id, post.collectStatus)
-                  }
-                >
-                  评论
-                </Button>
-                <Button
-                  type="primary"
-                  className="interaction-button collect-button"
-                  onClick={() => this.handleDeletePost(post.id)}
-                >
-                  删除
-                </Button>
+            <>
+              <View className="post" key={post.id}>
+                <Text className="post-content">{post.content}</Text>
+                <View className="post-tags">
+                  {post.tagName?.map((tag) => (
+                    <AtTag size="small" className="tagList" circle>
+                      {tag}
+                    </AtTag>
+                  ))}
+                </View>
+                <View className="interaction-buttons">
+                  <Button
+                    onClick={() =>
+                      this.handleLikePost(post.id, post.likeStatus)
+                    }
+                    className="interaction-button like-button"
+                  >
+                    {post.likeStatus ? "取消赞" : "赞"}
+                    {post.likeNum}
+                  </Button>
+                  <Button
+                    className="interaction-button collect-button"
+                    onClick={() =>
+                      this.handleCollectPost(post.id, post.collectStatus)
+                    }
+                  >
+                    {post.collectStatus ? "已收藏" : "收藏"}
+                    {post.collectNum}
+                  </Button>
+                  <Button
+                    type="primary"
+                    className="interaction-button collect-button"
+                    onClick={() =>
+                      this.handleCollectPost(post.id, post.collectStatus)
+                    }
+                  >
+                    评论
+                  </Button>
+                  <Button
+                    type="primary"
+                    className="interaction-button collect-button"
+                    onClick={() => this.handleDeletePost(post.id)}
+                  >
+                    删除
+                  </Button>
+                </View>
               </View>
-            </View>
+              <Button
+                type="primary"
+                className="interaction-button comment-button"
+                onClick={() => this.handleShowComments(post)}
+              >
+                查看评论
+              </Button>
+            </>
           ))}
         </View>
       </View>
