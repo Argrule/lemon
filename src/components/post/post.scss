@@ -1,12 +1,14 @@
 @import "~taro-ui/dist/style/components/tag.scss";
+@import "~taro-ui/dist/style/components/avatar.scss";
 $forum-fontSize: 25rpx; //input,button,post-content,interaction-button
 $forum-fontSize-b: 30rpx; //content
+$forum-fontSize-author: 35rpx; //author
 $button-color: #ffc701;
 $btn-color: #ffaa00;
 
 .post {
   background-color: #fff;
-  border: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
   border-radius: 10px;
   padding: 15px;
   margin-bottom: 15px;
@@ -14,10 +16,20 @@ $btn-color: #ffaa00;
   flex-direction: column;
   gap: 10px;
 
+  .post-author {
+    display: flex;
+    align-items: center;
+    gap: 50rpx;
+    font-size: $forum-fontSize-author;
+    color: $btn-color;
+  }
   .post-content {
     font-size: $forum-fontSize-b;
   }
   .post-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
     .tagList {
       color: $btn-color;
     }

@@ -1,3 +1,4 @@
+import { AtAvatar } from "taro-ui";
 import { View, Text, Button } from "@tarojs/components";
 import { AtTag } from "taro-ui";
 import { Item } from "$/pages/forum/data";
@@ -26,7 +27,17 @@ const PostComponent: FunctionComponent<PostComponentProps> = ({
 }) => {
   return (
     <View className="post" key={post.id}>
+      {/* 头像/作者，预留位置 */}
+      <View className="post-author">
+        <AtAvatar
+          size="small"
+          image="https://images.infogame.cn/uploads/20220702/img_62bfa8858e30c36.gif"
+        ></AtAvatar>
+        <Text>猫猫可爱捏</Text>
+      </View>
+      {/* 帖子内容 */}
       <Text className="post-content">{post.content}</Text>
+      {/* 帖子标签 */}
       <View className="post-tags">
         {post.tagName?.map((tag) => (
           <AtTag size="small" className="tagList" circle key={tag}>
@@ -34,6 +45,7 @@ const PostComponent: FunctionComponent<PostComponentProps> = ({
           </AtTag>
         ))}
       </View>
+      {/* 交互按钮 */}
       <View className="interaction-buttons">
         <Button
           onClick={() => onLike(post.id, post.likeStatus)}
