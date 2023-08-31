@@ -7,6 +7,7 @@ export default defineAppConfig({
     'pages/forum/forum',
     'pages/personalCenter/pc',
     'pages/gather/gather',
+    'pages/gather/createGather/createGather',
     'pages/sendPost/sp',
     'pages/comment/c',
   ],
@@ -27,7 +28,7 @@ export default defineAppConfig({
         text: '首页',
         iconPath: "./assets/tabbar/func.png",
         selectedIconPath: './assets/tabbar/func-active.png'
-      },      
+      },
       {
         pagePath: 'pages/gather/gather',
         text: '攒局',
