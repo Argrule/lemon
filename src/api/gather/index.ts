@@ -28,3 +28,24 @@ export const getTagList = async (params: {}) => {
   const res = await request.get("/team/show/tags" + `?${paramsStr}`);
   return res.data;
 };
+
+/**
+ * @description 创建攒局
+ * @param {string} params.topic
+ * @param {string} params.description
+ * @param {number} params.maxNum
+ * @param {number} params.tagId
+ * @returns
+ */
+export const createGather = async (params: {
+  topic: string;
+  description: string;
+  maxNum: number;
+  tagId: number;
+}) => {
+  // const paramsStr = Object.keys(params)
+  //   .map((key) => `${key}=${params[key]}`)
+  //   .join("&");
+  const res = await request.post("/team/create", params);
+  return res;
+};

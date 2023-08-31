@@ -4,6 +4,8 @@ import { useState,useEffect } from 'react';
 
 import { getGatherList,getTagList } from "$/api/gather";
 
+import Taro from "@tarojs/taro";
+
 // import request from '$/utils/request'
 
 import 'taro-ui/dist/style/components/button.scss';
@@ -19,8 +21,20 @@ interface ClassificationItem {
   name: string;
   checked: boolean;
 }
+interface GatherItemType {
+  maxNum: number;
+  id: number;
+  description: string;
+  currentNum: number;
+  tagName: string[] | null; // 根据实际情况调整，这里假设是一个字符串数组或者可能为空
+  topic: string;
+  uid: number;
+  createTime: string;
+  // 其他可能的属性
+}
 
 export default function Gather() {
+  const [gatherList, setGatherList] = useState<GatherItemType[]>([]); // 初始化为空数组
   const [classification, setClassification] = useState<ClassificationItem[]>([
     { name: '空位', checked: false },
     { name: '自习', checked: false },
@@ -37,11 +51,36 @@ export default function Gather() {
 
   useEffect(() => {
     getTagList({});
-    getGatherList({
-      pageNum: 1,
-      tagId:0
-    });
+    fetchGatherList()
+
   }, []);
+
+  const fetchGatherList = async () => {
+    try {
+      let response = await getGatherList({
+        pageNum: 1,
+        tagId: 0
+      });
+
+      console.log('res',response);
+      // const list = response.list.map(item => ({
+      //   ...item,
+      //   tagName: Array.from(item.tagName) // 将tagName字符串转换为字符数组
+      // }));
+      for (let item of response.list) {
+        console.log(item.tagName);
+        if (item.tagName) {
+          item.tagName = item.tagName.split('');
+        }
+      }
+      console.log('res',response.list);
+
+      // Assuming the response contains the list of gathers
+      setGatherList(response.list); // Update the gatherList state
+    } catch (error) {
+      console.error('Error fetching gather list', error);
+    }
+  };
 
   const tagClick = (index: number) => {
     if (classification[index].name === '空位') {
@@ -61,6 +100,10 @@ export default function Gather() {
 
   const fixedButtonClick = () => {
     console.log('fixedButtonClick');
+  };
+
+  const goCreateGather = () => {
+    Taro.navigateTo({url:'/pages/gather/createGather/createGather'})
   };
 
   // const getGatherList = async () => {
@@ -86,7 +129,7 @@ export default function Gather() {
         <AtButton className='join-button' type='primary' circle>
           我加入的局
         </AtButton>
-        <AtButton className='initiate-button' type='primary' circle>
+        <AtButton className='initiate-button' type='primary' circle onClick={goCreateGather}>
           发起攒局
         </AtButton>
       </View>
@@ -109,95 +152,31 @@ export default function Gather() {
         ))}
       </View>
       <View className='cards'>
-        <View className='card'>
-          <View className='side'>
-            <View>拼</View>
-            <View>单</View>
-          </View>
-          <View className='text'>
-            <View className='content'>
-              <View className='description'>
-                奥本海默，想去激光 IMAX 厅看最好的效果，有没有一起冲的，时间可以商量
+          {gatherList.map((gather, index) => (
+            <View className='card' key={index}>
+              <View className='side'>
+                <View>{gather.tagName?gather.tagName[0]:''}</View>
+                <View>{gather.tagName?gather.tagName[1]:''}</View>
               </View>
-              <View className='others'>
-                <View className='director'>局长：热带风味</View>
-                <View className='time'>2023-08-24 17:42:16</View>
+              <View className='text'>
+                <View className='content'>
+                  <View className='description'>
+                    {gather.topic}
+                  </View>
+                  <View className='others'>
+                    <View className='director'>{gather.uid}</View>
+                    <View className='time'>{gather.createTime}</View>
+                  </View>
+
+                </View>
+                <View className='schedule'>
+                    <AtProgress percent={gather.currentNum/gather.maxNum} />
+                  </View>
               </View>
 
             </View>
-            <View className='schedule'>
-                <AtProgress percent={25} />
-              </View>
-          </View>
+          ))}
 
-        </View>
-
-        <View className='card'>
-          <View className='side'>
-            <View>拼</View>
-            <View>单</View>
-          </View>
-          <View className='text'>
-            <View className='content'>
-              <View className='description'>
-                奥本海默，想去激光 IMAX 厅看最好的效果，有没有一起冲的，时间可以商量
-              </View>
-              <View className='others'>
-                <View className='director'>局长：热带风味</View>
-                <View className='time'>2023-08-24 17:42:16</View>
-              </View>
-
-            </View>
-            <View className='schedule'>
-                <AtProgress percent={25} />
-              </View>
-          </View>
-
-        </View>
-        <View className='card'>
-          <View className='side'>
-            <View>拼</View>
-            <View>单</View>
-          </View>
-          <View className='text'>
-            <View className='content'>
-              <View className='description'>
-                奥本海默，想去激光 IMAX 厅看最好的效果，有没有一起冲的，时间可以商量
-              </View>
-              <View className='others'>
-                <View className='director'>局长：热带风味</View>
-                <View className='time'>2023-08-24 17:42:16</View>
-              </View>
-
-            </View>
-            <View className='schedule'>
-                <AtProgress percent={25} />
-              </View>
-          </View>
-
-        </View>
-        <View className='card'>
-          <View className='side'>
-            <View>拼</View>
-            <View>单</View>
-          </View>
-          <View className='text'>
-            <View className='content'>
-              <View className='description'>
-                奥本海默，想去激光 IMAX 厅看最好的效果，有没有一起冲的，时间可以商量
-              </View>
-              <View className='others'>
-                <View className='director'>局长：热带风味</View>
-                <View className='time'>2023-08-24 17:42:16</View>
-              </View>
-
-            </View>
-            <View className='schedule'>
-                <AtProgress percent={25} />
-              </View>
-          </View>
-
-        </View>
       </View>
     </View>
   );

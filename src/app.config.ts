@@ -7,7 +7,7 @@ export default defineAppConfig({
     'pages/forum/forum',
     'pages/personalCenter/pc',
     'pages/gather/gather',
-    // 'pages/gather/createGather/createGather',
+    'pages/gather/createGather/createGather',
   ],
   window: {
     backgroundTextStyle: 'light',
