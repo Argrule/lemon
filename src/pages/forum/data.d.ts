@@ -57,3 +57,8 @@ export interface CommentData {
   };
   message: string;
 }
+
+export interface Tag {
+  id: number;
+  name: string;
+}

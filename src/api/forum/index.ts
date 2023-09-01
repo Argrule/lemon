@@ -1,9 +1,9 @@
-import { CommentData, Item } from "$/pages/forum/data";
+import { CommentData, Item, Tag } from "$/pages/forum/data";
 import o from "$/utils/request";
 
-interface BaseResponse {
+interface BaseResponse<T = any> {
   code: string;
-  data: any;
+  data: any | T;
   message: string;
 }
 interface PostALLData extends BaseResponse {
@@ -145,5 +145,13 @@ export const searchPost = async (params: {
     .map((key) => `${key}=${params[key]}`)
     .join("&");
   const res = (await o.get("/post/search" + `?${paramsStr}`)) as any;
+  return res;
+};
+
+/**
+ * @description 展示标签
+ */
+export const getTags = async (): Promise<BaseResponse<{ list: Tag[] }>> => {
+  const res = (await o.get("/post/show/tags")) as any;
   return res;
 };
