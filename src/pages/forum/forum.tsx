@@ -2,6 +2,7 @@ import { Component } from "react";
 import { View, Text, Button, BaseEventOrig } from "@tarojs/components";
 // import { Input } from "@tarojs/components";
 import { AtIcon } from "taro-ui";
+import { AtFab } from "taro-ui";
 import { AtTag } from "taro-ui";
 import { AtMessage } from "taro-ui";
 import Taro from "@tarojs/taro";
@@ -219,13 +220,13 @@ class Forum extends Component<{}, State> {
     return (
       <View className="forum">
         <AtMessage />
-        <AtIcon
-          className="plus"
-          value="add-circle"
-          size="40"
-          color="#a0aa25"
-          onClick={this.goToPutPost}
-        ></AtIcon>
+        <AtFab className="plus">
+          <AtIcon
+            className="plus-icon"
+            value="add"
+            onClick={this.goToPutPost}
+          ></AtIcon>
+        </AtFab>
         <AtSearchBar
           className="search-bar"
           fixed={true}
@@ -246,7 +247,9 @@ class Forum extends Component<{}, State> {
           {posts.map((post) => (
             <>
               <View className="post" key={post.id}>
-                <Text className="post-content" userSelect>{post.content}</Text>
+                <Text className="post-content" userSelect>
+                  {post.content}
+                </Text>
                 <View className="post-tags">
                   {post.tagName?.map((tag) => (
                     <AtTag size="small" className="tagList" circle>

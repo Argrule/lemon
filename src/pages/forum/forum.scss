@@ -1,5 +1,6 @@
 @import "../../app.scss";
 @import "~taro-ui/dist/style/components/icon.scss";
+@import "~taro-ui/dist/style/components/fab.scss";
 @import "~taro-ui/dist/style/components/tag.scss";
 @import "~taro-ui/dist/style/components/search-bar.scss";
 @import "~taro-ui/dist/style/components/button.scss";
@@ -15,10 +16,18 @@ button {
 }
 .plus {
   position: fixed;
-  bottom: 5%;
-  left: 50%;
-  transform: translateX(-50%);
+  top: 86vh;
+  right: 10vw;
+  // transform: translateX(-50%);
   z-index: 999;
+  &.at-fab--normal{
+    background-color: $button-color;
+  }
+  .plus-icon{
+    // font-size: 50rpx;//无效
+    color: #fff;
+  }
+
 }
 .search-bar {
   // position: fixed;
