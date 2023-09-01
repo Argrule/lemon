@@ -135,7 +135,7 @@ function CommentInput() {
             }
             onClick={() => handleTagChange(tag.id)}
           >
-            {tag.name}
+            # {tag.name}
           </AtTag>
         ))}
       </ScrollView>

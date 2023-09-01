@@ -1,6 +1,14 @@
 // @import "~taro-ui/dist/style/components/textarea.scss";
 @import "~taro-ui/dist/style/components/tag.scss";
 @import "~taro-ui/dist/style/components/message.scss";
+@import "../../app.scss";
+
+$text: #ffaa00;
+$text-bg: #fce1aa;
+$text-plain: #575757;
+$bgc-yellow: $lenmon-yellow;
+$bgc-green: $lenmon-green;
+
 button {
   line-height: 1.5;
 }
@@ -18,30 +26,36 @@ button {
 
   .scroll-container {
     white-space: nowrap;
-    .tag-item + .tag-item {
+    .tag-item {
+      & + .tag-item {
+        margin-left: 10rpx;
+      }
       display: inline-block;
-      margin-left: 10rpx;
       margin-bottom: 10rpx;
+      color: $text-plain;
     }
     .tag-item-active {
-      color: #fff;
-      background-color: #ffaa00;
+      color: $text;
+      background-color: $text-bg;
     }
   }
 
   .textarea {
-    color: #ffaa00;
-    border: #ffaa00;
+    color: $text;
+    border: $text;
     font-size: 30rpx;
     background: #fff;
     width: 100%;
     // min-height: 80rpx;//无效
     padding: 0 30rpx;
+    .textarea-placeholder{
+      color: $text;
+    }
   }
 }
 .publish-button {
   margin-top: 20px;
   width: 50%;
-  background-color: #ffc701;
+  background-color: $text;
   color: #fff;
 }
