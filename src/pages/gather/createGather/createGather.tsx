@@ -1,12 +1,11 @@
 import { View, Textarea } from '@tarojs/components';
-import { AtButton, AtTag,AtFab,AtIcon,AtProgress,AtInput,AtTextarea,AtMessage } from 'taro-ui';
-import { useState,useEffect } from 'react';
+import { AtButton, AtTag,AtInput,AtMessage } from 'taro-ui';
+import { useState } from 'react';
 
 import { createGather } from "$/api/gather";
 
 import Taro from "@tarojs/taro";
 
-// import request from '$/utils/request'
 import 'taro-ui/dist/style/components/button.scss';
 import 'taro-ui/dist/style/components/tag.scss';
 import "taro-ui/dist/style/components/fab.scss";
@@ -76,27 +75,21 @@ export default function Gather() {
   };
 
   const handleSubmit = async () => {
+    // @ts-ignore
+    // eslint-disable-next-line no-restricted-globals
     if (!gatherData.topic || !gatherData.description || isNaN(gatherData.maxNum) || gatherData.maxNum <= 0) {
+      // @ts-ignore
       Taro.atMessage({
         message: '请填写完整的攒局信息并确保总人数大于0。',
         type: 'error',
       });
-      // Taro.showToast({
-      //   title: '请填写完整的攒局信息并确保总人数大于0。',
-      //   icon: 'error',
-      //   duration: 2000
-      // })
       return;
     }
 
     const res = await createGather(gatherData);
 
     if (res.code === '00000') {
-      // Taro.showToast({
-      //   title: '创建成功',
-      //   icon: 'success',
-      //   duration: 2000
-      // })
+      // @ts-ignore
       Taro.atMessage({
         message: '创建成功',
         type: 'success',
@@ -105,11 +98,7 @@ export default function Gather() {
       setGatherData(initialGatherData);
       setClassification(initialClassification);
     } else {
-      // Taro.showToast({
-      //   title: '创建失败',
-      //   icon: 'error',
-      //   duration: 2000
-      // })
+      // @ts-ignore
       Taro.atMessage({
         message: '创建失败',
         type: 'error',

@@ -6,8 +6,6 @@ import { getGatherList,getTagList } from "$/api/gather";
 
 import Taro from "@tarojs/taro";
 
-// import request from '$/utils/request'
-
 import 'taro-ui/dist/style/components/button.scss';
 import 'taro-ui/dist/style/components/tag.scss';
 import "taro-ui/dist/style/components/fab.scss";
@@ -115,6 +113,18 @@ export default function Gather() {
 
   };
 
+  const cardClick = (gather) => {
+    console.log('gather',gather);
+    // Taro.navigateTo({url:'/pages/gather/gatherDetail/gatherDetail'})
+    Taro.navigateTo({
+      url: '/pages/gather/gatherDetail/gatherDetail',
+      success: function (res) {
+        // 通过eventChannel向被打开页面传送数据
+        res.eventChannel.emit('acceptDataFromOpenerPage', { gather: gather })
+      }
+    })
+  };
+
   const fixedButtonClick = () => {
     console.log('fixedButtonClick');
   };
@@ -122,17 +132,6 @@ export default function Gather() {
   const goCreateGather = () => {
     Taro.navigateTo({url:'/pages/gather/createGather/createGather'})
   };
-
-  // const getGatherList = async () => {
-  //   console.log('进来了');
-  //   try {
-  //     const res = await request.get('/team/show');
-  //     console.log('res', res);
-  //   } catch (error) {
-  //     console.error('Error', error);
-  //   }
-  // };
-
 
   return (
     <View className='container'>
@@ -170,7 +169,7 @@ export default function Gather() {
       </View>
       <View className='cards'>
           {gatherList.map((gather, index) => (
-            <View className='card' key={index}>
+            <View className='card' key={index} onClick={() => cardClick(gather)}>
               <View className='side'>
                 <View>{gather.tagName?gather.tagName[0]:''}</View>
                 <View>{gather.tagName?gather.tagName[1]:''}</View>
