@@ -45,6 +45,9 @@ button {
 
   .scroll-container {
     white-space: nowrap;
+    ::-webkit-scrollbar {
+      display: none;
+    }
     .tag-item {
       & + .tag-item {
         margin-left: 10rpx;
