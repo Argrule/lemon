@@ -1,10 +1,15 @@
-import { CommentData } from "$/pages/forum/data";
+import { CommentData, Item } from "$/pages/forum/data";
 import o from "$/utils/request";
 
 interface BaseResponse {
   code: string;
   data: any;
   message: string;
+}
+interface PostALLData extends BaseResponse {
+  data: {
+    list: Item[];
+  };
 }
 /**
  * @description 获取帖子列表
@@ -126,3 +131,19 @@ export const replyComment = async (data: {
 //   const res = (await o.post("/post/comment/like", { commentId })) as any;
 //   return res;
 // }
+
+/**
+ * @description 搜索帖子
+ * @param keyword 关键字
+ */
+export const searchPost = async (params: {
+  pageNum: number;
+  pageSize: number;
+  content: string;
+}): Promise<PostALLData> => {
+  const paramsStr = Object.keys(params)
+    .map((key) => `${key}=${params[key]}`)
+    .join("&");
+  const res = (await o.get("/post/search" + `?${paramsStr}`)) as any;
+  return res;
+};
