@@ -2,7 +2,9 @@ import { Component } from "react";
 import { View, Text, Button, BaseEventOrig } from "@tarojs/components";
 // import { Input } from "@tarojs/components";
 import { AtIcon } from "taro-ui";
+import { AtFab } from "taro-ui";
 import { AtTag } from "taro-ui";
+import { AtMessage } from "taro-ui";
 import Taro from "@tarojs/taro";
 import "./forum.scss";
 import { InputEventDetail } from "taro-ui/types/input";
@@ -14,14 +16,17 @@ import {
   cancelLikePost,
   collectPost,
   cancelCollectPost,
+  searchPost,
 } from "$/api/forum";
 import { Item, State } from "./data";
+import { AtSearchBar } from "taro-ui";
 
 class Forum extends Component<{}, State> {
   /* 状态 */
   state: State = {
     posts: [], // 帖子列表
     newPostContent: "", // 新帖子内容
+    searchContent: "",
   };
   /* 非生命周期，onShow */
   async componentDidShow() {
@@ -186,18 +191,50 @@ class Forum extends Component<{}, State> {
       url: "/pages/sendPost/sp",
     });
   };
+  //搜索框内容变化
+  handleSearchChange = (value: string) => {
+    this.setState({ searchContent: value });
+  };
+  //搜索
+  handleSearch = async () => {
+    const { searchContent } = this.state;
+    const res = await searchPost({
+      pageNum: 1,
+      pageSize: 10,
+      content: searchContent,
+    });
+    if (res.code != "00000") {
+      // @ts-ignore
+      Taro.atMessage({
+        message: "搜索失败",
+        type: "error",
+        duration: 800,
+      });
+      return;
+    }
+    this.setState({ posts: res.data.list });
+  };
   render() {
     const { posts } = this.state;
     // const { newPostContent } = this.state;
     return (
       <View className="forum">
-        <AtIcon
-          className="plus"
-          value="add-circle"
-          size="40"
-          color="#f4ea2a"
-          onClick={this.goToPutPost}
-        ></AtIcon>
+        <AtMessage />
+        <AtFab className="plus">
+          <AtIcon
+            className="plus-icon"
+            value="add"
+            onClick={this.goToPutPost}
+          ></AtIcon>
+        </AtFab>
+        <AtSearchBar
+          className="search-bar"
+          fixed={true}
+          value={this.state.searchContent}
+          onChange={this.handleSearchChange}
+          onConfirm={this.handleSearch}
+          onActionClick={this.handleSearch}
+        />
         {/* <View className="new-post">
           <Input
             value={newPostContent}
@@ -210,7 +247,9 @@ class Forum extends Component<{}, State> {
           {posts.map((post) => (
             <>
               <View className="post" key={post.id}>
-                <Text className="post-content">{post.content}</Text>
+                <Text className="post-content" userSelect>
+                  {post.content}
+                </Text>
                 <View className="post-tags">
                   {post.tagName?.map((tag) => (
                     <AtTag size="small" className="tagList" circle>

@@ -1,18 +1,49 @@
+@import "../../app.scss";
 @import "~taro-ui/dist/style/components/icon.scss";
+@import "~taro-ui/dist/style/components/fab.scss";
 @import "~taro-ui/dist/style/components/tag.scss";
+@import "~taro-ui/dist/style/components/search-bar.scss";
+@import "~taro-ui/dist/style/components/button.scss";
+@import "~taro-ui/dist/style/components/message.scss";
 $forum-fontSize: 25rpx; //input,button,post-content,interaction-button
 $forum-fontSize-b: 30rpx; //content
-$button-color: #ffc701;
-$btn-color: #ffaa00;
+// $button-color: #ffc701;
+// $btn-color: #ffaa00;
+$button-color: $lenmon-green;
+$btn-color: $lenmon-yellow;
 button {
   line-height: 1.5;
 }
 .plus {
   position: fixed;
-  bottom: 5%;
-  left: 50%;
-  transform: translateX(-50%);
+  top: 86vh;
+  right: 10vw;
+  // transform: translateX(-50%);
   z-index: 999;
+  &.at-fab--normal{
+    background-color: $button-color;
+  }
+  .plus-icon{
+    // font-size: 50rpx;//无效
+    color: #fff;
+  }
+
+}
+.search-bar {
+  // position: fixed;
+  // top: 0;
+  // left: 0;
+  // width: 100%;
+  // z-index: 999;
+  // .search-bar__input{
+  //   font-size: 30rpx;
+  // }
+  // position: relative;
+  height: 80rpx;
+  .at-search-bar__action {
+    // font-size: 30rpx;
+    background-color: $btn-color;
+  }
 }
 .forum {
   padding: 20px;
@@ -58,6 +89,7 @@ button {
   }
 
   .posts {
+    margin-top: 80rpx;
     .comments {
       margin-top: 10px; // 调整评论区域与上方内容的间距
       padding: 10px; // 添加内边距，美化样式
@@ -86,8 +118,8 @@ button {
       .post-content {
         font-size: $forum-fontSize-b; /* Larger font size for post content */
       }
-      .post-tags{
-        .tagList{
+      .post-tags {
+        .tagList {
           color: $btn-color;
           // border: $btn-color 1px solid;
         }
