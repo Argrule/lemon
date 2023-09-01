@@ -246,7 +246,7 @@ class Forum extends Component<{}, State> {
           {posts.map((post) => (
             <>
               <View className="post" key={post.id}>
-                <Text className="post-content">{post.content}</Text>
+                <Text className="post-content" userSelect>{post.content}</Text>
                 <View className="post-tags">
                   {post.tagName?.map((tag) => (
                     <AtTag size="small" className="tagList" circle>
