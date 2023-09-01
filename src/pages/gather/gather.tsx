@@ -6,8 +6,6 @@ import { getGatherList,getTagList } from "$/api/gather";
 
 import Taro from "@tarojs/taro";
 
-// import request from '$/utils/request'
-
 import 'taro-ui/dist/style/components/button.scss';
 import 'taro-ui/dist/style/components/tag.scss';
 import "taro-ui/dist/style/components/fab.scss";
@@ -34,6 +32,7 @@ interface GatherItemType {
 }
 
 export default function Gather() {
+  const [selectedTagIndex, setSelectedTagIndex] = useState<number>(0);
   const [gatherList, setGatherList] = useState<GatherItemType[]>([]); // 初始化为空数组
   const [classification, setClassification] = useState<ClassificationItem[]>([
     { name: '空位', checked: false },
@@ -51,16 +50,25 @@ export default function Gather() {
 
   useEffect(() => {
     getTagList({});
-    fetchGatherList()
+    fetchGatherList(0)
 
   }, []);
 
-  const fetchGatherList = async () => {
+  const fetchGatherList = async (tagId) => {
     try {
-      let response = await getGatherList({
-        pageNum: 1,
-        tagId: 0
-      });
+      let response;
+      if(tagId){
+        response = await getGatherList({
+          pageNum: 1,
+          tagId: tagId
+        });
+      } else {
+        response = await getGatherList({
+          pageNum: 1,
+          tagId: selectedTagIndex
+        });
+      }
+
 
       console.log('res',response);
       // const list = response.list.map(item => ({
@@ -89,13 +97,32 @@ export default function Gather() {
         checked: i === index ? !item.checked : item.checked,
       }));
       setClassification(updatedClassification);
+      console.log('index',index);
+      setSelectedTagIndex(index); // 更新选中的标签索引
+      fetchGatherList(index); // 重新获取数据
     } else {
       const updatedClassification = classification.map((item, i) => ({
         ...item,
         checked: item.name === '空位' ? item.checked : (i === index ? !item.checked : false),
       }));
       setClassification(updatedClassification);
+      console.log('index',index);
+      setSelectedTagIndex(index); // 更新选中的标签索引
+      fetchGatherList(index); // 重新获取数据
     }
+
+  };
+
+  const cardClick = (gather) => {
+    console.log('gather',gather);
+    // Taro.navigateTo({url:'/pages/gather/gatherDetail/gatherDetail'})
+    Taro.navigateTo({
+      url: '/pages/gather/gatherDetail/gatherDetail',
+      success: function (res) {
+        // 通过eventChannel向被打开页面传送数据
+        res.eventChannel.emit('acceptDataFromOpenerPage', { gather: gather })
+      }
+    })
   };
 
   const fixedButtonClick = () => {
@@ -105,17 +132,6 @@ export default function Gather() {
   const goCreateGather = () => {
     Taro.navigateTo({url:'/pages/gather/createGather/createGather'})
   };
-
-  // const getGatherList = async () => {
-  //   console.log('进来了');
-  //   try {
-  //     const res = await request.get('/team/show');
-  //     console.log('res', res);
-  //   } catch (error) {
-  //     console.error('Error', error);
-  //   }
-  // };
-
 
   return (
     <View className='container'>
@@ -153,7 +169,7 @@ export default function Gather() {
       </View>
       <View className='cards'>
           {gatherList.map((gather, index) => (
-            <View className='card' key={index}>
+            <View className='card' key={index} onClick={() => cardClick(gather)}>
               <View className='side'>
                 <View>{gather.tagName?gather.tagName[0]:''}</View>
                 <View>{gather.tagName?gather.tagName[1]:''}</View>

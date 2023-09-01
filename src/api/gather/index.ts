@@ -49,3 +49,17 @@ export const createGather = async (params: {
   const res = await request.post("/team/create", params);
   return res;
 };
+
+/**
+ * @description 获取攒局标签列表
+ * @returns
+ */
+export const joinGather = async (params: {
+  teamId:number
+}) => {
+  const paramsStr = Object.keys(params)
+    .map((key) => `${key}=${params[key]}`)
+    .join("&");
+  const res = await request.post("/team/join" + `?${paramsStr}`);
+  return res;
+};

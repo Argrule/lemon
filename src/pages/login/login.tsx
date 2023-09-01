@@ -11,10 +11,10 @@ export default function Login() {
   });
 
   return (
-    <View className="login">
+    <View className='login'>
       <Text>sign in！</Text>
-      <AtButton type="primary" onClick={signInPost}>
-        源神！ 启动！！
+      <AtButton type='primary' onClick={signInPost}>
+        一键登录
       </AtButton>
     </View>
   );
