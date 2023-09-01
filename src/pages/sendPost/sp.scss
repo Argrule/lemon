@@ -1,9 +1,10 @@
 // @import "~taro-ui/dist/style/components/textarea.scss";
+@import "~taro-ui/dist/style/components/tag.scss";
 @import "~taro-ui/dist/style/components/message.scss";
 button {
   line-height: 1.5;
 }
-.comment-input {
+.post-new {
   margin: 20px auto;
   width: 90%;
   // border: 1px solid #ecc745;
@@ -14,6 +15,16 @@ button {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  .scroll-container {
+    white-space: nowrap;
+    .tag-item + .tag-item {
+      display: inline-block;
+      margin-left: 10rpx;
+      margin-bottom: 10rpx;
+    }
+  }
+
   .textarea {
     color: #ffaa00;
     border: #ffaa00;
