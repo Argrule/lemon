@@ -213,12 +213,14 @@ export default function CommentDetail() {
         onDelete={handleDeletePost}
         onCollect={handleCollectPost}
       />
-      <View style={"color:#ffaa00"}>comment</View>
+      <View style={"color:#a0aa25"}>comment</View>
       {/* 评论展示区域 */}
       <View className="comments">
         {commentsList.map((comment) => (
           <View className="comment" key={comment.id}>
-            <Text className="comment-content">{comment.content}</Text>
+            <Text className="comment-content" userSelect>
+              {comment.content}
+            </Text>
             {/* ###### 暂时注释掉因为太丑了 ###### */}
             {/* <Button className="comment-reply" onClick={handleInputBlur}>
               回复

@@ -36,7 +36,9 @@ const PostComponent: FunctionComponent<PostComponentProps> = ({
         <Text>猫猫可爱捏</Text>
       </View>
       {/* 帖子内容 */}
-      <Text className="post-content">{post.content}</Text>
+      <Text className="post-content" userSelect>
+        {post.content}
+      </Text>
       {/* 帖子标签 */}
       <View className="post-tags">
         {post.tagName?.map((tag) => (

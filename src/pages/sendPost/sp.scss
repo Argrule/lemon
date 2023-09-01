@@ -1,32 +1,89 @@
 // @import "~taro-ui/dist/style/components/textarea.scss";
+@import "~taro-ui/dist/style/components/tag.scss";
 @import "~taro-ui/dist/style/components/message.scss";
+@import "~taro-ui/dist/style/components/image-picker.scss";
+@import "~taro-ui/dist/style/components/icon.scss";
+@import "../../app.scss";
+
+// $text: #ffaa00;
+$text: $lenmon-yellow;
+$text-bg: #ffecc5;
+$text-plain: #6d6d6d;
+$bgc-yellow: $lenmon-yellow;
+$bgc-green: $lenmon-green;
+
 button {
   line-height: 1.5;
 }
-.comment-input {
-  margin: 20px auto;
+.post-new {
+  margin: 0px auto;
   width: 90%;
+  height: 85vh;
   // border: 1px solid #ecc745;
   border-radius: 5px;
   font-size: 16px;
   padding: 10rpx;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
+
+  .header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .title {
+      position: relative;
+      right: 20rpx;
+      font-size: 17rpx;
+      background-color: $text;
+      padding: 5rpx;
+      color: #fff;
+    }
+  }
+
+  .scroll-container {
+    white-space: nowrap;
+    ::-webkit-scrollbar {
+      display: none;
+    }
+    .tag-item {
+      & + .tag-item {
+        margin-left: 10rpx;
+      }
+      display: inline-block;
+      font-size: 28rpx;
+      // padding: 5rpx 0;
+      color: $text-plain;
+    }
+    .tag-item-active {
+      color: $text;
+      background-color: $text-bg;
+    }
+  }
+
   .textarea {
-    color: #ffaa00;
-    border: #ffaa00;
+    color: $text;
+    border: $text;
     font-size: 30rpx;
     background: #fff;
     width: 100%;
     // min-height: 80rpx;//无效
-    padding: 0 30rpx;
+    padding: 40rpx 30rpx 20rpx;
+    .textarea-placeholder {
+      color: $text;
+    }
   }
 }
 .publish-button {
-  margin-top: 20px;
-  width: 50%;
-  background-color: #ffc701;
+  height: 5vh;
+  width: 70%;
+  border-radius: 40rpx;
+  background-color: $text;
   color: #fff;
+  // 文字不居中，下面解决bug
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

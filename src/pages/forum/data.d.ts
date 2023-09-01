@@ -32,6 +32,7 @@ export interface Item {
 export interface State {
   posts: Item[];
   newPostContent: string;
+  searchContent: string;
 }
 
 interface Reply {
@@ -55,4 +56,9 @@ export interface CommentData {
     list: Comment[];
   };
   message: string;
+}
+
+export interface Tag {
+  id: number;
+  name: string;
 }
