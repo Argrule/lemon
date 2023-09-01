@@ -32,6 +32,7 @@ export interface Item {
 export interface State {
   posts: Item[];
   newPostContent: string;
+  searchContent: string;
 }
 
 interface Reply {

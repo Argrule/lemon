@@ -16,12 +16,14 @@ import {
   cancelCollectPost,
 } from "$/api/forum";
 import { Item, State } from "./data";
+import { AtSearchBar } from 'taro-ui'
 
 class Forum extends Component<{}, State> {
   /* 状态 */
   state: State = {
     posts: [], // 帖子列表
     newPostContent: "", // 新帖子内容
+    searchContent: "",
   };
   /* 非生命周期，onShow */
   async componentDidShow() {
@@ -186,6 +188,10 @@ class Forum extends Component<{}, State> {
       url: "/pages/sendPost/sp",
     });
   };
+  //搜索框内容变化
+  handleSearchChange = (value: string) => {
+    this.setState({ searchContent: value });
+  };
   render() {
     const { posts } = this.state;
     // const { newPostContent } = this.state;
@@ -198,6 +204,12 @@ class Forum extends Component<{}, State> {
           color="#f4ea2a"
           onClick={this.goToPutPost}
         ></AtIcon>
+        <AtSearchBar
+        className="search-bar"
+        fixed={true}
+        value={this.state.searchContent}
+        onChange={this.handleSearchChange}
+      />
         {/* <View className="new-post">
           <Input
             value={newPostContent}

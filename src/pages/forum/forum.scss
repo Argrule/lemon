@@ -1,9 +1,14 @@
+@import "../../app.scss";
 @import "~taro-ui/dist/style/components/icon.scss";
 @import "~taro-ui/dist/style/components/tag.scss";
+@import "~taro-ui/dist/style/components/search-bar.scss";
+@import "~taro-ui/dist/style/components/button.scss";
 $forum-fontSize: 25rpx; //input,button,post-content,interaction-button
 $forum-fontSize-b: 30rpx; //content
-$button-color: #ffc701;
-$btn-color: #ffaa00;
+// $button-color: #ffc701;
+// $btn-color: #ffaa00;
+$button-color: $lenmon-yellow;
+$btn-color: $lenmon-green;
 button {
   line-height: 1.5;
 }
@@ -13,6 +18,20 @@ button {
   left: 50%;
   transform: translateX(-50%);
   z-index: 999;
+}
+.search-bar{
+  // position: fixed;
+  // top: 0;
+  // left: 0;
+  // width: 100%;
+  // z-index: 999;
+  // .search-bar__input{
+  //   font-size: 30rpx;
+  // }
+  .at-search-bar__action {
+    // font-size: 30rpx;
+    background-color: $btn-color;
+  }
 }
 .forum {
   padding: 20px;
@@ -86,8 +105,8 @@ button {
       .post-content {
         font-size: $forum-fontSize-b; /* Larger font size for post content */
       }
-      .post-tags{
-        .tagList{
+      .post-tags {
+        .tagList {
           color: $btn-color;
           // border: $btn-color 1px solid;
         }
