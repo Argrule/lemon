@@ -3,13 +3,13 @@ import { View, Button, ScrollView } from "@tarojs/components";
 import { Textarea } from "@tarojs/components";
 import { AtMessage } from "taro-ui";
 import { AtTag } from "taro-ui";
+import { AtImagePicker } from "taro-ui";
 import Taro, { useDidShow } from "@tarojs/taro";
 import { publishPost, getTags } from "$/api/forum";
 import { Tag } from "../forum/data";
 import "./sp.scss";
 
 function CommentInput() {
-  // { onPublish }
   const [commentText, setCommentText] = useState("");
   const [tagList, setTagList] = useState<Tag[]>([
     // {
@@ -62,6 +62,23 @@ function CommentInput() {
     // },
   ]);
   const [tagIds, setTagIds] = useState<number[]>([]);
+
+  const [files, setFiles] = useState<{ url: string }[]>([
+    {
+      url: "https://images.infogame.cn/uploads/20220702/img_62bfa8858e30c36.gif",
+    },
+  ]);
+  const onImageFileChange = (files) => {
+    console.log(files);
+    setFiles(files);
+    //@ts-ignore
+    Taro.atMessage({
+      message: "抱歉, 上传图片正在完善...",
+      type: "warning",
+      duration: 800,
+    });
+    // console.log("上传图片正在constructing...");
+  };
 
   useDidShow(async () => {
     initTagList();
@@ -118,38 +135,42 @@ function CommentInput() {
     }
   };
   return (
-    <View className="post-new">
-      {/* <Input
+    <>
+      <View className="post-new">
+        {/* <Input
         className="input-box"
         value={commentText}
         onInput={(e) => setCommentText(e.detail.value)}
         placeholder="请输入评论内容"
       /> */}
-      <ScrollView scrollX className="scroll-container">
-        {tagList.map((tag) => (
-          <AtTag
-            size="small"
-            key={tag.id}
-            className={
-              tagIds.includes(tag.id) ? "tag-item tag-item-active" : "tag-item"
-            }
-            onClick={() => handleTagChange(tag.id)}
-          >
-            # {tag.name}
-          </AtTag>
-        ))}
-      </ScrollView>
-      <Textarea
-        value={commentText}
-        maxlength={200}
-        placeholder="请输入帖子内容..."
-        className="textarea"
-        onInput={(e) => setCommentText(e.detail.value)}
-        style="min-height:200rpx"
-        autoHeight
-      />
-      <AtMessage />
-      {/* <AtTextarea
+        <ScrollView scrollX className="scroll-container">
+          {tagList.map((tag) => (
+            <AtTag
+              size="small"
+              key={tag.id}
+              className={
+                tagIds.includes(tag.id)
+                  ? "tag-item tag-item-active"
+                  : "tag-item"
+              }
+              onClick={() => handleTagChange(tag.id)}
+            >
+              # {tag.name}
+            </AtTag>
+          ))}
+        </ScrollView>
+        <Textarea
+          value={commentText}
+          maxlength={200}
+          placeholder="请输入帖子内容..."
+          className="textarea"
+          onInput={(e) => setCommentText(e.detail.value)}
+          style="min-height:200rpx"
+          autoHeight
+        />
+        <AtImagePicker files={files} onChange={onImageFileChange} />
+        <AtMessage />
+        {/* <AtTextarea
         className="textarea"
         count={true}
         value={commentText}
@@ -158,10 +179,11 @@ function CommentInput() {
         maxLength={200}
         placeholder="请输入帖子内容..."
       /> */}
+      </View>
       <Button className="publish-button" onClick={handlePublish}>
         发布
       </Button>
-    </View>
+    </>
   );
 }
 

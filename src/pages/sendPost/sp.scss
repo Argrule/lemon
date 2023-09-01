@@ -1,11 +1,14 @@
 // @import "~taro-ui/dist/style/components/textarea.scss";
 @import "~taro-ui/dist/style/components/tag.scss";
 @import "~taro-ui/dist/style/components/message.scss";
+@import "~taro-ui/dist/style/components/image-picker.scss";
+@import "~taro-ui/dist/style/components/icon.scss";
 @import "../../app.scss";
 
-$text: #ffaa00;
-$text-bg: #fce1aa;
-$text-plain: #575757;
+// $text: #ffaa00;
+$text: $lenmon-yellow;
+$text-bg: #ffecc5;
+$text-plain: #6d6d6d;
 $bgc-yellow: $lenmon-yellow;
 $bgc-green: $lenmon-green;
 
@@ -13,15 +16,16 @@ button {
   line-height: 1.5;
 }
 .post-new {
-  margin: 20px auto;
+  margin: 0px auto;
   width: 90%;
+  height: 85vh;
   // border: 1px solid #ecc745;
   border-radius: 5px;
   font-size: 16px;
   padding: 10rpx;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: start;
   align-items: center;
 
   .scroll-container {
@@ -31,6 +35,7 @@ button {
         margin-left: 10rpx;
       }
       display: inline-block;
+      // ### 可能必要时使用其他样式替代，容易影响高度
       margin-bottom: 10rpx;
       color: $text-plain;
     }
@@ -48,14 +53,16 @@ button {
     width: 100%;
     // min-height: 80rpx;//无效
     padding: 0 30rpx;
-    .textarea-placeholder{
+    .textarea-placeholder {
       color: $text;
     }
   }
 }
 .publish-button {
-  margin-top: 20px;
-  width: 50%;
+  // margin-top: 20px;
+  height: 5vh;
+  width: 70%;
+  border-radius: 40rpx;
   background-color: $text;
   color: #fff;
 }
