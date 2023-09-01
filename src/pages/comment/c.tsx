@@ -213,7 +213,7 @@ export default function CommentDetail() {
         onDelete={handleDeletePost}
         onCollect={handleCollectPost}
       />
-      <View style={"color:#ffaa00"}>comment</View>
+      <View style={"color:#a0aa25"}>comment</View>
       {/* 评论展示区域 */}
       <View className="comments">
         {commentsList.map((comment) => (

@@ -75,7 +75,7 @@ function CommentInput() {
     Taro.atMessage({
       message: "抱歉, 上传图片正在完善...",
       type: "warning",
-      duration: 800,
+      duration: 1500,
     });
     // console.log("上传图片正在constructing...");
   };
@@ -143,22 +143,25 @@ function CommentInput() {
         onInput={(e) => setCommentText(e.detail.value)}
         placeholder="请输入评论内容"
       /> */}
-        <ScrollView scrollX className="scroll-container">
-          {tagList.map((tag) => (
-            <AtTag
-              size="small"
-              key={tag.id}
-              className={
-                tagIds.includes(tag.id)
-                  ? "tag-item tag-item-active"
-                  : "tag-item"
-              }
-              onClick={() => handleTagChange(tag.id)}
-            >
-              # {tag.name}
-            </AtTag>
-          ))}
-        </ScrollView>
+        <View className="header">
+          <View className="title">热搜</View>
+          <ScrollView scrollX className="scroll-container">
+            {tagList.map((tag) => (
+              <AtTag
+                size="small"
+                key={tag.id}
+                className={
+                  tagIds.includes(tag.id)
+                    ? "tag-item tag-item-active"
+                    : "tag-item"
+                }
+                onClick={() => handleTagChange(tag.id)}
+              >
+                # {tag.name}
+              </AtTag>
+            ))}
+          </ScrollView>
+        </View>
         <Textarea
           value={commentText}
           maxlength={200}

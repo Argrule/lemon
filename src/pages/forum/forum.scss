@@ -8,8 +8,8 @@ $forum-fontSize: 25rpx; //input,button,post-content,interaction-button
 $forum-fontSize-b: 30rpx; //content
 // $button-color: #ffc701;
 // $btn-color: #ffaa00;
-$button-color: $lenmon-yellow;
-$btn-color: $lenmon-green;
+$button-color: $lenmon-green;
+$btn-color: $lenmon-yellow;
 button {
   line-height: 1.5;
 }
@@ -20,7 +20,7 @@ button {
   transform: translateX(-50%);
   z-index: 999;
 }
-.search-bar{
+.search-bar {
   // position: fixed;
   // top: 0;
   // left: 0;

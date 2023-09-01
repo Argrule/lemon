@@ -223,7 +223,7 @@ class Forum extends Component<{}, State> {
           className="plus"
           value="add-circle"
           size="40"
-          color="#f4ea2a"
+          color="#a0aa25"
           onClick={this.goToPutPost}
         ></AtIcon>
         <AtSearchBar

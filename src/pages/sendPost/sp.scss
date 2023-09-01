@@ -25,8 +25,23 @@ button {
   padding: 10rpx;
   display: flex;
   flex-direction: column;
-  justify-content: start;
+  justify-content: flex-start;
   align-items: center;
+
+  .header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .title {
+      position: relative;
+      right: 20rpx;
+      font-size: 17rpx;
+      background-color: $text;
+      padding: 5rpx;
+      color: #fff;
+    }
+  }
 
   .scroll-container {
     white-space: nowrap;
@@ -35,8 +50,8 @@ button {
         margin-left: 10rpx;
       }
       display: inline-block;
-      // ### 可能必要时使用其他样式替代，容易影响高度
-      margin-bottom: 10rpx;
+      font-size: 28rpx;
+      // padding: 5rpx 0;
       color: $text-plain;
     }
     .tag-item-active {
@@ -52,17 +67,20 @@ button {
     background: #fff;
     width: 100%;
     // min-height: 80rpx;//无效
-    padding: 0 30rpx;
+    padding: 40rpx 30rpx 20rpx;
     .textarea-placeholder {
       color: $text;
     }
   }
 }
 .publish-button {
-  // margin-top: 20px;
   height: 5vh;
   width: 70%;
   border-radius: 40rpx;
   background-color: $text;
   color: #fff;
+  // 文字不居中，下面解决bug
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
