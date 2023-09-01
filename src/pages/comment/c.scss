@@ -1,9 +1,12 @@
 @import "~taro-ui/dist/style/components/message.scss";
 @import "~taro-ui/dist/style/components/tag.scss";
+@import "../..//app.scss";
 $forum-fontSize: 25rpx; //input,button,post-content,interaction-button
 $forum-fontSize-b: 30rpx; //content
-$button-color: #ffc701;
-$btn-color: #ffaa00;
+// $button-color: #ffc701;
+// $btn-color: #ffaa00;
+$button-color: $lenmon-yellow;
+$btn-color: $lenmon-green;
 button {
   line-height: 1.5;
 }
@@ -64,7 +67,7 @@ button {
     .comment-content {
       font-size: $forum-fontSize; // 调整评论内容的字体大小
     }
-    .comment-reply{
+    .comment-reply {
       font-size: $forum-fontSize; // 调整评论内容的字体大小
       margin-left: 10px;
       background-color: $button-color;

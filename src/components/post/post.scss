@@ -1,10 +1,13 @@
 @import "~taro-ui/dist/style/components/tag.scss";
 @import "~taro-ui/dist/style/components/avatar.scss";
+@import "../../app.scss";
 $forum-fontSize: 25rpx; //input,button,post-content,interaction-button
 $forum-fontSize-b: 30rpx; //content
 $forum-fontSize-author: 35rpx; //author
-$button-color: #ffc701;
-$btn-color: #ffaa00;
+// $lenmon-yellow: #ffc701;
+// $btn-color: #ffaa00;
+$lenmon-yellow: $lenmon-green;
+$btn-color: $lenmon-yellow;
 
 .post {
   background-color: #fff;
