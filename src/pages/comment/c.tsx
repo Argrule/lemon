@@ -5,6 +5,7 @@ import { getComment, publishComment } from "$/api/forum";
 import Taro, { getCurrentInstance, useDidShow } from "@tarojs/taro";
 import { AtMessage } from "taro-ui";
 import { AtAvatar } from "taro-ui";
+import { AtActionSheet, AtActionSheetItem } from "taro-ui";
 // import { AtTag } from "taro-ui";
 import { Item, Comment } from "../forum/data";
 import {
@@ -35,6 +36,7 @@ export default function CommentDetail() {
   const [commentsList, setCommentsList] = useState<Comment[]>([]);
   const [newCommentContent, setNewCommentContent] = useState<string>("");
 
+  const [isInputDialogOpen, setIsInputDialogOpen] = useState<boolean>(false);
   const inputRef = useRef(null);
   const [placeholderStr, setPlaceholderStr] = useState("发布新评论");
 
@@ -202,12 +204,35 @@ export default function CommentDetail() {
     /**
      * 这个方案不太对啊，切换输入的内容万一不想发回复，又想发新评论怎么办
      */
-    (inputRef.current as any).focus();
+    // (inputRef.current as any).focus();
+    setIsInputDialogOpen(true);
   };
 
   return (
     <View>
+      {/* 顶部消息提示 */}
       <AtMessage />
+      {/* 指示器 用于输入 */}
+      <AtActionSheet
+        isOpened={isInputDialogOpen}
+        className="input-container"
+        onClose={() => setIsInputDialogOpen(false)}
+      >
+        <AtActionSheetItem>
+          <View className="rely-main">
+            <Input
+              className="rely-input"
+              ref={inputRef}
+              value={newCommentContent}
+              onInput={handleNewCommentChange}
+              placeholder={placeholderStr}
+            />
+            <Button className="rely-btn" onClick={handleNewCommentSubmit}>
+              发布
+            </Button>
+          </View>
+        </AtActionSheetItem>
+      </AtActionSheet>
       {/* 帖子 */}
       <PostComponent
         post={post}
@@ -235,10 +260,7 @@ export default function CommentDetail() {
               <Text className="comment-time">
                 {FormatTimeFromNow(comment.createTime)}
               </Text>
-              <Text
-                className="comment-reply"
-                /* onClick={handleInputBlur} */
-              >
+              <Text className="comment-reply" onClick={handleInputBlur}>
                 回复
               </Text>
             </View>
