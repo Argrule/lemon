@@ -2,7 +2,7 @@ import { View, Text, Button, Input } from "@tarojs/components";
 import { Textarea } from "@tarojs/components";
 // import { useDidShow } from "@tarojs/taro";
 import { useEffect, useRef, useState } from "react";
-import { getComment, publishComment } from "$/api/forum";
+import { getComment, publishComment, replyComment } from "$/api/forum";
 import Taro, { getCurrentInstance, useDidShow } from "@tarojs/taro";
 import { AtMessage } from "taro-ui";
 import { AtAvatar } from "taro-ui";
@@ -36,9 +36,12 @@ export default function CommentDetail() {
 
   const [commentsList, setCommentsList] = useState<Comment[]>([]);
   const [newCommentContent, setNewCommentContent] = useState<string>("");
+  const [newReplyContent, setNewReplyContent] = useState<string>("");
+  const CommentIdMark = useRef<number>(0);
 
   const [isInputDialogOpen, setIsInputDialogOpen] = useState<boolean>(false);
-  const inputRef = useRef(null);
+  const [isCommentDialogOpen, setIsCommentDialogOpen] =
+    useState<boolean>(false);
   const [placeholderStr, setPlaceholderStr] = useState("发布新评论");
 
   useDidShow(async () => {
@@ -199,15 +202,43 @@ export default function CommentDetail() {
     // };
     // setCommentsList([newComment, ...commentsList]);
   };
-  const handleInputBlur = () => {
-    console.log("blur");
-    setPlaceholderStr("发送你的回复哦~");
-    /**
-     * 这个方案不太对啊，切换输入的内容万一不想发回复，又想发新评论怎么办
-     */
-    setIsInputDialogOpen(true);
-    // @ts-ignore
-    // inputRef.current.focus();
+  const handleNewReplySubmit = async () => {
+    if (!newReplyContent) {
+      console.log("请输入回复内容");
+      //@ts-ignore
+      Taro.atMessage({
+        message: "请输入回复内容",
+        type: "error",
+        duration: 800,
+      });
+      return;
+    }
+    const res = await replyComment({
+      commentId: CommentIdMark.current,
+      content: newReplyContent,
+    });
+    if (res.code != "00000") {
+      console.log("回复失败");
+      return;
+    }
+    setNewReplyContent("");
+  };
+
+  const handleInputBlur = (id?: number) => {
+    // 打开输入框
+    switch (id) {
+      case undefined:
+        // ## 还没拿到 用户名
+        setPlaceholderStr("回复 @某人哦~");
+        setIsCommentDialogOpen(true);
+        break;
+
+      default:
+        setPlaceholderStr("发送你的回复哦~");
+        CommentIdMark.current = id;
+        setIsInputDialogOpen(true);
+        break;
+    }
   };
   // useEffect(() => {
   //   if (isInputDialogOpen) {
@@ -220,19 +251,18 @@ export default function CommentDetail() {
     <View>
       {/* 顶部消息提示 */}
       <AtMessage />
-      {/* 指示器 用于输入 */}
+      {/* 指示器 用于输入回复 */}
       <AtActionSheet
         isOpened={isInputDialogOpen}
         className="input-container"
         onClose={() => setIsInputDialogOpen(false)}
       >
         <Textarea
-          ref={inputRef}
-          value={newCommentContent}
+          value={newReplyContent}
           maxlength={200}
           placeholder="回复 @猫猫酱"
           className="textarea"
-          onInput={handleNewCommentChange}
+          onInput={(e) => setNewReplyContent((e.target as any).value)}
           style="min-height:200rpx"
           cursor-spacing={150}
           show-confirm-bar={false}
@@ -247,11 +277,45 @@ export default function CommentDetail() {
               onInput={handleNewCommentChange}
               placeholder={placeholderStr}
             /> */}
-            <Button className="rely-btn" onClick={() => setIsInputDialogOpen(false)}>
+            <Button
+              className="rely-btn"
+              onClick={() => setIsInputDialogOpen(false)}
+            >
+              预留其他功能
+            </Button>
+            <Button className="rely-btn" onClick={handleNewReplySubmit}>
+              回复
+            </Button>
+          </View>
+        </AtActionSheetItem>
+      </AtActionSheet>
+      {/* 用于输入评论 */}
+      <AtActionSheet
+        isOpened={isCommentDialogOpen}
+        className="input-container"
+        onClose={() => setIsCommentDialogOpen(false)}
+      >
+        <Textarea
+          value={newCommentContent}
+          maxlength={200}
+          placeholder="回复 @猫猫可爱捏"
+          className="textarea"
+          onInput={handleNewCommentChange}
+          style="min-height:200rpx"
+          cursor-spacing={150}
+          show-confirm-bar={false}
+          autoHeight
+        />
+        <AtActionSheetItem>
+          <View className="rely-main">
+            <Button
+              className="rely-btn"
+              onClick={() => setIsCommentDialogOpen(false)}
+            >
               预留其他功能
             </Button>
             <Button className="rely-btn" onClick={handleNewCommentSubmit}>
-              发布
+              发布评论
             </Button>
           </View>
         </AtActionSheetItem>
@@ -275,15 +339,19 @@ export default function CommentDetail() {
               ></AtAvatar>
               <Text>猫猫酱</Text>
             </View>
+            {/* 评论内容 */}
             <Text className="comment-content" userSelect>
               {comment.content}
             </Text>
-            {/* ###### 暂时注释掉因为太丑了 ###### */}
+            {/* 评论更多功能 */}
             <View>
               <Text className="comment-time">
                 {FormatTimeFromNow(comment.createTime)}
               </Text>
-              <Text className="comment-reply" onClick={handleInputBlur}>
+              <Text
+                className="comment-reply"
+                onClick={() => handleInputBlur(comment.id)}
+              >
                 回复
               </Text>
             </View>
@@ -297,6 +365,7 @@ export default function CommentDetail() {
       <View className="new-post">
         <Input
           value={newCommentContent}
+          onFocus={() => handleInputBlur()}
           onInput={handleNewCommentChange}
           placeholder={placeholderStr}
         />
