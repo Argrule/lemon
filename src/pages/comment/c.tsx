@@ -1,4 +1,5 @@
 import { View, Text, Button, Input } from "@tarojs/components";
+import { Textarea } from "@tarojs/components";
 // import { useDidShow } from "@tarojs/taro";
 import { useEffect, useRef, useState } from "react";
 import { getComment, publishComment } from "$/api/forum";
@@ -204,9 +205,16 @@ export default function CommentDetail() {
     /**
      * 这个方案不太对啊，切换输入的内容万一不想发回复，又想发新评论怎么办
      */
-    // (inputRef.current as any).focus();
     setIsInputDialogOpen(true);
+    // @ts-ignore
+    // inputRef.current.focus();
   };
+  // useEffect(() => {
+  //   if (isInputDialogOpen) {
+  //     // @ts-ignore
+  //     inputRef.current.focus();
+  //   }
+  // }, [isInputDialogOpen]);
 
   return (
     <View>
@@ -218,15 +226,30 @@ export default function CommentDetail() {
         className="input-container"
         onClose={() => setIsInputDialogOpen(false)}
       >
+        <Textarea
+          ref={inputRef}
+          value={newCommentContent}
+          maxlength={200}
+          placeholder="回复 @猫猫酱"
+          className="textarea"
+          onInput={handleNewCommentChange}
+          style="min-height:200rpx"
+          cursor-spacing={150}
+          show-confirm-bar={false}
+          autoHeight
+        />
         <AtActionSheetItem>
           <View className="rely-main">
-            <Input
+            {/* <Input
               className="rely-input"
-              ref={inputRef}
+              // ref={inputRef}
               value={newCommentContent}
               onInput={handleNewCommentChange}
               placeholder={placeholderStr}
-            />
+            /> */}
+            <Button className="rely-btn" onClick={() => setIsInputDialogOpen(false)}>
+              预留其他功能
+            </Button>
             <Button className="rely-btn" onClick={handleNewCommentSubmit}>
               发布
             </Button>
@@ -273,7 +296,6 @@ export default function CommentDetail() {
       {/* 评论输入区域 */}
       <View className="new-post">
         <Input
-          ref={inputRef}
           value={newCommentContent}
           onInput={handleNewCommentChange}
           placeholder={placeholderStr}
