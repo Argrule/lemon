@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { getComment, publishComment } from "$/api/forum";
 import Taro, { getCurrentInstance, useDidShow } from "@tarojs/taro";
 import { AtMessage } from "taro-ui";
+import { AtAvatar } from "taro-ui";
 // import { AtTag } from "taro-ui";
 import { Item, Comment } from "../forum/data";
 import {
@@ -15,6 +16,7 @@ import {
 } from "$/api/forum";
 import PostComponent from "$/components/post/post";
 import "./c.scss";
+import { FormatTimeFromNow } from "$/utils/dayjs";
 
 export default function CommentDetail() {
   const [post, setPost] = useState<Item>({
@@ -218,10 +220,28 @@ export default function CommentDetail() {
       <View className="comments">
         {commentsList.map((comment) => (
           <View className="comment" key={comment.id}>
+            <View className="author">
+              <AtAvatar
+                size="small"
+                image="https://c-ssl.dtstatic.com/uploads/blog/202201/07/20220107102121_8ad29.thumb.1000_0.gif"
+              ></AtAvatar>
+              <Text>猫猫酱</Text>
+            </View>
             <Text className="comment-content" userSelect>
               {comment.content}
             </Text>
             {/* ###### 暂时注释掉因为太丑了 ###### */}
+            <View>
+              <Text className="comment-time">
+                {FormatTimeFromNow(comment.createTime)}
+              </Text>
+              <Text
+                className="comment-reply"
+                /* onClick={handleInputBlur} */
+              >
+                回复
+              </Text>
+            </View>
             {/* <Button className="comment-reply" onClick={handleInputBlur}>
               回复
             </Button> */}

@@ -1,12 +1,15 @@
 @import "~taro-ui/dist/style/components/message.scss";
 @import "~taro-ui/dist/style/components/tag.scss";
+@import "~taro-ui/dist/style/components/avatar.scss";
 @import "../..//app.scss";
 $forum-fontSize: 25rpx; //input,button,post-content,interaction-button
 $forum-fontSize-b: 30rpx; //content
+$forum-fontSize-author: 35rpx; //author
 // $button-color: #ffc701;
 // $btn-color: #ffaa00;
 $button-color: $lenmon-yellow;
 $btn-color: $lenmon-green;
+$bgc-green: #e1e6bc;
 button {
   line-height: 1.5;
 }
@@ -55,23 +58,37 @@ button {
 }
 
 .comments {
-  margin-top: 10px; // 调整评论区域与上方内容的间距
-  padding: 10px; // 添加内边距，美化样式
+  margin-top: 10rpx; // 调整评论区域与上方内容的间距
+  padding: 15rpx; // 添加内边距，美化样式
 
   .comment {
-    background-color: #f5f5f5; // 评论区域背景颜色
-    padding: 8px;
-    border-radius: 5px;
-    margin-bottom: 5px; // 调整每个评论之间的间距
+    background-color: #fff; // 评论区域背景颜色
+    padding: 18rpx;
+    border-radius: 10rpx;
+    margin-bottom: 25rpx; // 调整每个评论之间的间距
+    box-shadow: 0 0 8rpx 5rpx rgba(0, 0, 0, 0.1); // 增加轻微的阴影效果
 
+    .author {
+      display: flex;
+      align-items: center;
+      gap: 40rpx;
+      font-size: $forum-fontSize-author; // 调整评论作者的字体大小
+      color: $btn-color; // 调整评论作者的字体颜色
+    }
+    .comment-time {
+      font-size: $forum-fontSize; // 调整评论时间的字体大小
+      color: $btn-color; // 调整评论时间的字体颜色
+    }
     .comment-content {
       font-size: $forum-fontSize; // 调整评论内容的字体大小
     }
     .comment-reply {
       font-size: $forum-fontSize; // 调整评论内容的字体大小
       margin-left: 10px;
-      background-color: $button-color;
-      color: #fff;
+      padding: 0 8rpx;
+      border-radius: 6rpx;
+      background-color: $bgc-green;
+      color: $btn-color;
     }
   }
 }
