@@ -28,6 +28,10 @@ class Forum extends Component<{}, State> {
     newPostContent: "", // 新帖子内容
     searchContent: "",
   };
+
+  pageNum = 1;
+  pageSize = 10;
+
   /* 非生命周期，onShow */
   async componentDidShow() {
     const res = (await getForumList({
@@ -35,6 +39,30 @@ class Forum extends Component<{}, State> {
       pageSize: 10,
     })) as { list: Item[] };
     this.setState({ posts: res.list });
+  }
+
+  /**
+   * @description 触底加载更多
+   */
+  async onReachBottom() {
+    console.log("触底了");
+    this.pageNum++;
+    const { posts } = this.state;
+    const res = (await getForumList({
+      pageNum: this.pageNum,
+      pageSize: this.pageSize,
+    })) as { list: Item[] };
+    if (res.list.length === 0) {
+      // @ts-ignore
+      Taro.atMessage({
+        message: "没有更多了",
+        type: "error",
+        duration: 800,
+      });
+      this.pageNum--;
+      return;
+    }
+    this.setState({ posts: [...posts, ...res.list] });
   }
   /**
    * @description 输入框内容变化
