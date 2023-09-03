@@ -190,6 +190,8 @@ export default function CommentDetail() {
       return;
     }
     setCommentsList(res2.data.list);
+    // 关闭输入弹窗
+    setIsCommentDialogOpen(false);
 
     //不触发全部重新获取,需要后端返回新评论的数据
     // post.current = post.current;
@@ -222,6 +224,16 @@ export default function CommentDetail() {
       return;
     }
     setNewReplyContent("");
+
+    // 直接重新获取评论列表,没错就是评论列表，不是回复列表
+    const res2 = await getComment(post.id);
+    if (res2.code != "00000") {
+      console.log("展示评论失败");
+      return;
+    }
+    setCommentsList(res2.data.list);
+    // 关闭输入弹窗
+    setIsInputDialogOpen(false);
   };
 
   const handleInputBlur = (id?: number) => {
