@@ -3,9 +3,10 @@
 @import "~taro-ui/dist/style/components/avatar.scss";
 @import "~taro-ui/dist/style/components/action-sheet.scss";
 @import "../..//app.scss";
-$forum-fontSize: 25rpx; //input,button,post-content,interaction-button
-$forum-fontSize-b: 30rpx; //content
+$forum-fontSize-s: 25rpx; //input,button,post-content,interaction-button
+$forum-fontSize: 30rpx; //content
 $forum-fontSize-author: 35rpx; //author
+$forum-fontSize-author-2: 30rpx; //author-小号-回复
 // $button-color: #ffc701;
 // $btn-color: #ffaa00;
 $button-color: $lenmon-yellow;
@@ -69,8 +70,8 @@ button {
       background-color: $button-color;
       color: #fff;
       border: none;
-      border-radius: 15rpx; 
-      font-size: $forum-fontSize;
+      border-radius: 15rpx;
+      font-size: $forum-fontSize-s;
       transition: background-color 0.3s;
       &:hover {
         background-color: #a0aa25;
@@ -95,6 +96,8 @@ button {
   padding: 20px;
   position: fixed;
   bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
   background-color: #fff;
   z-index: 100;
 
@@ -103,7 +106,7 @@ button {
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 20px;
-    font-size: $forum-fontSize;
+    font-size: $forum-fontSize-s;
   }
 
   button {
@@ -113,7 +116,7 @@ button {
     color: #fff;
     border: none;
     border-radius: 20px; /* Increase the border radius for a more rounded button */
-    font-size: $forum-fontSize; /* Slightly larger font size for better readability */
+    font-size: $forum-fontSize-s; /* Slightly larger font size for better readability */
     cursor: pointer;
     transition: background-color 0.3s;
 
@@ -126,6 +129,7 @@ button {
 .comments {
   margin-top: 10rpx; // 调整评论区域与上方内容的间距
   padding: 15rpx; // 添加内边距，美化样式
+  padding-bottom: 80rpx;// 调整评论空出输入框距离
 
   .comment {
     background-color: #fff; // 评论区域背景颜色
@@ -142,19 +146,39 @@ button {
       color: $btn-color; // 调整评论作者的字体颜色
     }
     .comment-time {
-      font-size: $forum-fontSize; // 调整评论时间的字体大小
+      font-size: $forum-fontSize-s; // 调整评论时间的字体大小
       color: $btn-color; // 调整评论时间的字体颜色
     }
     .comment-content {
       font-size: $forum-fontSize; // 调整评论内容的字体大小
     }
     .comment-reply {
-      font-size: $forum-fontSize; // 调整评论内容的字体大小
+      font-size: $forum-fontSize-s; // 调整评论内容的字体大小
       margin-left: 10px;
       padding: 0 8rpx;
       border-radius: 6rpx;
       background-color: $bgc-green;
       color: $btn-color;
+    }
+
+    .reply {
+      margin-left: 115rpx;
+      margin-top: 10rpx;
+      display: flex;
+      flex-direction: column;
+      gap: 20rpx;
+      // .reply-item + .reply-item{
+      //   border-top: 1rpx solid #ccc;
+      // }
+      .author {
+        font-size: $forum-fontSize-author-2; // 调整评论作者的字体大小
+        color: $btn-color; // 调整评论作者的字体颜色
+        .custom-avatar {
+        }
+      }
+      .reply-content {
+        font-size: $forum-fontSize; // 调整评论内容的字体大小
+      }
     }
   }
 }

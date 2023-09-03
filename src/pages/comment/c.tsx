@@ -346,7 +346,7 @@ export default function CommentDetail() {
           <View className="comment" key={comment.id}>
             <View className="author">
               <AtAvatar
-                size="small"
+                size="normal"
                 image="https://c-ssl.dtstatic.com/uploads/blog/202201/07/20220107102121_8ad29.thumb.1000_0.gif"
               ></AtAvatar>
               <Text>猫猫酱</Text>
@@ -367,9 +367,25 @@ export default function CommentDetail() {
                 回复
               </Text>
             </View>
-            {/* <Button className="comment-reply" onClick={handleInputBlur}>
-              回复
-            </Button> */}
+            {/* 回复评论 */}
+            <View className="reply">
+              {comment.replyList.map((reply) => (
+                <View className="reply-item" key={reply.uid}>
+                  <View className="author">
+                    <AtAvatar
+                      size="small"
+                      className="custom-avatar"
+                      image="https://c-ssl.dtstatic.com/uploads/blog/202201/07/20220107102121_8ad29.thumb.1000_0.gif"
+                    ></AtAvatar>
+                    <Text>猫猫酱二号</Text>                
+                    <Text className="comment-time">
+                      {FormatTimeFromNow(reply.createTime)}
+                    </Text>
+                  </View>
+                  <Text className="reply-content">{reply.content}</Text>
+                </View>
+              ))}
+            </View>
           </View>
         ))}
       </View>
