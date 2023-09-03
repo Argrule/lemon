@@ -393,7 +393,8 @@ export default function CommentDetail() {
       <View className="new-post">
         <Input
           value={newCommentContent}
-          onFocus={() => handleInputBlur()}
+          disabled
+          onClick={() => handleInputBlur()}
           onInput={handleNewCommentChange}
           placeholder={placeholderStr}
         />
