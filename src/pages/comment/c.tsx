@@ -237,6 +237,7 @@ export default function CommentDetail() {
   };
 
   const handleInputBlur = (id?: number) => {
+    scrollToBottom()
     // 打开输入框
     switch (id) {
       case undefined:
@@ -252,6 +253,21 @@ export default function CommentDetail() {
         break;
     }
   };
+  function scrollToBottom() {
+    // 获取页面高度
+    Taro.createSelectorQuery()
+      .selectViewport()
+      .scrollOffset((res) => {
+        const scrollTop = res.scrollTop;
+        console.log(scrollTop);
+        // 设置滚动位置为页面底部
+        Taro.pageScrollTo({
+          scrollTop: 100000, // 10000 是一个足够大的值，确保能滚动到页面底部
+          duration: 300, // 滚动持续时间
+        });
+      })
+      .exec();
+  }
   // useEffect(() => {
   //   if (isInputDialogOpen) {
   //     // @ts-ignore
