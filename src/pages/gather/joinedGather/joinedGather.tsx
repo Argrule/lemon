@@ -2,7 +2,7 @@ import { View } from '@tarojs/components';
 import { AtButton, AtTag,AtFab,AtIcon,AtProgress } from 'taro-ui';
 import { useState,useEffect } from 'react';
 
-import { getGatherList,getTagList } from "$/api/gather";
+import { getTeamList,getTagList } from "$/api/gather";
 
 import Taro from "@tarojs/taro";
 
@@ -11,7 +11,7 @@ import 'taro-ui/dist/style/components/tag.scss';
 import "taro-ui/dist/style/components/fab.scss";
 import "taro-ui/dist/style/components/icon.scss";
 import "taro-ui/dist/style/components/progress.scss"
-import './gather.scss';
+import './joinedGather.scss';
 
 
 
@@ -58,14 +58,14 @@ export default function Gather() {
     try {
       let response;
       if(tagId){
-        response = await getGatherList({
+        response = await getTeamList({
           pageNum: 1,
-          tagId: tagId
+          pageSize: 30
         });
       } else {
-        response = await getGatherList({
+        response = await getTeamList({
           pageNum: 1,
-          tagId: selectedTagIndex
+          pageSize: 30
         });
       }
 
@@ -133,10 +133,6 @@ export default function Gather() {
     Taro.navigateTo({url:'/pages/gather/createGather/createGather'})
   };
 
-  const goJoinedGather = () => {
-    Taro.navigateTo({url:'/pages/gather/joinedGather/joinedGather'})
-  };
-
   return (
     <View className='container'>
       {/* <View className='fixed-button'>
@@ -145,15 +141,15 @@ export default function Gather() {
         </AtFab>
       </View> */}
 
-      <View className='joinAndInitiate'>
-        <AtButton className='join-button' type='primary' circle onClick={goJoinedGather}>
+      {/* <View className='joinAndInitiate'>
+        <AtButton className='join-button' type='primary' circle>
           我加入的局
         </AtButton>
         <AtButton className='initiate-button' type='primary' circle onClick={goCreateGather}>
           发起攒局
         </AtButton>
-      </View>
-      <View className='tags'>
+      </View> */}
+      {/* <View className='tags'>
         {classification.map((item, index) => (
           <View
             className={`tag ${item.checked ? 'checked' : ''}`}
@@ -170,7 +166,7 @@ export default function Gather() {
             </AtTag>
           </View>
         ))}
-      </View>
+      </View> */}
       <View className='cards'>
           {gatherList.map((gather, index) => (
             <View className='card' key={index} onClick={() => cardClick(gather)}>

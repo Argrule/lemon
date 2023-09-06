@@ -63,3 +63,20 @@ export const joinGather = async (params: {
   const res = await request.post("/team/join" + `?${paramsStr}`);
   return res;
 };
+
+/**
+ * @description 获取我的组队
+ * @param {number} params.pageNum
+ * @param {number} params.pageSize
+ * @returns
+ */
+export const getTeamList = async (params: {
+  pageNum: number;
+  pageSize: number;
+}) => {
+  const paramsStr = Object.keys(params)
+    .map((key) => `${key}=${params[key]}`)
+    .join("&");
+  const res = await request.get("/user/team" + `?${paramsStr}`);
+  return res.data;
+};
