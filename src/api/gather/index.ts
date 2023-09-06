@@ -51,7 +51,8 @@ export const createGather = async (params: {
 };
 
 /**
- * @description 获取攒局标签列表
+ * @description 加入组队
+ * @param {number} params.teamId
  * @returns
  */
 export const joinGather = async (params: {
@@ -79,4 +80,34 @@ export const getTeamList = async (params: {
     .join("&");
   const res = await request.get("/user/team" + `?${paramsStr}`);
   return res.data;
+};
+
+/**
+ * @description 退出组队
+ * @param {number} params.teamId
+ * @returns
+ */
+export const quitGather = async (params: {
+  teamId:number
+}) => {
+  const paramsStr = Object.keys(params)
+    .map((key) => `${key}=${params[key]}`)
+    .join("&");
+  const res = await request.post("/team/leave" + `?${paramsStr}`);
+  return res;
+};
+
+/**
+ * @description 删除组队
+ * @param {number} params.teamId
+ * @returns
+ */
+export const deleteGather = async (params: {
+  teamId:number
+}) => {
+  const paramsStr = Object.keys(params)
+    .map((key) => `${key}=${params[key]}`)
+    .join("&");
+  const res = await request.delete("/team/delete" + `?${paramsStr}`);
+  return res;
 };

@@ -186,7 +186,7 @@ export default function Gather() {
 
                 </View>
                 <View className='schedule'>
-                    <AtProgress percent={gather.currentNum*100/gather.maxNum} />
+                    <AtProgress percent={Math.floor(gather.currentNum*100/gather.maxNum)} />
                   </View>
               </View>
 
