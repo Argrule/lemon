@@ -135,11 +135,11 @@ export default function Gather() {
 
   return (
     <View className='container'>
-      <View className='fixed-button'>
+      {/* <View className='fixed-button'>
         <AtFab onClick={() => fixedButtonClick()}>
           <AtIcon value='search' size='25' color='white'></AtIcon>
         </AtFab>
-      </View>
+      </View> */}
 
       <View className='joinAndInitiate'>
         <AtButton className='join-button' type='primary' circle>
