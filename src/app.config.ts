@@ -13,6 +13,7 @@ export default defineAppConfig({
     "pages/sendPost/sp",
     "pages/comment/c",
     "pages/developing/developing",
+    "pages/personalCenter/userAgreement/userAgreement",
   ],
   window: {
     backgroundTextStyle: "light",

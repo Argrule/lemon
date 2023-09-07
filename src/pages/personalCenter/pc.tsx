@@ -28,7 +28,7 @@ const pc = () => {
     {
       content: "用户协议",
       icon: "chevron-right",
-      path: "/pages/developing/developing",
+      path: "/pages/personalCenter/userAgreement/userAgreement",
     },
     {
       content: "版本",
