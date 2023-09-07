@@ -1,5 +1,5 @@
 import { View } from '@tarojs/components';
-import { AtButton, AtTag,AtFab,AtIcon,AtProgress } from 'taro-ui';
+import { AtButton, AtTag,AtFab,AtIcon,AtProgress,AtMessage } from 'taro-ui';
 import { useState,useEffect } from 'react';
 
 import { getGatherList,getTagList } from "$/api/gather";
@@ -46,7 +46,7 @@ export default function Gather() {
     { name: '旅行', checked: false },
     { name: '其他', checked: false },
   ]);
-
+  const [pageNum, setPageNum] = useState<number>(1);
 
   useEffect(() => {
     getTagList({});
@@ -54,17 +54,51 @@ export default function Gather() {
 
   }, []);
 
+
+  Taro.useReachBottom(() => {
+    onReachBottom();
+  });
+  /**
+   * @description 触底加载更多
+   */
+  const onReachBottom=async() =>{
+    setPageNum(pageNum+1);
+    console.log("触底了",pageNum);
+    const res=await fetchGatherList(0)
+    // if (res.list.length === 0) {
+    //   // @ts-ignore
+    //   Taro.atMessage({
+    //     message: "没有更多了",
+    //     type: "error",
+    //     duration: 800,
+    //   });
+    //   this.pageNum--;
+    //   return;
+    // }
+    console.log('res',res);
+
+  }
+  // 使用 usePullDownRefresh 钩子来处理下拉刷新
+  Taro.usePullDownRefresh(() => {
+    refreshData();
+  });
+
+  const refreshData = () => {
+    // 在这里触发下拉刷新
+    fetchGatherList(selectedTagIndex);
+  };
+
   const fetchGatherList = async (tagId) => {
     try {
       let response;
       if(tagId){
         response = await getGatherList({
-          pageNum: 1,
+          pageNum: pageNum,
           tagId: tagId
         });
       } else {
         response = await getGatherList({
-          pageNum: 1,
+          pageNum: pageNum,
           tagId: selectedTagIndex
         });
       }
@@ -83,10 +117,25 @@ export default function Gather() {
       }
       console.log('res',response.list);
 
+      if(pageNum===1){
+        setGatherList(response.list); // Update the gatherList state
+      } else if(pageNum>1){
+        console.log('response.list',response.list);
+        if(response.list.length==0){
+          Taro.atMessage({
+            message: '没有更多数据了',
+            type: 'error',
+          });
+        }
+        setGatherList([...gatherList,...response.list]);
+
+      }
       // Assuming the response contains the list of gathers
-      setGatherList(response.list); // Update the gatherList state
+
+      Taro.stopPullDownRefresh(); // 始终在请求结束后停止下拉刷新动画
     } catch (error) {
       console.error('Error fetching gather list', error);
+      Taro.stopPullDownRefresh(); // 始终在请求结束后停止下拉刷新动画
     }
   };
 
@@ -184,7 +233,7 @@ export default function Gather() {
                     {gather.topic}
                   </View>
                   <View className='others'>
-                    <View className='director'>{gather.uid}</View>
+                    <View className='director'>局长：{gather.uid}</View>
                     <View className='time'>{gather.createTime}</View>
                   </View>
 
@@ -196,7 +245,7 @@ export default function Gather() {
 
             </View>
           ))}
-
+        <AtMessage />
       </View>
     </View>
   );

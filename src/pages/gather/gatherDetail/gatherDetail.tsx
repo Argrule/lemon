@@ -153,9 +153,9 @@ export default function GatherDetail() {
         <AtButton type='primary' circle onClick={handleQuit} className='buttonItem'>
           我要出局
         </AtButton>
-        <AtButton type='primary' circle onClick={handleDelete} className='buttonItem'>
+        {/* <AtButton type='primary' circle onClick={handleDelete} className='buttonItem'>
           炸局
-        </AtButton>
+        </AtButton> */}
         <AtMessage />
       </View>
     </View>

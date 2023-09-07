@@ -54,6 +54,16 @@ export default function Gather() {
 
   }, []);
 
+  // 使用 usePullDownRefresh 钩子来处理下拉刷新
+  Taro.usePullDownRefresh(() => {
+    refreshData();
+  });
+
+  const refreshData = () => {
+    // 在这里触发下拉刷新
+    fetchGatherList(selectedTagIndex);
+  };
+
   const fetchGatherList = async (tagId) => {
     try {
       let response;
@@ -85,8 +95,10 @@ export default function Gather() {
 
       // Assuming the response contains the list of gathers
       setGatherList(response.list); // Update the gatherList state
+      Taro.stopPullDownRefresh(); // 始终在请求结束后停止下拉刷新动画
     } catch (error) {
       console.error('Error fetching gather list', error);
+      Taro.stopPullDownRefresh(); // 始终在请求结束后停止下拉刷新动画
     }
   };
 
