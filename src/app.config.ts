@@ -17,6 +17,8 @@ export default defineAppConfig({
     "pages/comment/c",
     "pages/developing/developing",
     "pages/personalCenter/userAgreement/userAgreement",
+    "pages/personalCenter/myPost/post",
+    "pages/personalCenter/myCollect/collect",
   ],
   window: {
     backgroundTextStyle: "light",

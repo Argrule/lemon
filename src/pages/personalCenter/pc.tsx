@@ -48,12 +48,12 @@ const pc = () => {
     {
       content: "我收藏的",
       icon: "chevron-right",
-      path: "/pages/myCollect/collect",
+      path: "/pages/personalCenter/myCollect/collect",
     },
     {
       content: "我发的帖子",
       icon: "chevron-right",
-      path: "/pages/myPost/post",
+      path: "/pages/personalCenter/myPost/post",
     }
   ];
 
