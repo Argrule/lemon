@@ -11,7 +11,7 @@ import { InputEventDetail } from "taro-ui/types/input";
 import {
   deletePost,
   getForumList,
-  publishPost,
+  // publishPost,
   likePost,
   cancelLikePost,
   collectPost,
@@ -75,38 +75,38 @@ class Forum extends Component<{}, State> {
   /**
    * @description 发布新帖子
    */
-  handleNewPostSubmit = async () => {
-    const { newPostContent, posts } = this.state;
-    if (!newPostContent) {
-      console.log("请输入内容");
-      return;
-    }
-    // ## 假冒的帖子
-    const newMockPost: Item = {
-      id: Date.now(),
-      uid: 1,
-      schoolId: 1,
-      content: newPostContent,
-      likeNum: 0,
-      readNum: 0,
-      collectNum: 0,
-      collectStatus: false,
-      likeStatus: false,
-      createTime: Date(),
-    };
-    const res = await publishPost({
-      content: newPostContent,
-      tagIds: [1, 2],
-    });
-    if (res.code != "00000") {
-      console.log("发布失败");
-      return;
-    }
-    this.setState({
-      posts: [newMockPost, ...posts],
-      newPostContent: "",
-    });
-  };
+  // handleNewPostSubmit = async () => {
+  //   const { newPostContent, posts } = this.state;
+  //   if (!newPostContent) {
+  //     console.log("请输入内容");
+  //     return;
+  //   }
+  //   // ## 假冒的帖子
+  //   const newMockPost: Item = {
+  //     id: Date.now(),
+  //     uid: 1,
+  //     schoolId: 1,
+  //     content: newPostContent,
+  //     likeNum: 0,
+  //     readNum: 0,
+  //     collectNum: 0,
+  //     collectStatus: false,
+  //     likeStatus: false,
+  //     createTime: Date(),
+  //   };
+  //   const res = await publishPost({
+  //     content: newPostContent,
+  //     tagIds: [1, 2],
+  //   });
+  //   if (res.code != "00000") {
+  //     console.log("发布失败");
+  //     return;
+  //   }
+  //   this.setState({
+  //     posts: [newMockPost, ...posts],
+  //     newPostContent: "",
+  //   });
+  // };
   /**
    * @description 点赞及取消点赞
    * @param postId 帖子id
