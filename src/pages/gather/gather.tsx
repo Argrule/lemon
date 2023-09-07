@@ -183,7 +183,7 @@ export default function Gather() {
   };
 
   const fixedButtonClick = () => {
-    console.log('fixedButtonClick');
+    Taro.navigateTo({url:'/pages/gather/searchGather/searchGather'})
   };
 
   const goCreateGather = () => {
@@ -194,13 +194,14 @@ export default function Gather() {
     Taro.navigateTo({url:'/pages/gather/joinedGather/joinedGather'})
   };
 
+
   return (
     <View className='container'>
-      {/* <View className='fixed-button'>
+      <View className='fixed-button'>
         <AtFab onClick={() => fixedButtonClick()}>
           <AtIcon value='search' size='25' color='white'></AtIcon>
         </AtFab>
-      </View> */}
+      </View>
 
       <View className='joinAndInitiate'>
         <AtButton className='join-button' type='primary' circle onClick={goJoinedGather}>
