@@ -6,11 +6,13 @@ import MenuList from "$/components/personalCenter/MenuList";
 import { AtAvatar } from "taro-ui";
 import "taro-ui/dist/style/components/avatar.scss";
 import { useState } from "react";
+import staticAvatar from "../../assets/avatar.jpg";
 
 const pc = () => {
-  const [avatar, serAvatar] = useState("");
+  const [avatar, setAvatar] = useState("");
+  const [nickname, setNickname] = useState("加载中");
+  const [school, setSchool] = useState("加载中");
   // 菜单的数据
-  let nickname = "加载中";
   let slogan = "加载中";
   const menuList = [
     {
@@ -38,7 +40,14 @@ const pc = () => {
       icon: "chevron-right",
       path: "/pages/developing/developing",
     },
+    {
+      content: "我创建的局",
+      icon: "chevron-right",
+      path: "/pages/myGather/gather",
+    },
   ];
+
+  // 页面展示时检测登录状态
   async function checkLogin() {
     let token = Taro.getStorageSync("Authorization");
     let res;
@@ -48,6 +57,7 @@ const pc = () => {
       });
     } else {
       res = await o.get("/user/info", "");
+      setNickname("锐锐"), setAvatar(staticAvatar), setSchool("门头沟学院");
       console.log("LOGIN RES:", res);
       return res;
     }
@@ -70,7 +80,7 @@ const pc = () => {
         ></AtAvatar>
         <View className="name-slogan">
           <Text className="nickname">{nickname}</Text>
-          <Text className="slogan">{slogan}</Text>
+          <Text className="slogan">{school}</Text>
         </View>
       </View>
       {/* 跳转列表部分 */}

@@ -8,6 +8,7 @@ export default defineAppConfig({
     "pages/personalCenter/pc",
     "pages/personalCenter/setting/setting",
     "pages/gather/gather",
+    "pages/myGather/gather",
     "pages/gather/createGather/createGather",
     "pages/gather/gatherDetail/gatherDetail",
     "pages/sendPost/sp",
