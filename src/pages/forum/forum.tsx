@@ -1,5 +1,5 @@
 import { Component } from "react";
-import { View, Text, Button, BaseEventOrig } from "@tarojs/components";
+import { View, Text, Button, BaseEventOrig, Image } from "@tarojs/components";
 // import { Input } from "@tarojs/components";
 import { AtIcon } from "taro-ui";
 import { AtFab } from "taro-ui";
@@ -20,6 +20,7 @@ import {
 } from "$/api/forum";
 import { Item, State } from "./data";
 import { AtSearchBar } from "taro-ui";
+import { FormatTimeFromNow } from "$/utils/dayjs";
 
 class Forum extends Component<{}, State> {
   /* 状态 */
@@ -278,6 +279,14 @@ class Forum extends Component<{}, State> {
                 <Text className="post-content" userSelect>
                   {post.content}
                 </Text>
+                <View className="flex">
+                  {post.images?.map((image) => (
+                    <Image
+                      src={image}
+                      style="width: 100px;height: 100px;background: #fff;"
+                    />
+                  ))}
+                </View>
                 <View className="post-tags">
                   {post.tagName?.map((tag) => (
                     <AtTag size="small" className="tagList" circle>
@@ -286,6 +295,9 @@ class Forum extends Component<{}, State> {
                   ))}
                 </View>
                 <View className="interaction-buttons">
+                  <Text className="post-time">
+                    {FormatTimeFromNow(post.createTime)}
+                  </Text>
                   <Button
                     onClick={() =>
                       this.handleLikePost(post.id, post.likeStatus)
