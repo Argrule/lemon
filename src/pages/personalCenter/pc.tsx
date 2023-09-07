@@ -57,7 +57,9 @@ const pc = () => {
       });
     } else {
       res = await o.get("/user/info", "");
-      setNickname("锐锐"), setAvatar(staticAvatar), setSchool("门头沟学院");
+      setNickname(res.data.nickname),
+        setAvatar(res.data.avatarUrl),
+        setSchool(res.data.school);
       console.log("LOGIN RES:", res);
       return res;
     }
