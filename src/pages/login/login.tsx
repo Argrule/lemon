@@ -1,6 +1,7 @@
-import { View, Text } from "@tarojs/components";
+import { View, Text, Image } from "@tarojs/components";
 import Taro, { useLoad } from "@tarojs/taro";
 import { AtButton } from "taro-ui";
+import nothing from "../../assets/nothing.svg";
 import o from "$/utils/request";
 import "taro-ui/dist/style/components/button.scss"; // 按需引入
 import "./login.scss";
@@ -11,11 +12,19 @@ export default function Login() {
   });
 
   return (
-    <View className="login">
-      <Text>sign in！</Text>
-      <AtButton type="primary" onClick={signInPost}>
-        源神！ 启动！！
-      </AtButton>
+    // <View className="login">
+    //   <Text>sign in！</Text>
+    //   <AtButton type="secondary" onClick={signInPost}>
+    //     一键登录
+    //   </AtButton>
+    // </View>
+    <View className="login-root">
+      <View className="main">
+        <Image src={nothing}></Image>
+        <AtButton type="primary" onClick={signInPost}>
+          一键登录
+        </AtButton>
+      </View>
     </View>
   );
 }
