@@ -393,7 +393,7 @@ export default function CommentDetail() {
                       className="custom-avatar"
                       image="https://c-ssl.dtstatic.com/uploads/blog/202201/07/20220107102121_8ad29.thumb.1000_0.gif"
                     ></AtAvatar>
-                    <Text>猫猫酱二号</Text>                
+                    <Text>猫猫酱二号❤️</Text>                
                     <Text className="comment-time">
                       {FormatTimeFromNow(reply.createTime)}
                     </Text>

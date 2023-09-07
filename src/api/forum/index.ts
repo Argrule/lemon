@@ -1,5 +1,6 @@
 import { CommentData, Item, Tag } from "$/pages/forum/data";
 import o from "$/utils/request";
+// import Taro from "@tarojs/taro";
 
 interface BaseResponse<T = any> {
   code: string;
@@ -34,11 +35,28 @@ export const getForumList = async (params: {
  * @param data.tagIds 帖子标签
  * @abstract tagIds由请求获取，描述帖子的tag
  */
+// export const publishPost = async (data: {
+//   content: string;
+//   tagIds: number[];
+//   files: File[];
+// }): Promise<BaseResponse> => {
+//   const res = (await Taro.uploadFile(
+//     "/post/publish",
+//     data,
+//     "application/form-data"
+//   )) as any;
+//   return res;
+// };
 export const publishPost = async (data: {
   content: string;
   tagIds: number[];
+  files: File[];
 }): Promise<BaseResponse> => {
-  const res = (await o.post("/post/publish", data)) as any;
+  const res = (await o.post(
+    "/post/publish",
+    data,
+    "application/form-data"
+  )) as any;
   return res;
 };
 
