@@ -1,5 +1,5 @@
 import { Component } from "react";
-import { View, Text, Button, BaseEventOrig } from "@tarojs/components";
+import { View, Text, Button, BaseEventOrig, Image } from "@tarojs/components";
 // import { Input } from "@tarojs/components";
 import { AtIcon } from "taro-ui";
 import { AtFab } from "taro-ui";
@@ -20,6 +20,7 @@ import {
 } from "$/api/forum";
 import { Item, State } from "./data";
 import { AtSearchBar } from "taro-ui";
+import { FormatTimeFromNow } from "$/utils/dayjs";
 
 class Forum extends Component<{}, State> {
   /* 状态 */
@@ -28,6 +29,10 @@ class Forum extends Component<{}, State> {
     newPostContent: "", // 新帖子内容
     searchContent: "",
   };
+
+  pageNum = 1;
+  pageSize = 10;
+
   /* 非生命周期，onShow */
   async componentDidShow() {
     const res = (await getForumList({
@@ -35,6 +40,30 @@ class Forum extends Component<{}, State> {
       pageSize: 10,
     })) as { list: Item[] };
     this.setState({ posts: res.list });
+  }
+
+  /**
+   * @description 触底加载更多
+   */
+  async onReachBottom() {
+    console.log("触底了");
+    this.pageNum++;
+    const { posts } = this.state;
+    const res = (await getForumList({
+      pageNum: this.pageNum,
+      pageSize: this.pageSize,
+    })) as { list: Item[] };
+    if (res.list.length === 0) {
+      // @ts-ignore
+      Taro.atMessage({
+        message: "没有更多了",
+        type: "error",
+        duration: 800,
+      });
+      this.pageNum--;
+      return;
+    }
+    this.setState({ posts: [...posts, ...res.list] });
   }
   /**
    * @description 输入框内容变化
@@ -250,6 +279,14 @@ class Forum extends Component<{}, State> {
                 <Text className="post-content" userSelect>
                   {post.content}
                 </Text>
+                <View className="flex">
+                  {post.images?.map((image) => (
+                    <Image
+                      src={image}
+                      style="width: 100px;height: 100px;background: #fff;"
+                    />
+                  ))}
+                </View>
                 <View className="post-tags">
                   {post.tagName?.map((tag) => (
                     <AtTag size="small" className="tagList" circle>
@@ -258,6 +295,9 @@ class Forum extends Component<{}, State> {
                   ))}
                 </View>
                 <View className="interaction-buttons">
+                  <Text className="post-time">
+                    {FormatTimeFromNow(post.createTime)}
+                  </Text>
                   <Button
                     onClick={() =>
                       this.handleLikePost(post.id, post.likeStatus)
