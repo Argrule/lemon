@@ -1,4 +1,29 @@
+@import "~taro-ui/dist/style/components/icon.scss";
+@import "../../app.scss";
+$text-color:$lenmon-yellow;
+$icon-color:$lenmon-yellow;
+.icon{
+    color: $icon-color;
+}
 .sayhi{
     background-color: rgb(255, 98, 195);
     width: 50%;
+}
+// .flex{
+//     display: flex;
+//     justify-content: space-evenly;
+//     align-items: center;    
+// }
+// .container{
+//     padding: 20rpx;
+    .icon-text{
+        font-size: 38rpx;
+        color: $text-color;
+    }
+// }
+.flex-col{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
 }
