@@ -10,6 +10,7 @@ export default defineAppConfig({
     "pages/gather/gather",
     "pages/myGather/gather",
     "pages/gather/createGather/createGather",
+    'pages/gather/joinedGather/joinedGather',
     "pages/gather/gatherDetail/gatherDetail",
     "pages/sendPost/sp",
     "pages/comment/c",

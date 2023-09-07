@@ -1,8 +1,8 @@
 import { View } from '@tarojs/components';
-import { AtButton, AtTag,AtFab,AtIcon,AtProgress,AtMessage } from 'taro-ui';
+import { AtButton, AtTag,AtFab,AtIcon,AtProgress } from 'taro-ui';
 import { useState,useEffect } from 'react';
 
-import { getGatherList,getTagList } from "$/api/gather";
+import { getTeamList,getTagList } from "$/api/gather";
 
 import Taro from "@tarojs/taro";
 
@@ -11,7 +11,7 @@ import 'taro-ui/dist/style/components/tag.scss';
 import "taro-ui/dist/style/components/fab.scss";
 import "taro-ui/dist/style/components/icon.scss";
 import "taro-ui/dist/style/components/progress.scss"
-import './gather.scss';
+import './joinedGather.scss';
 
 
 
@@ -35,7 +35,7 @@ export default function Gather() {
   const [selectedTagIndex, setSelectedTagIndex] = useState<number>(0);
   const [gatherList, setGatherList] = useState<GatherItemType[]>([]); // 初始化为空数组
   const [classification, setClassification] = useState<ClassificationItem[]>([
-    { name: '全部', checked: false },
+    { name: '空位', checked: false },
     { name: '自习', checked: false },
     { name: '电影', checked: false },
     { name: '聚餐', checked: false },
@@ -46,7 +46,7 @@ export default function Gather() {
     { name: '旅行', checked: false },
     { name: '其他', checked: false },
   ]);
-  const [pageNum, setPageNum] = useState<number>(1);
+
 
   useEffect(() => {
     getTagList({});
@@ -54,30 +54,6 @@ export default function Gather() {
 
   }, []);
 
-
-  Taro.useReachBottom(() => {
-    onReachBottom();
-  });
-  /**
-   * @description 触底加载更多
-   */
-  const onReachBottom=async() =>{
-    setPageNum(pageNum+1);
-    console.log("触底了",pageNum);
-    const res=await fetchGatherList(0)
-    // if (res.list.length === 0) {
-    //   // @ts-ignore
-    //   Taro.atMessage({
-    //     message: "没有更多了",
-    //     type: "error",
-    //     duration: 800,
-    //   });
-    //   this.pageNum--;
-    //   return;
-    // }
-    console.log('res',res);
-
-  }
   // 使用 usePullDownRefresh 钩子来处理下拉刷新
   Taro.usePullDownRefresh(() => {
     refreshData();
@@ -85,27 +61,23 @@ export default function Gather() {
 
   const refreshData = () => {
     // 在这里触发下拉刷新
-    fetchGatherList(0);
+    fetchGatherList(selectedTagIndex);
   };
 
   const fetchGatherList = async (tagId) => {
-    console.log('tagId',tagId);
-
     try {
       let response;
-      // if(tagId){
-        console.log('进了上面');
-        response = await getGatherList({
-          pageNum: pageNum,
-          tagId: tagId
+      if(tagId){
+        response = await getTeamList({
+          pageNum: 1,
+          pageSize: 30
         });
-      // } else {
-      //   console.log('进了下面');
-      //   response = await getGatherList({
-      //     pageNum: pageNum,
-      //     tagId: selectedTagIndex
-      //   });
-      // }
+      } else {
+        response = await getTeamList({
+          pageNum: 1,
+          pageSize: 30
+        });
+      }
 
 
       console.log('res',response);
@@ -121,21 +93,8 @@ export default function Gather() {
       }
       console.log('res',response.list);
 
-      if(pageNum===1){
-        setGatherList(response.list); // Update the gatherList state
-      } else if(pageNum>1){
-        console.log('response.list',response.list);
-        if(response.list.length==0){
-          Taro.atMessage({
-            message: '没有更多数据了',
-            type: 'error',
-          });
-        }
-        setGatherList([...gatherList,...response.list]);
-
-      }
       // Assuming the response contains the list of gathers
-
+      setGatherList(response.list); // Update the gatherList state
       Taro.stopPullDownRefresh(); // 始终在请求结束后停止下拉刷新动画
     } catch (error) {
       console.error('Error fetching gather list', error);
@@ -144,28 +103,24 @@ export default function Gather() {
   };
 
   const tagClick = (index: number) => {
-    setPageNum(1);
     if (classification[index].name === '空位') {
       const updatedClassification = classification.map((item, i) => ({
         ...item,
         checked: i === index ? !item.checked : item.checked,
       }));
       setClassification(updatedClassification);
-      console.log('index空位',index);
+      console.log('index',index);
       setSelectedTagIndex(index); // 更新选中的标签索引
       fetchGatherList(index); // 重新获取数据
-
     } else {
       const updatedClassification = classification.map((item, i) => ({
         ...item,
         checked: item.name === '空位' ? item.checked : (i === index ? !item.checked : false),
       }));
       setClassification(updatedClassification);
-      console.log('index非空位',index);
+      console.log('index',index);
       setSelectedTagIndex(index); // 更新选中的标签索引
       fetchGatherList(index); // 重新获取数据
-
-
     }
 
   };
@@ -190,10 +145,6 @@ export default function Gather() {
     Taro.navigateTo({url:'/pages/gather/createGather/createGather'})
   };
 
-  const goJoinedGather = () => {
-    Taro.navigateTo({url:'/pages/gather/joinedGather/joinedGather'})
-  };
-
   return (
     <View className='container'>
       {/* <View className='fixed-button'>
@@ -202,15 +153,15 @@ export default function Gather() {
         </AtFab>
       </View> */}
 
-      <View className='joinAndInitiate'>
-        <AtButton className='join-button' type='primary' circle onClick={goJoinedGather}>
+      {/* <View className='joinAndInitiate'>
+        <AtButton className='join-button' type='primary' circle>
           我加入的局
         </AtButton>
         <AtButton className='initiate-button' type='primary' circle onClick={goCreateGather}>
           发起攒局
         </AtButton>
-      </View>
-      <View className='tags'>
+      </View> */}
+      {/* <View className='tags'>
         {classification.map((item, index) => (
           <View
             className={`tag ${item.checked ? 'checked' : ''}`}
@@ -227,7 +178,7 @@ export default function Gather() {
             </AtTag>
           </View>
         ))}
-      </View>
+      </View> */}
       <View className='cards'>
           {gatherList.map((gather, index) => (
             <View className='card' key={index} onClick={() => cardClick(gather)}>
@@ -241,7 +192,7 @@ export default function Gather() {
                     {gather.topic}
                   </View>
                   <View className='others'>
-                    <View className='director'>局长：{gather.uid}</View>
+                    <View className='director'>{gather.uid}</View>
                     <View className='time'>{gather.createTime}</View>
                   </View>
 
@@ -253,7 +204,7 @@ export default function Gather() {
 
             </View>
           ))}
-        <AtMessage />
+
       </View>
     </View>
   );

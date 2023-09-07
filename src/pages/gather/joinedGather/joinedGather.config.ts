@@ -1,9 +1,8 @@
 export default definePageConfig({
-    navigationBarTitleText: '攒局',
+    navigationBarTitleText: '我的组队',
     navigationBarBackgroundColor: '#fff',
     navigationBarTextStyle: 'black',
     enablePullDownRefresh: true,
-    onReachBottomDistance: 0,
     backgroundTextStyle: 'dark',
     // onReachBottomDistance: 50,
     // usingComponents: {
