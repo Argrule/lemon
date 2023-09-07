@@ -126,3 +126,20 @@ export const deleteGather = async (params: {
   const res = await request.delete("/team/delete" + `?${paramsStr}`);
   return res;
 };
+
+/**
+ * @description 搜索攒局
+ * @param {number} params.pageNum
+ * @param {string} params.topic
+ * @returns
+ */
+export const searchTeamList = async (params: {
+  pageNum: number;
+  topic: string;
+}) => {
+  const paramsStr = Object.keys(params)
+    .map((key) => `${key}=${params[key]}`)
+    .join("&");
+  const res = await request.get("/team/search" + `?${paramsStr}`);
+  return res.data;
+};
