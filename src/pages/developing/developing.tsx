@@ -2,6 +2,7 @@ import { View, Text, Image } from "@tarojs/components";
 import Taro from "@tarojs/taro";
 import houseWork from "../../assets/doHouseWork.svg";
 import "./developing.scss";
+import React from "react";
 const developing = () => {
   Taro.setNavigationBarTitle({
     title: "开发中",

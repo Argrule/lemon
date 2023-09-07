@@ -54,7 +54,7 @@ const pc = () => {
       content: "我发的帖子",
       icon: "chevron-right",
       path: "/pages/personalCenter/myPost/post",
-    }
+    },
   ];
 
   // 页面展示时检测登录状态
@@ -67,10 +67,11 @@ const pc = () => {
       });
     } else {
       res = await o.get("/user/info", "");
-      setNickname(res.data.nickname),
-        setAvatar(res.data.avatarUrl),
-        setSchool(res.data.school);
-      console.log("LOGIN RES:", res);
+      setNickname(res.data.nickname);
+      setAvatar(res.data.avatarUrl);
+      setSchool(res.data.school);
+      Taro.setStorageSync("avatar", res.data.avatarUrl);
+      // console.log("LOGIN RES:", res);
       return res;
     }
   }
@@ -80,10 +81,18 @@ const pc = () => {
   });
   // console.log("TOKEN:", Taro.getStorageSync("Authorization"));
   Taro.getStorageSync("Authorization");
+
   return (
     <View className="personalCenter">
       {/* 头像部分 */}
-      <View className="head-card">
+      <View
+        className="head-card"
+        onClick={() =>
+          Taro.navigateTo({
+            url: "/pages/personalCenter/changeUserInfo/changeUserInfo",
+          })
+        }
+      >
         <AtAvatar
           image={avatar}
           size="large"
