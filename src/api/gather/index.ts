@@ -30,7 +30,7 @@ export const getMyGatherList = async (params: {
   const paramsStr = Object.keys(params)
     .map((key) => `${key}=${params[key]}`)
     .join("&");
-  const res = await request.get("team/create" + `?${paramsStr}`);
+  const res = await request.get("/user/team/create" + `?${paramsStr}`);
   return res.data;
 };
 
