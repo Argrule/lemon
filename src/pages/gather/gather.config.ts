@@ -3,6 +3,7 @@ export default definePageConfig({
     navigationBarBackgroundColor: '#fff',
     navigationBarTextStyle: 'black',
     enablePullDownRefresh: true,
+    onReachBottomDistance: 0,
     backgroundTextStyle: 'dark',
     // onReachBottomDistance: 50,
     // usingComponents: {

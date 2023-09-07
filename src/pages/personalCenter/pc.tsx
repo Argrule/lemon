@@ -43,7 +43,7 @@ const pc = () => {
     {
       content: "我创建的局",
       icon: "chevron-right",
-      path: "/pages/myGather/gather",
+      path: "/pages/personalCenter/myJoinedGather/joinedGather",
     },
     {
       content: "我收藏的",
@@ -67,7 +67,9 @@ const pc = () => {
       });
     } else {
       res = await o.get("/user/info", "");
-      setNickname("锐锐"), setAvatar(staticAvatar), setSchool("门头沟学院");
+      setNickname(res.data.nickname),
+        setAvatar(res.data.avatarUrl),
+        setSchool(res.data.school);
       console.log("LOGIN RES:", res);
       return res;
     }
