@@ -18,23 +18,6 @@ export const getGatherList = async (params: {
 };
 
 /**
- * @description 获取我的攒局列表
- * @param {number} params.pageNum
- * @param {number} params.tagId
- * @returns
- */
-export const getMyGatherList = async (params: {
-  pageNum: number;
-  tagId: number;
-}) => {
-  const paramsStr = Object.keys(params)
-    .map((key) => `${key}=${params[key]}`)
-    .join("&");
-  const res = await request.get("team/create" + `?${paramsStr}`);
-  return res.data;
-};
-
-/**
  * @description 获取攒局标签列表
  * @returns
  */
@@ -68,7 +51,8 @@ export const createGather = async (params: {
 };
 
 /**
- * @description 获取攒局标签列表
+ * @description 加入组队
+ * @param {number} params.teamId
  * @returns
  */
 export const joinGather = async (params: { teamId: number }) => {
@@ -77,4 +61,81 @@ export const joinGather = async (params: { teamId: number }) => {
     .join("&");
   const res = await request.post("/team/join" + `?${paramsStr}`);
   return res;
+};
+
+/**
+ * @description 获取我的组队
+ * @param {number} params.pageNum
+ * @param {number} params.pageSize
+ * @returns
+ */
+export const getTeamList = async (params: {
+  pageNum: number;
+  pageSize: number;
+}) => {
+  const paramsStr = Object.keys(params)
+    .map((key) => `${key}=${params[key]}`)
+    .join("&");
+  const res = await request.get("/user/team" + `?${paramsStr}`);
+  return res.data;
+};
+
+/**
+ * @description 获取我创建的组队
+ * @param {number} params.pageNum
+ * @param {number} params.pageSize
+ * @returns
+ */
+export const getMyTeamList = async (params: {
+  pageNum: number;
+  pageSize: number;
+}) => {
+  const paramsStr = Object.keys(params)
+    .map((key) => `${key}=${params[key]}`)
+    .join("&");
+  const res = await request.get("/user/team/create" + `?${paramsStr}`);
+  return res.data;
+};
+
+/**
+ * @description 退出组队
+ * @param {number} params.teamId
+ * @returns
+ */
+export const quitGather = async (params: { teamId: number }) => {
+  const paramsStr = Object.keys(params)
+    .map((key) => `${key}=${params[key]}`)
+    .join("&");
+  const res = await request.post("/team/leave" + `?${paramsStr}`);
+  return res;
+};
+
+/**
+ * @description 删除组队
+ * @param {number} params.teamId
+ * @returns
+ */
+export const deleteGather = async (params: { teamId: number }) => {
+  const paramsStr = Object.keys(params)
+    .map((key) => `${key}=${params[key]}`)
+    .join("&");
+  const res = await request.delete("/team/delete" + `?${paramsStr}`);
+  return res;
+};
+
+/**
+ * @description 搜索攒局
+ * @param {number} params.pageNum
+ * @param {string} params.topic
+ * @returns
+ */
+export const searchTeamList = async (params: {
+  pageNum: number;
+  topic: string;
+}) => {
+  const paramsStr = Object.keys(params)
+    .map((key) => `${key}=${params[key]}`)
+    .join("&");
+  const res = await request.get("/team/search" + `?${paramsStr}`);
+  return res.data;
 };

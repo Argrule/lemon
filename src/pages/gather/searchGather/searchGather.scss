@@ -1,5 +1,9 @@
 @import "~taro-ui/dist/style/components/message.scss";
 
+.searchBar{
+  width: 90vw;
+  margin-bottom: 3vh;
+}
 .content{
   display: flex;
   flex-direction: column;

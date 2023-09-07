@@ -43,8 +43,18 @@ const pc = () => {
     {
       content: "我创建的局",
       icon: "chevron-right",
-      path: "/pages/myGather/gather",
+      path: "/pages/personalCenter/myJoinedGather/joinedGather",
     },
+    {
+      content: "我收藏的",
+      icon: "chevron-right",
+      path: "/pages/personalCenter/myCollect/collect",
+    },
+    {
+      content: "我发的帖子",
+      icon: "chevron-right",
+      path: "/pages/personalCenter/myPost/post",
+    }
   ];
 
   // 页面展示时检测登录状态
@@ -57,7 +67,9 @@ const pc = () => {
       });
     } else {
       res = await o.get("/user/info", "");
-      setNickname("锐锐"), setAvatar(staticAvatar), setSchool("门头沟学院");
+      setNickname(res.data.nickname),
+        setAvatar(res.data.avatarUrl),
+        setSchool(res.data.school);
       console.log("LOGIN RES:", res);
       return res;
     }
