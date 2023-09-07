@@ -30,7 +30,7 @@ const PostComponent: FunctionComponent<PostComponentProps> = ({
       {/* 头像/作者，预留位置 */}
       <View className="post-author">
         <AtAvatar
-          size="small"
+          size="normal"
           image="https://images.infogame.cn/uploads/20220702/img_62bfa8858e30c36.gif"
         ></AtAvatar>
         <Text>猫猫可爱捏</Text>

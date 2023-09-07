@@ -24,6 +24,7 @@ export interface Item {
   collectStatus: boolean;
   createTime: string;
   tagName?: string[];
+  images?: string[];
 }
 
 /**

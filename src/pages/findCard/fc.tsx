@@ -15,6 +15,7 @@ export default class FindCard extends Component<PropsWithChildren<any>> {
   render () {
     return (
       <View className='index'>
+        {/* eslint-disable-next-line react/no-unescaped-entities */}
         <Text>find student's card</Text>
         <MyTest />
       </View>

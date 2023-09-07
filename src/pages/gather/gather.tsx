@@ -35,7 +35,7 @@ export default function Gather() {
   const [selectedTagIndex, setSelectedTagIndex] = useState<number>(0);
   const [gatherList, setGatherList] = useState<GatherItemType[]>([]); // 初始化为空数组
   const [classification, setClassification] = useState<ClassificationItem[]>([
-    { name: '空位', checked: false },
+    { name: '全部', checked: false },
     { name: '自习', checked: false },
     { name: '电影', checked: false },
     { name: '聚餐', checked: false },
@@ -85,23 +85,27 @@ export default function Gather() {
 
   const refreshData = () => {
     // 在这里触发下拉刷新
-    fetchGatherList(selectedTagIndex);
+    fetchGatherList(0);
   };
 
   const fetchGatherList = async (tagId) => {
+    console.log('tagId',tagId);
+
     try {
       let response;
-      if(tagId){
+      // if(tagId){
+        console.log('进了上面');
         response = await getGatherList({
           pageNum: pageNum,
           tagId: tagId
         });
-      } else {
-        response = await getGatherList({
-          pageNum: pageNum,
-          tagId: selectedTagIndex
-        });
-      }
+      // } else {
+      //   console.log('进了下面');
+      //   response = await getGatherList({
+      //     pageNum: pageNum,
+      //     tagId: selectedTagIndex
+      //   });
+      // }
 
 
       console.log('res',response);
@@ -140,24 +144,28 @@ export default function Gather() {
   };
 
   const tagClick = (index: number) => {
+    setPageNum(1);
     if (classification[index].name === '空位') {
       const updatedClassification = classification.map((item, i) => ({
         ...item,
         checked: i === index ? !item.checked : item.checked,
       }));
       setClassification(updatedClassification);
-      console.log('index',index);
+      console.log('index空位',index);
       setSelectedTagIndex(index); // 更新选中的标签索引
       fetchGatherList(index); // 重新获取数据
+
     } else {
       const updatedClassification = classification.map((item, i) => ({
         ...item,
         checked: item.name === '空位' ? item.checked : (i === index ? !item.checked : false),
       }));
       setClassification(updatedClassification);
-      console.log('index',index);
+      console.log('index非空位',index);
       setSelectedTagIndex(index); // 更新选中的标签索引
       fetchGatherList(index); // 重新获取数据
+
+
     }
 
   };
