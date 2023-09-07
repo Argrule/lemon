@@ -45,6 +45,16 @@ const pc = () => {
       icon: "chevron-right",
       path: "/pages/myGather/gather",
     },
+    {
+      content: "我收藏的",
+      icon: "chevron-right",
+      path: "/pages/myCollect/collect",
+    },
+    {
+      content: "我发的帖子",
+      icon: "chevron-right",
+      path: "/pages/myPost/post",
+    }
   ];
 
   // 页面展示时检测登录状态
