@@ -43,7 +43,7 @@ const pc = () => {
     {
       content: "我创建的局",
       icon: "chevron-right",
-      path: "/pages/myGather/gather",
+      path: "/pages/personalCenter/myJoinedGather/joinedGather",
     },
   ];
 

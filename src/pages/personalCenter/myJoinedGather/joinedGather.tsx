@@ -2,7 +2,7 @@ import { View } from "@tarojs/components";
 import { AtButton, AtTag, AtFab, AtIcon, AtProgress } from "taro-ui";
 import { useState, useEffect } from "react";
 
-import { getMyGatherList, getTagList } from "$/api/gather";
+import { getMyTeamList, getTagList } from "$/api/gather";
 
 import Taro from "@tarojs/taro";
 
@@ -11,7 +11,7 @@ import "taro-ui/dist/style/components/tag.scss";
 import "taro-ui/dist/style/components/fab.scss";
 import "taro-ui/dist/style/components/icon.scss";
 import "taro-ui/dist/style/components/progress.scss";
-import "./gather.scss";
+import "./joinedGather.scss";
 
 interface ClassificationItem {
   name: string;
@@ -50,18 +50,28 @@ export default function Gather() {
     fetchGatherList(0);
   }, []);
 
+  // 使用 usePullDownRefresh 钩子来处理下拉刷新
+  Taro.usePullDownRefresh(() => {
+    refreshData();
+  });
+
+  const refreshData = () => {
+    // 在这里触发下拉刷新
+    fetchGatherList(selectedTagIndex);
+  };
+
   const fetchGatherList = async (tagId) => {
     try {
       let response;
       if (tagId) {
-        response = await getMyGatherList({
+        response = await getMyTeamList({
           pageNum: 1,
-          tagId: tagId,
+          pageSize: 30,
         });
       } else {
-        response = await getMyGatherList({
+        response = await getMyTeamList({
           pageNum: 1,
-          tagId: selectedTagIndex,
+          pageSize: 30,
         });
       }
 
@@ -80,8 +90,10 @@ export default function Gather() {
 
       // Assuming the response contains the list of gathers
       setGatherList(response.list); // Update the gatherList state
+      Taro.stopPullDownRefresh(); // 始终在请求结束后停止下拉刷新动画
     } catch (error) {
       console.error("Error fetching gather list", error);
+      Taro.stopPullDownRefresh(); // 始终在请求结束后停止下拉刷新动画
     }
   };
 
@@ -134,22 +146,30 @@ export default function Gather() {
 
   return (
     <View className="container">
-      <View className="fixed-button">
+      {/* <View className='fixed-button'>
         <AtFab onClick={() => fixedButtonClick()}>
-          <AtIcon value="search" size="25" color="white"></AtIcon>
+          <AtIcon value='search' size='25' color='white'></AtIcon>
         </AtFab>
-      </View>
+      </View> */}
 
-      <View className="tags">
+      {/* <View className='joinAndInitiate'>
+        <AtButton className='join-button' type='primary' circle>
+          我加入的局
+        </AtButton>
+        <AtButton className='initiate-button' type='primary' circle onClick={goCreateGather}>
+          发起攒局
+        </AtButton>
+      </View> */}
+      {/* <View className='tags'>
         {classification.map((item, index) => (
           <View
-            className={`tag ${item.checked ? "checked" : ""}`}
+            className={`tag ${item.checked ? 'checked' : ''}`}
             key={index}
             onClick={() => tagClick(index)}
           >
             <AtTag
-              className="tag-text"
-              type="primary"
+              className='tag-text'
+              type='primary'
               circle
               active={item.checked}
             >
@@ -157,7 +177,7 @@ export default function Gather() {
             </AtTag>
           </View>
         ))}
-      </View>
+      </View> */}
       <View className="cards">
         {gatherList.map((gather, index) => (
           <View className="card" key={index} onClick={() => cardClick(gather)}>
@@ -174,7 +194,11 @@ export default function Gather() {
                 </View>
               </View>
               <View className="schedule">
-                <AtProgress percent={gather.currentNum / gather.maxNum} />
+                <AtProgress
+                  percent={Math.floor(
+                    (gather.currentNum * 100) / gather.maxNum
+                  )}
+                />
               </View>
             </View>
           </View>
