@@ -73,16 +73,6 @@ export default function Gather() {
     setPageNum(pageNum+1);
     console.log("触底了",pageNum);
     const res=await fetchGatherList(0)
-    // if (res.list.length === 0) {
-    //   // @ts-ignore
-    //   Taro.atMessage({
-    //     message: "没有更多了",
-    //     type: "error",
-    //     duration: 800,
-    //   });
-    //   this.pageNum--;
-    //   return;
-    // }
     console.log('res',res);
 
   }
@@ -115,20 +105,7 @@ export default function Gather() {
           }
         }
         console.log('res',response.list);
-
-        // if(pageNum===1){
         setGatherList(response.list); // Update the gatherList state
-        // } else if(pageNum>1){
-        //   console.log('response.list',response.list);
-        //   if(response.list.length==0){
-        //     Taro.atMessage({
-        //       message: '没有更多数据了',
-        //       type: 'error',
-        //     });
-        //   }
-        //   setGatherList([...gatherList,...response.list]);
-
-        // }
       } else {
         console.log('进了下面');
         response = await getGatherList({
@@ -158,8 +135,6 @@ export default function Gather() {
 
         }
       }
-
-
 
       // Assuming the response contains the list of gathers
 

@@ -1,5 +1,5 @@
 import { View, Image, ScrollView } from '@tarojs/components';
-import { AtButton,AtMessage,AtList, AtListItem } from 'taro-ui';
+import { AtButton,AtMessage } from 'taro-ui';
 import { useState,useEffect, } from 'react';
 
 
@@ -36,21 +36,6 @@ export default function GatherDetail() {
       getAvator(data.gather.uidArray)
       console.log(data.gather.uid);
       console.log(data.gather.uidArray);
-      // for(let i = 0; i < data.gather.uidArray.length; i++) {
-      //   if(data.gather.uid==data.gather.uidArray[i]){
-      //     console.log('已加入队伍');
-
-      //     setIsGather(true)
-      //   }
-      // }
-      // if(data.gather.uid in data.gather.uidArray){
-      //   console.log('处于队伍');
-
-      //   setIsGather(true)
-      // } else{
-      //   console.log('不处于队伍');
-      //   setIsGather(false)
-      // }
     });
 
 
@@ -71,15 +56,10 @@ export default function GatherDetail() {
         response = await getUserInfo({
           userId:uidArray[i]
         });
-        // console.log('res',response.avatarUrl);
         let avator=[response.avatarUrl];
         // console.log('avator',avator);
         console.log('avatorList',avatorList);
         mergeAvator=[...mergeAvator,...avator];
-
-        // console.log('avatorList',[...avatorList,...avator]);
-
-        // 将接收到的数据存储到组件状态中
       } catch (error) {
         console.error('Error fetching gather list', error);
       }
@@ -214,56 +194,6 @@ export default function GatherDetail() {
             </View>
           ))}
         </ScrollView>
-        {/* <ScrollView  style={{ flexDirection: 'row' }} showsHorizontalScrollIndicator={false}>
-          <View className='avatar'>
-
-              <Image
-                mode='widthFix'
-                src={userInfo?.avatarUrl}
-                style='width: 50px; height: 50px; border-radius: 50%;margin-left: 4vw;'
-              />
-              <Image
-                mode='widthFix'
-                src={userInfo?.avatarUrl}
-                style='width: 50px; height: 50px; border-radius: 50%;margin-left: 4vw;'
-              />
-              <Image
-                mode='widthFix'
-                src={userInfo?.avatarUrl}
-                style='width: 50px; height: 50px; border-radius: 50%;margin-left: 4vw;'
-              />
-              <Image
-                mode='widthFix'
-                src={userInfo?.avatarUrl}
-                style='width: 50px; height: 50px; border-radius: 50%;margin-left: 4vw;'
-              />
-              <Image
-                mode='widthFix'
-                src={userInfo?.avatarUrl}
-                style='width: 50px; height: 50px; border-radius: 50%;margin-left: 4vw;'
-              />
-              <Image
-                mode='widthFix'
-                src={userInfo?.avatarUrl}
-                style='width: 50px; height: 50px; border-radius: 50%;margin-left: 4vw;'
-              />
-              <Image
-                mode='widthFix'
-                src={userInfo?.avatarUrl}
-                style='width: 50px; height: 50px; border-radius: 50%;margin-left: 4vw;'
-              />
-
-
-            {avatorList.map((item, index) => (
-              <Image
-                key={index}
-                mode='widthFix'
-                src={item}
-                style='width: 50px; height: 50px; border-radius: 50%;margin-left: 4vw;'
-              />
-            ))}
-          </View>
-        </ScrollView> */}
       </View>
       <View className='detailContainer'>
         <View className='directorInfo'>
@@ -291,9 +221,6 @@ export default function GatherDetail() {
             申请入局
           </AtButton>
         }
-        {/* <AtButton type='primary' circle onClick={handleDelete} className='buttonItem'>
-          炸局
-        </AtButton> */}
         <AtMessage />
       </View>
     </View>

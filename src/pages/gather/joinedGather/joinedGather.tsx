@@ -1,5 +1,5 @@
 import { View } from '@tarojs/components';
-import { AtButton, AtTag,AtFab,AtIcon,AtProgress } from 'taro-ui';
+import { AtProgress } from 'taro-ui';
 import { useState,useEffect } from 'react';
 
 import { getTeamList,getTagList } from "$/api/gather";
@@ -81,10 +81,6 @@ export default function Gather() {
 
 
       console.log('res',response);
-      // const list = response.list.map(item => ({
-      //   ...item,
-      //   tagName: Array.from(item.tagName) // 将tagName字符串转换为字符数组
-      // }));
       for (let item of response.list) {
         console.log(item.tagName);
         if (item.tagName) {
@@ -137,48 +133,9 @@ export default function Gather() {
     })
   };
 
-  const fixedButtonClick = () => {
-    console.log('fixedButtonClick');
-  };
-
-  const goCreateGather = () => {
-    Taro.navigateTo({url:'/pages/gather/createGather/createGather'})
-  };
 
   return (
     <View className='container'>
-      {/* <View className='fixed-button'>
-        <AtFab onClick={() => fixedButtonClick()}>
-          <AtIcon value='search' size='25' color='white'></AtIcon>
-        </AtFab>
-      </View> */}
-
-      {/* <View className='joinAndInitiate'>
-        <AtButton className='join-button' type='primary' circle>
-          我加入的局
-        </AtButton>
-        <AtButton className='initiate-button' type='primary' circle onClick={goCreateGather}>
-          发起攒局
-        </AtButton>
-      </View> */}
-      {/* <View className='tags'>
-        {classification.map((item, index) => (
-          <View
-            className={`tag ${item.checked ? 'checked' : ''}`}
-            key={index}
-            onClick={() => tagClick(index)}
-          >
-            <AtTag
-              className='tag-text'
-              type='primary'
-              circle
-              active={item.checked}
-            >
-              {item.name}
-            </AtTag>
-          </View>
-        ))}
-      </View> */}
       <View className='cards'>
           {gatherList.map((gather, index) => (
             <View className='card' key={index} onClick={() => cardClick(gather)}>
