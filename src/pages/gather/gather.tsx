@@ -1,10 +1,10 @@
 import { View } from '@tarojs/components';
 import { AtButton, AtTag,AtFab,AtIcon,AtProgress,AtMessage } from 'taro-ui';
-import { useState,useEffect } from 'react';
+import { useState,useEffect,} from 'react';
 
 import { getGatherList,getTagList } from "$/api/gather";
 
-import Taro from "@tarojs/taro";
+import Taro, { useDidShow } from "@tarojs/taro";
 
 import 'taro-ui/dist/style/components/button.scss';
 import 'taro-ui/dist/style/components/tag.scss';
@@ -53,7 +53,9 @@ export default function Gather() {
     fetchGatherList(0)
 
   }, []);
-
+  useDidShow(() => {
+    fetchGatherList(0);
+  });
 
   Taro.useReachBottom(() => {
     onReachBottom();
