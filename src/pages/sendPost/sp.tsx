@@ -85,13 +85,6 @@ function CommentInput() {
   };
 
   /**
-   * @description 上传图片 #####bug 这是测试
-   */
-
-  const handleUpload = async () => {
-    deleteDraft();
-  };
-  /**
    * @description 创建帖子草稿
    */
   const createDraft = async () => {
@@ -174,7 +167,6 @@ function CommentInput() {
     const resList = await Promise.all(resQuese);
     console.log(resList);
 
-    // return;
     const res = await publishPost({
       postId,
       content: commentText,
@@ -189,7 +181,6 @@ function CommentInput() {
       });
       return;
     }
-    // ## debugger
     // 设置不可取消发布，阻止删除帖子草稿
     Taro.setStorageSync("canCancel", true);
 
@@ -217,9 +208,7 @@ function CommentInput() {
         placeholder="请输入评论内容"
       /> */}
         <View className="header">
-          <View className="title" onClick={handleUpload}>
-            热搜
-          </View>
+          <View className="title">热搜</View>
           <ScrollView scrollX className="scroll-container">
             {tagList.map((tag) => (
               <AtTag
