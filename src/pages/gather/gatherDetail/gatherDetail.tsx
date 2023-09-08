@@ -1,5 +1,5 @@
 import { View, Image, ScrollView } from '@tarojs/components';
-import { AtButton,AtMessage,AtList, AtListItem } from 'taro-ui';
+import { AtButton,AtMessage } from 'taro-ui';
 import { useState,useEffect, } from 'react';
 
 
@@ -19,6 +19,7 @@ import './gatherDetail.scss';
 
 export default function GatherDetail() {
   // const router = useRouter();
+  const [isGather, setIsGather] = useState(false);
   const [gatherData, setGatherData] = useState(null);
   const [userInfo, setUserInfo] = useState(null);
   const [avatorList, setAvatorList] = useState([]);
@@ -28,11 +29,13 @@ export default function GatherDetail() {
 
     eventChannel.on('acceptDataFromOpenerPage', (data) => {
       console.log('Received data:', data.gather);
-
+      setIsGather(data.isJoined)
       // 将接收到的数据存储到组件状态中
       setGatherData(data.gather);
       getInfo(data.gather.uid);
       getAvator(data.gather.uidArray)
+      console.log(data.gather.uid);
+      console.log(data.gather.uidArray);
     });
 
 
@@ -53,15 +56,10 @@ export default function GatherDetail() {
         response = await getUserInfo({
           userId:uidArray[i]
         });
-        // console.log('res',response.avatarUrl);
         let avator=[response.avatarUrl];
         // console.log('avator',avator);
         console.log('avatorList',avatorList);
         mergeAvator=[...mergeAvator,...avator];
-
-        // console.log('avatorList',[...avatorList,...avator]);
-
-        // 将接收到的数据存储到组件状态中
       } catch (error) {
         console.error('Error fetching gather list', error);
       }
@@ -102,7 +100,7 @@ export default function GatherDetail() {
       //更改为已加入状态//todo
     } else if(res.code === 'A0400'){
       Taro.atMessage({
-        message: '已在队中',
+        message: res.message,
         type: 'error',
       });
     } else{
@@ -196,56 +194,6 @@ export default function GatherDetail() {
             </View>
           ))}
         </ScrollView>
-        {/* <ScrollView  style={{ flexDirection: 'row' }} showsHorizontalScrollIndicator={false}>
-          <View className='avatar'>
-
-              <Image
-                mode='widthFix'
-                src={userInfo?.avatarUrl}
-                style='width: 50px; height: 50px; border-radius: 50%;margin-left: 4vw;'
-              />
-              <Image
-                mode='widthFix'
-                src={userInfo?.avatarUrl}
-                style='width: 50px; height: 50px; border-radius: 50%;margin-left: 4vw;'
-              />
-              <Image
-                mode='widthFix'
-                src={userInfo?.avatarUrl}
-                style='width: 50px; height: 50px; border-radius: 50%;margin-left: 4vw;'
-              />
-              <Image
-                mode='widthFix'
-                src={userInfo?.avatarUrl}
-                style='width: 50px; height: 50px; border-radius: 50%;margin-left: 4vw;'
-              />
-              <Image
-                mode='widthFix'
-                src={userInfo?.avatarUrl}
-                style='width: 50px; height: 50px; border-radius: 50%;margin-left: 4vw;'
-              />
-              <Image
-                mode='widthFix'
-                src={userInfo?.avatarUrl}
-                style='width: 50px; height: 50px; border-radius: 50%;margin-left: 4vw;'
-              />
-              <Image
-                mode='widthFix'
-                src={userInfo?.avatarUrl}
-                style='width: 50px; height: 50px; border-radius: 50%;margin-left: 4vw;'
-              />
-
-
-            {avatorList.map((item, index) => (
-              <Image
-                key={index}
-                mode='widthFix'
-                src={item}
-                style='width: 50px; height: 50px; border-radius: 50%;margin-left: 4vw;'
-              />
-            ))}
-          </View>
-        </ScrollView> */}
       </View>
       <View className='detailContainer'>
         <View className='directorInfo'>
@@ -264,15 +212,15 @@ export default function GatherDetail() {
         </View>
       </View>
       <View className='joinButton'>
-        <AtButton type='primary' circle onClick={handleSubmit} className='buttonItem'>
-          申请入局
-        </AtButton>
-        <AtButton type='primary' circle onClick={handleQuit} className='buttonItem'>
-          我要出局
-        </AtButton>
-        {/* <AtButton type='primary' circle onClick={handleDelete} className='buttonItem'>
-          炸局
-        </AtButton> */}
+        {isGather?
+          <AtButton type='primary' circle onClick={handleQuit} className='buttonItem'>
+            我要出局
+          </AtButton>
+          :
+          <AtButton type='primary' circle onClick={handleSubmit} className='buttonItem'>
+            申请入局
+          </AtButton>
+        }
         <AtMessage />
       </View>
     </View>
