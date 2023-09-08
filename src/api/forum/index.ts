@@ -32,10 +32,9 @@ export const getForumList = async (params: {
 /**
  * @description 创建帖子草稿
  */
-//@ts-ignore
 export const CreateDraftAPI = async (): Promise<number> => {
-  // const data = (await o.put("/post/create")) as any;
-  // return data;
+  const data = (await o.put("/post/create")) as any;
+  return data.data;
 };
 /**
  * @description 删除帖子草稿
@@ -43,10 +42,9 @@ export const CreateDraftAPI = async (): Promise<number> => {
  */
 export const DeleteDraftAPI = async (
   draftId: number
-  //@ts-ignore
 ): Promise<BaseResponse> => {
-  // const res = (await o.delete("/post/cancel" + `?postId=${draftId}`)) as any;
-  // return res;
+  const res = (await o.delete("/post/cancel" + `?postId=${draftId}`)) as any;
+  return res;
 };
 /**
  * @description 上传图片
@@ -60,11 +58,15 @@ export const uploadImage = async (
   // const res = (await o.post("/post/upload", file, "application/form-data")) as any;
   return new Promise((resolve) => {
     Taro.uploadFile({
-      url: "https://hangzhoukj.cn" + "/post/upload", //仅为示例，非真实的接口地址
+      url: "https://hangzhoukj.cn" + "/post/upload",
       filePath: file,
       name: "file",
       formData: {
         postId: postId,
+      },
+      header: {
+        "content-type": "multipart/form-data",
+        Authorization: Taro.getStorageSync("Authorization"),
       },
       success(res) {
         const data = res.data;

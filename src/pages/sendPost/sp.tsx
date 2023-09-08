@@ -13,7 +13,6 @@ import { File } from "taro-ui/types/image-picker";
 
 function CommentInput() {
   const [postId, setPostId] = useState<number>(0);
-
   const [commentText, setCommentText] = useState("");
   const [tagList, setTagList] = useState<Tag[]>([
     // {
@@ -77,11 +76,11 @@ function CommentInput() {
     console.log(files);
     setFiles(files);
     //@ts-ignore
-    Taro.atMessage({
-      message: "抱歉, 上传图片正在完善...",
-      type: "warning",
-      duration: 1500,
-    });
+    // Taro.atMessage({
+    //   message: "抱歉, 上传图片正在完善...",
+    //   type: "warning",
+    //   duration: 1500,
+    // });
     // console.log("上传图片正在constructing...");
   };
 
@@ -100,13 +99,20 @@ function CommentInput() {
     const data = await CreateDraftAPI();
     console.log(data);
     setPostId(data);
+    Taro.setStorageSync("postId", data);
   };
   /**
    * @description 删除帖子草稿
    */
   const deleteDraft = async () => {
     console.log("删除帖子草稿");
-    const data = await DeleteDraftAPI(postId);
+    let canCancel = Taro.getStorageSync("canCancel");
+    if (canCancel) {
+      return;
+    }
+    // 退出时，useState的数据可能已经被清空，重置为初始值
+    let draftPostId = Number(Taro.getStorageSync("postId"));
+    const data = await DeleteDraftAPI(draftPostId);
     console.log(data);
   };
   useDidShow(async () => {
@@ -159,11 +165,14 @@ function CommentInput() {
       return;
     }
     // 一次性上传所有图片
-    files.forEach(async (file) => {
+    const resQuese = files.map(async (file) => {
       console.log(file);
-      const res = await uploadImage(file.url, postId);
-      console.log(res);
+      return uploadImage(file.url, postId);
+      // console.log(res);
     });
+    const resList = await Promise.all(resQuese);
+    console.log(resList);
+
     // return;
     const res = await publishPost({
       postId,
@@ -179,6 +188,10 @@ function CommentInput() {
       });
       return;
     }
+    // ## debugger
+    // 设置不可取消发布，阻止删除帖子草稿
+    Taro.setStorageSync('canCancel', true)
+
     Taro.switchTab({ url: "/pages/forum/forum" });
     // onPublish(commentText);
     setCommentText("");
