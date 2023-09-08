@@ -1,6 +1,6 @@
 import { CommentData, Item, Tag } from "$/pages/forum/data";
 import o from "$/utils/request";
-// import Taro from "@tarojs/taro";
+import Taro from "@tarojs/taro";
 
 interface BaseResponse<T = any> {
   code: string;
@@ -30,35 +30,78 @@ export const getForumList = async (params: {
 };
 
 /**
+ * @description 创建帖子草稿
+ */
+//@ts-ignore
+export const CreateDraftAPI = async (): Promise<number> => {
+  // const data = (await o.put("/post/create")) as any;
+  // return data;
+};
+/**
+ * @description 删除帖子草稿
+ * @param draftId 草稿id
+ */
+export const DeleteDraftAPI = async (
+  draftId: number
+  //@ts-ignore
+): Promise<BaseResponse> => {
+  // const res = (await o.delete("/post/cancel" + `?postId=${draftId}`)) as any;
+  // return res;
+};
+/**
+ * @description 上传图片
+ * @param file 图片文件的临时路径
+ * @param postId 帖子id
+ */
+export const uploadImage = async (
+  file: string,
+  postId: number
+): Promise<string> => {
+  // const res = (await o.post("/post/upload", file, "application/form-data")) as any;
+  return new Promise((resolve) => {
+    Taro.uploadFile({
+      url: "https://hangzhoukj.cn" + "/post/upload", //仅为示例，非真实的接口地址
+      filePath: file,
+      name: "file",
+      formData: {
+        postId: postId,
+      },
+      success(res) {
+        const data = res.data;
+        //do something
+        resolve(data);
+        // return data;
+      },
+    });
+  });
+};
+/**
  * @description 发布帖子
+ * @param data.postId 帖子id
  * @param data.content 帖子内容
  * @param data.tagIds 帖子标签
  * @abstract tagIds由请求获取，描述帖子的tag
  */
+export const publishPost = async (data: {
+  content: string;
+  tagIds: number[];
+  postId: number;
+}): Promise<BaseResponse> => {
+  const res = (await o.post("/post/publish", data)) as any;
+  return res;
+};
 // export const publishPost = async (data: {
 //   content: string;
 //   tagIds: number[];
 //   files: File[];
 // }): Promise<BaseResponse> => {
-//   const res = (await Taro.uploadFile(
+//   const res = (await o.post(
 //     "/post/publish",
 //     data,
 //     "application/form-data"
 //   )) as any;
 //   return res;
 // };
-export const publishPost = async (data: {
-  content: string;
-  tagIds: number[];
-  files: File[];
-}): Promise<BaseResponse> => {
-  const res = (await o.post(
-    "/post/publish",
-    data,
-    "application/form-data"
-  )) as any;
-  return res;
-};
 
 /**
  * @description 删除帖子
