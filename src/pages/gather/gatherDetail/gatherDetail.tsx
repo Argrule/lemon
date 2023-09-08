@@ -1,5 +1,5 @@
-import { View, Image } from '@tarojs/components';
-import { AtButton,AtMessage } from 'taro-ui';
+import { View, Image, ScrollView } from '@tarojs/components';
+import { AtButton,AtMessage,AtList, AtListItem } from 'taro-ui';
 import { useState,useEffect, } from 'react';
 
 
@@ -21,6 +21,7 @@ export default function GatherDetail() {
   // const router = useRouter();
   const [gatherData, setGatherData] = useState(null);
   const [userInfo, setUserInfo] = useState(null);
+  const [avatorList, setAvatorList] = useState([]);
 
   useEffect(() => {
     const eventChannel = Taro.getCurrentInstance().page.getOpenerEventChannel();
@@ -30,7 +31,8 @@ export default function GatherDetail() {
 
       // 将接收到的数据存储到组件状态中
       setGatherData(data.gather);
-      getInfo(data.gather.uid)
+      getInfo(data.gather.uid);
+      getAvator(data.gather.uidArray)
     });
 
 
@@ -40,6 +42,34 @@ export default function GatherDetail() {
     };
 
   }, []);
+
+  const getAvator = async (uidArray) => {
+    let mergeAvator =[];
+    for(let i = 0; i < uidArray.length; i++) {
+      try {
+        let response;
+        console.log('uidArray[i]',uidArray[i]);
+
+        response = await getUserInfo({
+          userId:uidArray[i]
+        });
+        // console.log('res',response.avatarUrl);
+        let avator=[response.avatarUrl];
+        // console.log('avator',avator);
+        console.log('avatorList',avatorList);
+        mergeAvator=[...mergeAvator,...avator];
+
+        // console.log('avatorList',[...avatorList,...avator]);
+
+        // 将接收到的数据存储到组件状态中
+      } catch (error) {
+        console.error('Error fetching gather list', error);
+      }
+    }
+    setAvatorList(mergeAvator);
+
+  };
+
   const getInfo = async (userId) => {
     try {
       let response;
@@ -149,9 +179,74 @@ export default function GatherDetail() {
 
   return (
     <View className='container'>
-      {/* <View className="membersContainer">
+      <View className="membersContainer">
         <View className="title">局内成员</View>
-      </View> */}
+        <ScrollView
+          scrollX
+          style={{ whiteSpace: 'nowrap', overflowX: 'auto', height: '50px' }}
+          className='avatar'
+        >
+          {avatorList.map((item, index) => (
+            <View key={index} style={{ display: 'inline-block', marginLeft: '4vw' }}>
+              <Image
+                mode='widthFix'
+                src={item}
+                style={{ width: '50px', height: '50px', borderRadius: '50%' }}
+              />
+            </View>
+          ))}
+        </ScrollView>
+        {/* <ScrollView  style={{ flexDirection: 'row' }} showsHorizontalScrollIndicator={false}>
+          <View className='avatar'>
+
+              <Image
+                mode='widthFix'
+                src={userInfo?.avatarUrl}
+                style='width: 50px; height: 50px; border-radius: 50%;margin-left: 4vw;'
+              />
+              <Image
+                mode='widthFix'
+                src={userInfo?.avatarUrl}
+                style='width: 50px; height: 50px; border-radius: 50%;margin-left: 4vw;'
+              />
+              <Image
+                mode='widthFix'
+                src={userInfo?.avatarUrl}
+                style='width: 50px; height: 50px; border-radius: 50%;margin-left: 4vw;'
+              />
+              <Image
+                mode='widthFix'
+                src={userInfo?.avatarUrl}
+                style='width: 50px; height: 50px; border-radius: 50%;margin-left: 4vw;'
+              />
+              <Image
+                mode='widthFix'
+                src={userInfo?.avatarUrl}
+                style='width: 50px; height: 50px; border-radius: 50%;margin-left: 4vw;'
+              />
+              <Image
+                mode='widthFix'
+                src={userInfo?.avatarUrl}
+                style='width: 50px; height: 50px; border-radius: 50%;margin-left: 4vw;'
+              />
+              <Image
+                mode='widthFix'
+                src={userInfo?.avatarUrl}
+                style='width: 50px; height: 50px; border-radius: 50%;margin-left: 4vw;'
+              />
+
+
+            {avatorList.map((item, index) => (
+              <Image
+                key={index}
+                mode='widthFix'
+                src={item}
+                style='width: 50px; height: 50px; border-radius: 50%;margin-left: 4vw;'
+              />
+            ))}
+          </View>
+        </ScrollView> */}
+      </View>
       <View className='detailContainer'>
         <View className='directorInfo'>
           <View className='avatar'>
