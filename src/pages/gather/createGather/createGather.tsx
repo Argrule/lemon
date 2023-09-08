@@ -97,6 +97,7 @@ export default function Gather() {
       // 重置状态为初始值
       setGatherData(initialGatherData);
       setClassification(initialClassification);
+      goGather()
     } else {
       // @ts-ignore
       Taro.atMessage({
@@ -108,6 +109,10 @@ export default function Gather() {
 
   const handleDescriptionChange = (value: string) => {
     setGatherData({ ...gatherData, description: value });
+  };
+
+  const goGather = () => {
+    Taro.switchTab({url:'/pages/gather/gather'})
   };
 
   return (

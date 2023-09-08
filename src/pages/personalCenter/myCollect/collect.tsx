@@ -10,7 +10,7 @@ import "../../forum/forum.scss";
 import { InputEventDetail } from "taro-ui/types/input";
 import {
   deletePost,
-  getForumList,
+  getMyCollectForumList,
   // publishPost,
   likePost,
   cancelLikePost,
@@ -35,7 +35,7 @@ class Forum extends Component<{}, State> {
 
   /* 非生命周期，onShow */
   async componentDidShow() {
-    const res = (await getForumList({
+    const res = (await getMyCollectForumList({
       pageNum: 1,
       pageSize: 10,
     })) as { list: Item[] };
@@ -49,7 +49,7 @@ class Forum extends Component<{}, State> {
     console.log("触底了");
     this.pageNum++;
     const { posts } = this.state;
-    const res = (await getForumList({
+    const res = (await getMyCollectForumList({
       pageNum: this.pageNum,
       pageSize: this.pageSize,
     })) as { list: Item[] };

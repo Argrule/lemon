@@ -76,7 +76,7 @@ export const getTeamList = async (params: {
   const paramsStr = Object.keys(params)
     .map((key) => `${key}=${params[key]}`)
     .join("&");
-  const res = await request.get("/user/team" + `?${paramsStr}`);
+  const res = await request.get("/team/my/join" + `?${paramsStr}`);
   return res.data;
 };
 
@@ -93,7 +93,7 @@ export const getMyTeamList = async (params: {
   const paramsStr = Object.keys(params)
     .map((key) => `${key}=${params[key]}`)
     .join("&");
-  const res = await request.get("/user/team/create" + `?${paramsStr}`);
+  const res = await request.get("/team/my/create" + `?${paramsStr}`);
   return res.data;
 };
 
@@ -137,5 +137,20 @@ export const searchTeamList = async (params: {
     .map((key) => `${key}=${params[key]}`)
     .join("&");
   const res = await request.get("/team/search" + `?${paramsStr}`);
+  return res.data;
+};
+
+/**
+ * @description 获取个人信息
+ * @param {number} params.userId
+ * @returns
+ */
+export const getUserInfo = async (params: {
+  userId: number;
+}) => {
+  const paramsStr = Object.keys(params)
+    .map((key) => `${key}=${params[key]}`)
+    .join("&");
+  const res = await request.get("/user/info" + `?${paramsStr}`);
   return res.data;
 };

@@ -1,5 +1,5 @@
 import { View } from '@tarojs/components';
-import { AtButton, AtTag,AtFab,AtIcon,AtProgress,AtMessage,AtSearchBar } from 'taro-ui';
+import { AtProgress,AtMessage,AtSearchBar } from 'taro-ui';
 import { useState,useEffect } from 'react';
 
 import { searchTeamList } from "$/api/gather";
@@ -38,8 +38,6 @@ export default function Gather() {
   const [pageNum, setPageNum] = useState<number>(1);
 
   useEffect(() => {
-    // getTagList({});
-    // fetchGatherList(0)
 
   }, []);
 

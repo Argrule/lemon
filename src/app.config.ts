@@ -19,6 +19,7 @@ export default defineAppConfig({
     "pages/personalCenter/userAgreement/userAgreement",
     "pages/personalCenter/myPost/post",
     "pages/personalCenter/myCollect/collect",
+    "pages/personalCenter/changeUserInfo/changeUserInfo",
   ],
   window: {
     backgroundTextStyle: "light",
