@@ -2,6 +2,7 @@ import { View, Text } from "@tarojs/components";
 import UnitList from "./UnitList";
 import { UnitData } from "./personalCenter";
 import "./menuList.scss";
+import React from "react";
 
 const MenuList = (props: { list: UnitData[] }) => {
   const menuList = props.list;

@@ -6,7 +6,7 @@ import { AtFab } from "taro-ui";
 import { AtTag } from "taro-ui";
 import { AtMessage } from "taro-ui";
 import Taro from "@tarojs/taro";
-import "./forum.scss";
+import "../../forum/forum.scss";
 import { InputEventDetail } from "taro-ui/types/input";
 import {
   deletePost,
@@ -18,7 +18,7 @@ import {
   cancelCollectPost,
   searchPost,
 } from "$/api/forum";
-import { Item, State } from "./data";
+import { Item, State } from "../../forum/data";
 import { AtSearchBar } from "taro-ui";
 import { FormatTimeFromNow } from "$/utils/dayjs";
 

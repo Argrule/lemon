@@ -8,6 +8,7 @@ import Taro, { useDidShow } from "@tarojs/taro";
 import { publishPost, getTags } from "$/api/forum";
 import { Tag } from "../forum/data";
 import "./sp.scss";
+// import { File } from "taro-ui/types/image-picker";
 
 function CommentInput() {
   const [commentText, setCommentText] = useState("");
@@ -63,10 +64,11 @@ function CommentInput() {
   ]);
   const [tagIds, setTagIds] = useState<number[]>([]);
 
-  const [files, setFiles] = useState<{ url: string }[]>([
-    {
-      url: "https://images.infogame.cn/uploads/20220702/img_62bfa8858e30c36.gif",
-    },
+  // const [files, setFiles] = useState<File[]>([
+  const [files, setFiles] = useState<any[]>([
+    // {
+    //   url: "https://images.infogame.cn/uploads/20220702/img_62bfa8858e30c36.gif",
+    // },
   ]);
   const onImageFileChange = (files) => {
     console.log(files);
@@ -107,9 +109,20 @@ function CommentInput() {
       });
       return;
     }
+    if (tagIds.length == 0) {
+      // @ts-ignore Taro缺少atMessage声明，忽略报错
+      Taro.atMessage({
+        message: "请选择标签",
+        type: "error",
+        duration: 800,
+      });
+      return;
+    }
     const res = await publishPost({
       content: commentText,
       tagIds,
+      // files: files.map((file) => file.file),
+      files: files,
     });
     if (res.code != "00000") {
       //@ts-ignore
