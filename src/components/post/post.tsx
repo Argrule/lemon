@@ -1,5 +1,6 @@
 import { AtAvatar } from "taro-ui";
-import { View, Text, Button, Image } from "@tarojs/components";
+import { View, Text, Image } from "@tarojs/components";
+// import { Button} from "@tarojs/components";
 import { AtTag } from "taro-ui";
 import { Item } from "$/pages/forum/data";
 import "./post.scss";
@@ -13,7 +14,8 @@ interface PostComponentProps {
   post: Item;
   onLike: (postId: number, likeStatus: boolean) => void;
   onCollect: (postId: number, collectStatus: boolean) => void;
-  onDelete: (postId: number) => void;
+  onDelete?: (postId: number) => void;
+  onShowComments: (postItem: Item) => void;
 }
 type FunctionComponent<P = {}> = React.FunctionComponent<P>;
 
@@ -28,12 +30,9 @@ const PostComponent: FunctionComponent<PostComponentProps> = ({
   post,
   onLike,
   onCollect,
-  onDelete,
+  onShowComments,
+  // onDelete,
 }) => {
-  // 待判断
-  const handleShowComments = (post) => {
-    console.log(post);
-  };
   return (
     <View className="post" key={post.id}>
       {/* 头像/作者，预留位置 */}
@@ -50,12 +49,13 @@ const PostComponent: FunctionComponent<PostComponentProps> = ({
           className="text-ellipsis post-content"
           userSelect
           numberOfLines={3}
+          onClick={() => onShowComments(post)}
         >
           {post.content}
         </Text>
       </View>
       {/* 帖子图片 */}
-      <View className="flex" onClick={() => handleShowComments(post)}>
+      <View className="flex" onClick={() => onShowComments(post)}>
         {post.images?.map((image) => (
           <Image
             src={image}
@@ -114,14 +114,14 @@ const PostComponent: FunctionComponent<PostComponentProps> = ({
           {/* {post.collectStatus ? "已收藏" : "收藏"} */}
           {post.collectNum}
         </View>
-        <Button
+        {/* <Button
           style={"display:none"}
           type="primary"
           className="interaction-button collect-button"
           onClick={() => onDelete(post.id)}
         >
           删除
-        </Button>
+        </Button> */}
       </View>
     </View>
   );
