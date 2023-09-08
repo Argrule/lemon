@@ -1,10 +1,10 @@
 export default defineAppConfig({
   pages: [
+    "pages/forum/forum", // 入口第一个默认是首页
     "pages/index/index", // 入口第一个默认是首页
     "pages/learningLibrary/lb",
     "pages/findCard/fc",
     "pages/login/login",
-    "pages/forum/forum",
     "pages/personalCenter/pc",
     "pages/personalCenter/setting/setting",
     "pages/gather/gather",
@@ -34,6 +34,12 @@ export default defineAppConfig({
     borderStyle: "white",
     list: [
       {
+        pagePath: "pages/forum/forum",
+        text: "论坛",
+        iconPath: "./assets/tabbar/forum.png",
+        selectedIconPath: "./assets/tabbar/forum-active.png",
+      },
+      {
         pagePath: "pages/index/index",
         text: "首页",
         iconPath: "./assets/tabbar/func.png",
@@ -44,12 +50,6 @@ export default defineAppConfig({
         text: "攒局",
         iconPath: "./assets/tabbar/gather.png",
         selectedIconPath: "./assets/tabbar/gather-active.png",
-      },
-      {
-        pagePath: "pages/forum/forum",
-        text: "论坛",
-        iconPath: "./assets/tabbar/forum.png",
-        selectedIconPath: "./assets/tabbar/forum-active.png",
       },
       {
         pagePath: "pages/personalCenter/pc",
