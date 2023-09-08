@@ -1,9 +1,10 @@
 import { Component } from "react";
-import { View, Text, Button, BaseEventOrig, Image } from "@tarojs/components";
+import { View, BaseEventOrig } from "@tarojs/components";
+// import { Text, Button, Image } from "@tarojs/components";
 // import { Input } from "@tarojs/components";
 import { AtIcon } from "taro-ui";
 import { AtFab } from "taro-ui";
-import { AtTag } from "taro-ui";
+// import { AtTag } from "taro-ui";
 import { AtMessage } from "taro-ui";
 import Taro from "@tarojs/taro";
 import "./forum.scss";
@@ -20,7 +21,8 @@ import {
 } from "$/api/forum";
 import { Item, State } from "./data";
 import { AtSearchBar } from "taro-ui";
-import { FormatTimeFromNow } from "$/utils/dayjs";
+// import { FormatTimeFromNow } from "$/utils/dayjs";
+import PostComponent from "$/components/post/post";
 
 class Forum extends Component<{}, State> {
   /* 状态 */
@@ -273,13 +275,23 @@ class Forum extends Component<{}, State> {
           <Button onClick={this.handleNewPostSubmit}>发布</Button>
         </View> */}
         <View className="posts">
-          {posts.map((post) => (
-            <>
-              <View className="post" key={post.id}>
-                <Text className="post-content" userSelect>
+          {/* // ### 这里做判断 是防止出现取消发布的数据写回不及时 多出一个空白帖子的bug */}
+          {posts.map((post) =>
+            post.content == undefined ? null : (
+              <>
+                {/* <View className="post" key={post.id}>
+                <Text className="post-nick">{post.nickname}</Text>
+                <Text
+                  className="post-content"
+                  userSelect
+                  onClick={() => this.handleShowComments(post)}
+                >
                   {post.content}
                 </Text>
-                <View className="flex">
+                <View
+                  className="flex"
+                  onClick={() => this.handleShowComments(post)}
+                >
                   {post.images?.map((image) => (
                     <Image
                       src={image}
@@ -317,13 +329,7 @@ class Forum extends Component<{}, State> {
                     {post.collectNum}
                   </Button>
                   <Button
-                    type="primary"
-                    className="interaction-button collect-button"
-                    onClick={() => this.handleShowComments(post)}
-                  >
-                    评论
-                  </Button>
-                  <Button
+                    style={"display:none"}
                     type="primary"
                     className="interaction-button collect-button"
                     onClick={() => this.handleDeletePost(post.id)}
@@ -331,16 +337,18 @@ class Forum extends Component<{}, State> {
                     删除
                   </Button>
                 </View>
-              </View>
-              {/* <Button
-                type="primary"
-                className="interaction-button comment-button"
-                onClick={() => this.handleShowComments(post)}
-              >
-                查看评论
-              </Button> */}
-            </>
-          ))}
+              </View> */}
+                {/* 帖子 */}
+                <PostComponent
+                  post={post}
+                  onLike={this.handleLikePost}
+                  onDelete={this.handleDeletePost}
+                  onCollect={this.handleCollectPost}
+                  onShowComments={this.handleShowComments}
+                />
+              </>
+            )
+          )}
         </View>
       </View>
     );

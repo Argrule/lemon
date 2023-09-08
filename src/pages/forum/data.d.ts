@@ -25,6 +25,7 @@ export interface Item {
   createTime: string;
   tagName?: string[];
   images?: string[];
+  nickname?: string;
 }
 
 /**

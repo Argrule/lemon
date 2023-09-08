@@ -1,16 +1,18 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { View, Button, ScrollView } from "@tarojs/components";
 import { Textarea } from "@tarojs/components";
 import { AtMessage } from "taro-ui";
 import { AtTag } from "taro-ui";
 import { AtImagePicker } from "taro-ui";
 import Taro, { useDidShow } from "@tarojs/taro";
-import { publishPost, getTags } from "$/api/forum";
+import { publishPost, getTags, uploadImage } from "$/api/forum";
+import { CreateDraftAPI, DeleteDraftAPI } from "$/api/forum";
 import { Tag } from "../forum/data";
 import "./sp.scss";
-// import { File } from "taro-ui/types/image-picker";
+import { File } from "taro-ui/types/image-picker";
 
 function CommentInput() {
+  const [postId, setPostId] = useState<number>(0);
   const [commentText, setCommentText] = useState("");
   const [tagList, setTagList] = useState<Tag[]>([
     // {
@@ -64,27 +66,65 @@ function CommentInput() {
   ]);
   const [tagIds, setTagIds] = useState<number[]>([]);
 
-  // const [files, setFiles] = useState<File[]>([
-  const [files, setFiles] = useState<any[]>([
+  const [files, setFiles] = useState<File[]>([
+    // const [files, setFiles] = useState<any[]>([
     // {
     //   url: "https://images.infogame.cn/uploads/20220702/img_62bfa8858e30c36.gif",
     // },
   ]);
-  const onImageFileChange = (files) => {
+  const onImageFileChange = (files: File[]) => {
     console.log(files);
     setFiles(files);
     //@ts-ignore
-    Taro.atMessage({
-      message: "抱歉, 上传图片正在完善...",
-      type: "warning",
-      duration: 1500,
-    });
+    // Taro.atMessage({
+    //   message: "抱歉, 上传图片正在完善...",
+    //   type: "warning",
+    //   duration: 1500,
+    // });
     // console.log("上传图片正在constructing...");
   };
 
+  /**
+   * @description 创建帖子草稿
+   */
+  const createDraft = async () => {
+    console.log("创建帖子草稿");
+    const data = await CreateDraftAPI();
+    console.log(data);
+    setPostId(data);
+    Taro.setStorageSync("postId", data);
+    Taro.setStorageSync("canCancel", false);
+  };
+  /**
+   * @description 删除帖子草稿
+   */
+  const deleteDraft = async () => {
+    console.log("删除帖子草稿");
+    let canCancel = Taro.getStorageSync("canCancel");
+    if (canCancel) {
+      return;
+    }
+    // 退出时，useState的数据可能已经被清空，重置为初始值
+    let draftPostId = Number(Taro.getStorageSync("postId"));
+    const data = await DeleteDraftAPI(draftPostId);
+    console.log(data);
+  };
   useDidShow(async () => {
+    // 获取标签列表
     initTagList();
+    // 创建帖子草稿
+    createDraft();
   });
+  // 卸载时删除帖子草稿，useDidHide不行
+  useEffect(() => {
+    return () => {
+      // setCommentText("");
+      // setTagIds([]);
+      // setFiles([]);
+      // 删除帖子草稿
+      deleteDraft();
+    };
+  }, []);
   // 获取标签列表
   const initTagList = async () => {
     const res = await getTags();
@@ -118,11 +158,19 @@ function CommentInput() {
       });
       return;
     }
+    // 一次性上传所有图片
+    const resQuese = files.map(async (file) => {
+      console.log(file);
+      return uploadImage(file.url, postId);
+      // console.log(res);
+    });
+    const resList = await Promise.all(resQuese);
+    console.log(resList);
+
     const res = await publishPost({
+      postId,
       content: commentText,
       tagIds,
-      // files: files.map((file) => file.file),
-      files: files,
     });
     if (res.code != "00000") {
       //@ts-ignore
@@ -133,6 +181,9 @@ function CommentInput() {
       });
       return;
     }
+    // 设置不可取消发布，阻止删除帖子草稿
+    Taro.setStorageSync("canCancel", true);
+
     Taro.switchTab({ url: "/pages/forum/forum" });
     // onPublish(commentText);
     setCommentText("");
