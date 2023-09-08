@@ -4,7 +4,7 @@ import { useState,useEffect, } from 'react';
 
 
 // import { getGatherList,getTagList } from "$/api/gather";
-import { joinGather,quitGather,deleteGather } from "$/api/gather";
+import { joinGather,quitGather,deleteGather,getUserInfo} from "$/api/gather";
 import Taro from "@tarojs/taro";
 
 // import request from '$/utils/request'
@@ -20,6 +20,7 @@ import './gatherDetail.scss';
 export default function GatherDetail() {
   // const router = useRouter();
   const [gatherData, setGatherData] = useState(null);
+  const [userInfo, setUserInfo] = useState(null);
 
   useEffect(() => {
     const eventChannel = Taro.getCurrentInstance().page.getOpenerEventChannel();
@@ -29,7 +30,9 @@ export default function GatherDetail() {
 
       // 将接收到的数据存储到组件状态中
       setGatherData(data.gather);
+      getInfo(data.gather.uid)
     });
+
 
     // 返回函数用于清除监听器，以避免内存泄漏
     return () => {
@@ -37,7 +40,19 @@ export default function GatherDetail() {
     };
 
   }, []);
-
+  const getInfo = async (userId) => {
+    try {
+      let response;
+      response = await getUserInfo({
+        userId:userId
+      });
+      console.log('res',response);
+      // 将接收到的数据存储到组件状态中
+      setUserInfo(response);
+    } catch (error) {
+      console.error('Error fetching gather list', error);
+    }
+  };
   const handleSubmit = async () => {
     // @ts-ignore
     // eslint-disable-next-line no-restricted-globals
@@ -135,11 +150,11 @@ export default function GatherDetail() {
           <View className='avatar'>
             <Image
               mode='widthFix'
-              src='https://s2.loli.net/2023/05/13/cln1tpJuZG8wTrP.jpg'
+              src={userInfo?.avatarUrl}
               style='width: 50px; height: 50px; border-radius: 50%;margin-left: 4vw; margin-right: 5vw'
             />
           </View>
-          <View className='name'>肥肥鲨</View>
+          <View className='name'>{userInfo?.nickname}</View>
         </View>
         <View className='detail'>
           <View className='title'>局情</View>
