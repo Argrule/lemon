@@ -1,8 +1,13 @@
 import { AtAvatar } from "taro-ui";
-import { View, Text, Button } from "@tarojs/components";
+import { View, Text, Button, Image } from "@tarojs/components";
 import { AtTag } from "taro-ui";
 import { Item } from "$/pages/forum/data";
 import "./post.scss";
+import { FormatTimeFromNow } from "$/utils/dayjs";
+import lenmon_regular from "../../assets/post/lemonR.svg";
+import lenmon_solid from "../../assets/post/lemonS.svg";
+import star_regular from "../../assets/post/starR.svg";
+import star_solid from "../../assets/post/starS.svg";
 
 interface PostComponentProps {
   post: Item;
@@ -25,6 +30,10 @@ const PostComponent: FunctionComponent<PostComponentProps> = ({
   onCollect,
   onDelete,
 }) => {
+  // 待判断
+  const handleShowComments = (post) => {
+    console.log(post);
+  };
   return (
     <View className="post" key={post.id}>
       {/* 头像/作者，预留位置 */}
@@ -33,12 +42,27 @@ const PostComponent: FunctionComponent<PostComponentProps> = ({
           size="normal"
           image="https://images.infogame.cn/uploads/20220702/img_62bfa8858e30c36.gif"
         ></AtAvatar>
-        <Text>猫猫可爱捏</Text>
+        <Text>{post.nickname}</Text>
       </View>
       {/* 帖子内容 */}
-      <Text className="post-content" userSelect>
-        {post.content}
-      </Text>
+      <View className="text-ellipsis">
+        <Text
+          className="text-ellipsis post-content"
+          userSelect
+          numberOfLines={3}
+        >
+          {post.content}
+        </Text>
+      </View>
+      {/* 帖子图片 */}
+      <View className="flex" onClick={() => handleShowComments(post)}>
+        {post.images?.map((image) => (
+          <Image
+            src={image}
+            style="width: 100px;height: 100px;background: #fff;"
+          />
+        ))}
+      </View>
       {/* 帖子标签 */}
       <View className="post-tags">
         {post.tagName?.map((tag) => (
@@ -49,28 +73,49 @@ const PostComponent: FunctionComponent<PostComponentProps> = ({
       </View>
       {/* 交互按钮 */}
       <View className="interaction-buttons">
-        <Button
+        <Text className="post-time">{FormatTimeFromNow(post.createTime)}</Text>
+        <View
           onClick={() => onLike(post.id, post.likeStatus)}
           className="interaction-button like-button"
         >
-          {post.likeStatus ? "取消赞" : "赞"}
+          {post.likeStatus ? (
+            <Image
+              src={lenmon_solid}
+              mode="scaleToFill"
+              style="width: 20px; height: 20px;"
+            ></Image>
+          ) : (
+            <Image
+              src={lenmon_regular}
+              mode="scaleToFill"
+              style="width: 20px; height: 20px;"
+            ></Image>
+          )}
+          {/* {post.likeStatus ? "取消赞" : "赞"} */}
           {post.likeNum}
-        </Button>
-        <Button
+        </View>
+        <View
           className="interaction-button collect-button"
           onClick={() => onCollect(post.id, post.collectStatus)}
         >
-          {post.collectStatus ? "已收藏" : "收藏"}
+          {post.collectStatus ? (
+            <Image
+              src={star_solid}
+              mode="scaleToFill"
+              style="width: 20px; height: 20px;"
+            ></Image>
+          ) : (
+            <Image
+              src={star_regular}
+              mode="scaleToFill"
+              style="width: 20px; height: 20px;"
+            ></Image>
+          )}
+          {/* {post.collectStatus ? "已收藏" : "收藏"} */}
           {post.collectNum}
-        </Button>
-        {/* <Button
-          type="primary"
-          className="interaction-button collect-button"
-          onClick={() => onCollect(post.id, post.collectStatus)}
-        >
-          评论
-        </Button> */}
+        </View>
         <Button
+          style={"display:none"}
           type="primary"
           className="interaction-button collect-button"
           onClick={() => onDelete(post.id)}
