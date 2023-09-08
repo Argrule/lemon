@@ -276,10 +276,11 @@ class Forum extends Component<{}, State> {
           {posts.map((post) => (
             <>
               <View className="post" key={post.id}>
-                <Text className="post-content" userSelect>
+                <Text className="post-nick">{post.nickname}</Text>
+                <Text className="post-content" userSelect onClick={() => this.handleShowComments(post)} >
                   {post.content}
                 </Text>
-                <View className="flex">
+                <View className="flex" onClick={() => this.handleShowComments(post)} >
                   {post.images?.map((image) => (
                     <Image
                       src={image}
@@ -316,14 +317,15 @@ class Forum extends Component<{}, State> {
                     {post.collectStatus ? "已收藏" : "收藏"}
                     {post.collectNum}
                   </Button>
-                  <Button
+                  {/* <Button
                     type="primary"
                     className="interaction-button collect-button"
                     onClick={() => this.handleShowComments(post)}
                   >
                     评论
-                  </Button>
+                  </Button> */}
                   <Button
+                  style={'display:none'}
                     type="primary"
                     className="interaction-button collect-button"
                     onClick={() => this.handleDeletePost(post.id)}
@@ -331,14 +333,7 @@ class Forum extends Component<{}, State> {
                     删除
                   </Button>
                 </View>
-              </View>
-              {/* <Button
-                type="primary"
-                className="interaction-button comment-button"
-                onClick={() => this.handleShowComments(post)}
-              >
-                查看评论
-              </Button> */}
+              </View>        
             </>
           ))}
         </View>

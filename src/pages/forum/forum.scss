@@ -119,6 +119,10 @@ button {
       flex-direction: column;
       gap: 10px;
 
+      .post-nick{
+        font-size: $forum-fontSize-b;
+        color: $btn-color;
+      }
       .post-content {
         font-size: $forum-fontSize-b; /* Larger font size for post content */
       }
