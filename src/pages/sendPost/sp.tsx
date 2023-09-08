@@ -100,6 +100,7 @@ function CommentInput() {
     console.log(data);
     setPostId(data);
     Taro.setStorageSync("postId", data);
+    Taro.setStorageSync("canCancel", false);
   };
   /**
    * @description 删除帖子草稿
