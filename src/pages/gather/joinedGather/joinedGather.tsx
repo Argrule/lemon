@@ -192,7 +192,7 @@ export default function Gather() {
                     {gather.topic}
                   </View>
                   <View className='others'>
-                    <View className='director'>局长：{gather.uid}</View>
+                    <View className='director'>局长：{gather.nickname}</View>
                     <View className='time'>{gather.createTime}</View>
                   </View>
 

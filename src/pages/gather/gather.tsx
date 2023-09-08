@@ -50,11 +50,17 @@ export default function Gather() {
 
   useEffect(() => {
     getTagList({});
-    fetchGatherList(0)
+    fetchGatherList(0,1)
 
   }, []);
   useDidShow(() => {
-    fetchGatherList(0);
+    setPageNum(1);
+    fetchGatherList(0,1);
+    const updatedClassification = classification.map((item, i) => ({
+      ...item,
+      checked: false,
+    }));
+    setClassification(updatedClassification);
   });
 
   Taro.useReachBottom(() => {
@@ -87,55 +93,74 @@ export default function Gather() {
 
   const refreshData = () => {
     // 在这里触发下拉刷新
-    fetchGatherList(0);
+    fetchGatherList(0,1);
   };
 
-  const fetchGatherList = async (tagId) => {
+  const fetchGatherList = async (tagId,initPageNum) => {
     console.log('tagId',tagId);
 
     try {
       let response;
-      // if(tagId){
+      if(initPageNum){
         console.log('进了上面');
+        response = await getGatherList({
+          pageNum: initPageNum,
+          tagId: tagId
+        });
+        console.log('res',response);
+        for (let item of response.list) {
+          console.log(item.tagName);
+          if (item.tagName) {
+            item.tagName = item.tagName.split('');
+          }
+        }
+        console.log('res',response.list);
+
+        // if(pageNum===1){
+        setGatherList(response.list); // Update the gatherList state
+        // } else if(pageNum>1){
+        //   console.log('response.list',response.list);
+        //   if(response.list.length==0){
+        //     Taro.atMessage({
+        //       message: '没有更多数据了',
+        //       type: 'error',
+        //     });
+        //   }
+        //   setGatherList([...gatherList,...response.list]);
+
+        // }
+      } else {
+        console.log('进了下面');
         response = await getGatherList({
           pageNum: pageNum,
           tagId: tagId
         });
-      // } else {
-      //   console.log('进了下面');
-      //   response = await getGatherList({
-      //     pageNum: pageNum,
-      //     tagId: selectedTagIndex
-      //   });
-      // }
+        console.log('res',response);
+        for (let item of response.list) {
+          console.log(item.tagName);
+          if (item.tagName) {
+            item.tagName = item.tagName.split('');
+          }
+        }
+        console.log('res',response.list);
 
+        if(pageNum===1){
+          setGatherList(response.list); // Update the gatherList state
+        } else if(pageNum>1){
+          console.log('response.list',response.list);
+          if(response.list.length==0){
+            Taro.atMessage({
+              message: '没有更多数据了',
+              type: 'error',
+            });
+          }
+          setGatherList([...gatherList,...response.list]);
 
-      console.log('res',response);
-      // const list = response.list.map(item => ({
-      //   ...item,
-      //   tagName: Array.from(item.tagName) // 将tagName字符串转换为字符数组
-      // }));
-      for (let item of response.list) {
-        console.log(item.tagName);
-        if (item.tagName) {
-          item.tagName = item.tagName.split('');
         }
       }
-      console.log('res',response.list);
 
-      if(pageNum===1){
-        setGatherList(response.list); // Update the gatherList state
-      } else if(pageNum>1){
-        console.log('response.list',response.list);
-        if(response.list.length==0){
-          Taro.atMessage({
-            message: '没有更多数据了',
-            type: 'error',
-          });
-        }
-        setGatherList([...gatherList,...response.list]);
 
-      }
+
       // Assuming the response contains the list of gathers
 
       Taro.stopPullDownRefresh(); // 始终在请求结束后停止下拉刷新动画
@@ -155,7 +180,7 @@ export default function Gather() {
       setClassification(updatedClassification);
       console.log('index空位',index);
       setSelectedTagIndex(index); // 更新选中的标签索引
-      fetchGatherList(index); // 重新获取数据
+      fetchGatherList(index,1); // 重新获取数据
 
     } else {
       const updatedClassification = classification.map((item, i) => ({
@@ -165,7 +190,7 @@ export default function Gather() {
       setClassification(updatedClassification);
       console.log('index非空位',index);
       setSelectedTagIndex(index); // 更新选中的标签索引
-      fetchGatherList(index); // 重新获取数据
+      fetchGatherList(index,1); // 重新获取数据
 
 
     }
@@ -244,7 +269,7 @@ export default function Gather() {
                     {gather.topic}
                   </View>
                   <View className='others'>
-                    <View className='director'>局长：{gather.uid}</View>
+                    <View className='director'>局长：{gather.nickname}</View>
                     <View className='time'>{gather.createTime}</View>
                   </View>
 
