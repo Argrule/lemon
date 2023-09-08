@@ -76,7 +76,7 @@ export const getTeamList = async (params: {
   const paramsStr = Object.keys(params)
     .map((key) => `${key}=${params[key]}`)
     .join("&");
-  const res = await request.get("/user/team" + `?${paramsStr}`);
+  const res = await request.get("/team/my/join" + `?${paramsStr}`);
   return res.data;
 };
 
@@ -93,7 +93,7 @@ export const getMyTeamList = async (params: {
   const paramsStr = Object.keys(params)
     .map((key) => `${key}=${params[key]}`)
     .join("&");
-  const res = await request.get("/user/team/create" + `?${paramsStr}`);
+  const res = await request.get("/team/my/create" + `?${paramsStr}`);
   return res.data;
 };
 
