@@ -275,9 +275,11 @@ class Forum extends Component<{}, State> {
           <Button onClick={this.handleNewPostSubmit}>发布</Button>
         </View> */}
         <View className="posts">
-          {posts.map((post) => (
-            <>
-              {/* <View className="post" key={post.id}>
+          {/* // ### 这里做判断 是防止出现取消发布的数据写回不及时 多出一个空白帖子的bug */}
+          {posts.map((post) =>
+            post.content == undefined ? null : (
+              <>
+                {/* <View className="post" key={post.id}>
                 <Text className="post-nick">{post.nickname}</Text>
                 <Text
                   className="post-content"
@@ -336,16 +338,17 @@ class Forum extends Component<{}, State> {
                   </Button>
                 </View>
               </View> */}
-              {/* 帖子 */}
-              <PostComponent
-                post={post}
-                onLike={this.handleLikePost}
-                onDelete={this.handleDeletePost}
-                onCollect={this.handleCollectPost}
-                onShowComments={this.handleShowComments}
-              />
-            </>
-          ))}
+                {/* 帖子 */}
+                <PostComponent
+                  post={post}
+                  onLike={this.handleLikePost}
+                  onDelete={this.handleDeletePost}
+                  onCollect={this.handleCollectPost}
+                  onShowComments={this.handleShowComments}
+                />
+              </>
+            )
+          )}
         </View>
       </View>
     );

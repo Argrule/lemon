@@ -191,7 +191,7 @@ function CommentInput() {
     }
     // ## debugger
     // 设置不可取消发布，阻止删除帖子草稿
-    Taro.setStorageSync('canCancel', true)
+    Taro.setStorageSync("canCancel", true);
 
     Taro.switchTab({ url: "/pages/forum/forum" });
     // onPublish(commentText);
