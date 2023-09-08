@@ -132,7 +132,7 @@ export default function Gather() {
       url: '/pages/gather/gatherDetail/gatherDetail',
       success: function (res) {
         // 通过eventChannel向被打开页面传送数据
-        res.eventChannel.emit('acceptDataFromOpenerPage', { gather: gather })
+        res.eventChannel.emit('acceptDataFromOpenerPage', { gather: gather,isJoined: true });
       }
     })
   };

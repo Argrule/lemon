@@ -19,6 +19,7 @@ import './gatherDetail.scss';
 
 export default function GatherDetail() {
   // const router = useRouter();
+  const [isGather, setIsGather] = useState(false);
   const [gatherData, setGatherData] = useState(null);
   const [userInfo, setUserInfo] = useState(null);
   const [avatorList, setAvatorList] = useState([]);
@@ -28,11 +29,28 @@ export default function GatherDetail() {
 
     eventChannel.on('acceptDataFromOpenerPage', (data) => {
       console.log('Received data:', data.gather);
-
+      setIsGather(data.isJoined)
       // 将接收到的数据存储到组件状态中
       setGatherData(data.gather);
       getInfo(data.gather.uid);
       getAvator(data.gather.uidArray)
+      console.log(data.gather.uid);
+      console.log(data.gather.uidArray);
+      // for(let i = 0; i < data.gather.uidArray.length; i++) {
+      //   if(data.gather.uid==data.gather.uidArray[i]){
+      //     console.log('已加入队伍');
+
+      //     setIsGather(true)
+      //   }
+      // }
+      // if(data.gather.uid in data.gather.uidArray){
+      //   console.log('处于队伍');
+
+      //   setIsGather(true)
+      // } else{
+      //   console.log('不处于队伍');
+      //   setIsGather(false)
+      // }
     });
 
 
@@ -102,7 +120,7 @@ export default function GatherDetail() {
       //更改为已加入状态//todo
     } else if(res.code === 'A0400'){
       Taro.atMessage({
-        message: '已在队中',
+        message: res.message,
         type: 'error',
       });
     } else{
@@ -264,12 +282,15 @@ export default function GatherDetail() {
         </View>
       </View>
       <View className='joinButton'>
-        <AtButton type='primary' circle onClick={handleSubmit} className='buttonItem'>
-          申请入局
-        </AtButton>
-        <AtButton type='primary' circle onClick={handleQuit} className='buttonItem'>
-          我要出局
-        </AtButton>
+        {isGather?
+          <AtButton type='primary' circle onClick={handleQuit} className='buttonItem'>
+            我要出局
+          </AtButton>
+          :
+          <AtButton type='primary' circle onClick={handleSubmit} className='buttonItem'>
+            申请入局
+          </AtButton>
+        }
         {/* <AtButton type='primary' circle onClick={handleDelete} className='buttonItem'>
           炸局
         </AtButton> */}
