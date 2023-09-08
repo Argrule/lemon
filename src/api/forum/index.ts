@@ -30,6 +30,40 @@ export const getForumList = async (params: {
 };
 
 /**
+ * @description 获取我的帖子列表
+ * @param {number} params.pageNum
+ * @param {number} params.pageSize
+ * @returns
+ */
+export const getMyForumList = async (params: {
+  pageNum: number;
+  pageSize: number;
+}) => {
+  const paramsStr = Object.keys(params)
+    .map((key) => `${key}=${params[key]}`)
+    .join("&");
+  const res = await o.get("/post/my/publish" + `?${paramsStr}`);
+  return res.data;
+};
+
+/**
+ * @description 获取我的收藏列表
+ * @param {number} params.pageNum
+ * @param {number} params.pageSize
+ * @returns
+ */
+export const getMyCollectForumList = async (params: {
+  pageNum: number;
+  pageSize: number;
+}) => {
+  const paramsStr = Object.keys(params)
+    .map((key) => `${key}=${params[key]}`)
+    .join("&");
+  const res = await o.get("/post/my/collect" + `?${paramsStr}`);
+  return res.data;
+};
+
+/**
  * @description 发布帖子
  * @param data.content 帖子内容
  * @param data.tagIds 帖子标签
