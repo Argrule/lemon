@@ -39,7 +39,7 @@ const PostComponent: FunctionComponent<PostComponentProps> = ({
       <View className="post-author">
         <AtAvatar
           size="normal"
-          image="https://images.infogame.cn/uploads/20220702/img_62bfa8858e30c36.gif"
+          image={post.avatarUrl}
         ></AtAvatar>
         <Text>{post.nickname}</Text>
       </View>
