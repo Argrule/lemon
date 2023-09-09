@@ -32,6 +32,7 @@ export default function CommentDetail() {
     likeStatus: false,
     collectStatus: false,
     createTime: "",
+    nickname: "",
   });
 
   const [commentsList, setCommentsList] = useState<Comment[]>([]);
@@ -43,6 +44,7 @@ export default function CommentDetail() {
   const [isCommentDialogOpen, setIsCommentDialogOpen] =
     useState<boolean>(false);
   const [placeholderStr, setPlaceholderStr] = useState("发布新评论");
+  const [replyToPerson, setReplyToPerson] = useState<string>("");
 
   useDidShow(async () => {
     const instance = getCurrentInstance();
@@ -236,19 +238,21 @@ export default function CommentDetail() {
     setIsInputDialogOpen(false);
   };
 
-  const handleInputBlur = (id?: number) => {
+  const handleInputBlur = (nickname: string, id?: number) => {
     scrollToBottom();
     // 打开输入框
     switch (id) {
       case undefined:
         // ## 还没拿到 用户名
         setPlaceholderStr("回复 @某人哦~");
+        setReplyToPerson(nickname);
         setIsCommentDialogOpen(true);
         break;
 
       default:
         setPlaceholderStr("发送你的回复哦~");
         CommentIdMark.current = id;
+        setReplyToPerson(nickname);
         setIsInputDialogOpen(true);
         break;
     }
@@ -288,7 +292,7 @@ export default function CommentDetail() {
         <Textarea
           value={newReplyContent}
           maxlength={200}
-          placeholder="回复 @猫猫酱"
+          placeholder={`回复 @${replyToPerson}`}
           className="textarea"
           onInput={(e) => setNewReplyContent((e.target as any).value)}
           style="min-height:200rpx"
@@ -326,7 +330,7 @@ export default function CommentDetail() {
         <Textarea
           value={newCommentContent}
           maxlength={200}
-          placeholder="回复 @猫猫可爱捏"
+          placeholder={`回复 @${replyToPerson}`}
           className="textarea"
           onInput={handleNewCommentChange}
           style="min-height:200rpx"
@@ -356,17 +360,14 @@ export default function CommentDetail() {
         onCollect={handleCollectPost}
         onShowComments={() => {}}
       />
-      <View style={"color:#a0aa25"}>comment</View>
+      <View style={"color:#a0aa25;margin-left:15rpx;"}>评论</View>
       {/* 评论展示区域 */}
       <View className="comments">
         {commentsList.map((comment) => (
           <View className="comment" key={comment.id}>
             <View className="author">
-              <AtAvatar
-                size="normal"
-                image="https://c-ssl.dtstatic.com/uploads/blog/202201/07/20220107102121_8ad29.thumb.1000_0.gif"
-              ></AtAvatar>
-              <Text>猫猫酱</Text>
+              <AtAvatar size="normal" image={comment.avatarUrl}></AtAvatar>
+              <Text>{comment.nickname}</Text>
             </View>
             {/* 评论内容 */}
             <Text className="comment-content" userSelect>
@@ -379,7 +380,7 @@ export default function CommentDetail() {
               </Text>
               <Text
                 className="comment-reply"
-                onClick={() => handleInputBlur(comment.id)}
+                onClick={() => handleInputBlur(comment.nickname, comment.id)}
               >
                 回复
               </Text>
@@ -392,9 +393,9 @@ export default function CommentDetail() {
                     <AtAvatar
                       size="small"
                       className="custom-avatar"
-                      image="https://c-ssl.dtstatic.com/uploads/blog/202201/07/20220107102121_8ad29.thumb.1000_0.gif"
+                      image={reply.avatarUrl}
                     ></AtAvatar>
-                    <Text>猫猫酱二号❤️</Text>
+                    <Text>{reply.nickname}</Text>
                     <Text className="comment-time">
                       {FormatTimeFromNow(reply.createTime)}
                     </Text>
@@ -411,7 +412,7 @@ export default function CommentDetail() {
         <Input
           value={newCommentContent}
           disabled
-          onClick={() => handleInputBlur()}
+          onClick={() => handleInputBlur(post.nickname)}
           onInput={handleNewCommentChange}
           placeholder={placeholderStr}
         />
