@@ -370,9 +370,9 @@ export default function CommentDetail() {
               <Text>{comment.nickname}</Text>
             </View>
             {/* 评论内容 */}
-            <Text className="comment-content" userSelect>
-              {comment.content}
-            </Text>
+            <View className="comment-content">
+              <Text userSelect>{comment.content}</Text>
+            </View>
             {/* 评论更多功能 */}
             <View>
               <Text className="comment-time">
@@ -400,7 +400,9 @@ export default function CommentDetail() {
                       {FormatTimeFromNow(reply.createTime)}
                     </Text>
                   </View>
-                  <Text className="reply-content">{reply.content}</Text>
+                  <View className="reply-content">
+                    <Text userSelect>{reply.content}</Text>
+                  </View>
                 </View>
               ))}
             </View>
