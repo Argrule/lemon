@@ -6,7 +6,7 @@ import { AtFab } from "taro-ui";
 import { AtTag } from "taro-ui";
 import { AtMessage } from "taro-ui";
 import Taro from "@tarojs/taro";
-import "../../forum/forum.scss";
+import "./forum.scss";
 import { InputEventDetail } from "taro-ui/types/input";
 import {
   deletePost,
@@ -272,7 +272,7 @@ class Forum extends Component<{}, State> {
           />
           <Button onClick={this.handleNewPostSubmit}>发布</Button>
         </View> */}
-        <View className="posts">
+        <View className="my-posts">
           {posts.map((post) => (
             <>
               <View className="post" key={post.id}>

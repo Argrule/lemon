@@ -19,6 +19,12 @@ $btn-color: $lenmon-yellow;
   flex-direction: column;
   gap: 10px;
 
+  .flex{
+    display: flex;
+    gap: 30rpx;
+    flex-wrap: wrap;
+    padding: 10rpx 20rpx;
+  }
   .post-author {
     display: flex;
     align-items: center;
@@ -28,6 +34,25 @@ $btn-color: $lenmon-yellow;
   }
   .post-content {
     font-size: $forum-fontSize-b;
+    padding: 0 20rpx;
+  }
+  .text-ellipsis {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 3; /* 最大显示三行 */
+    // width: 200px; /* 设置文本容器的宽度 */
+    // white-space: nowrap; /* 防止文本换行 */
+    // overflow: hidden; /* 隐藏超出容器宽度的部分文本 */
+    // text-overflow: ellipsis; /* 显示省略号 */
+  }
+  .post-time {
+    font-size: $forum-fontSize;
+    color: $btn-color;
+    // justify-self: flex-start;
+    position: relative;
+    right: 105rpx;
   }
   .post-tags {
     display: flex;
@@ -40,7 +65,7 @@ $btn-color: $lenmon-yellow;
 
   .interaction-buttons {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-evenly;
     align-items: center;
 
     .interaction-button {
@@ -49,16 +74,19 @@ $btn-color: $lenmon-yellow;
       border-radius: 20px;
       font-size: $forum-fontSize;
       cursor: pointer;
-      transition: background-color 0.3s;
+      transition: background-color 0.3s;      
+      display: flex;
+      align-items: center;
+      gap: 10px;
 
       &.like-button {
-        background-color: #e0245e; /* Twitter's like button color */
-        color: #fff;
+        // background-color: #fff; 
+        // color: #000;
       }
 
       &.collect-button {
-        background-color: $btn-color; /* QQ's collect button color */
-        color: #fff;
+        // background-color: #fff; 
+        // color: #fff;
       }
 
       &:hover {
