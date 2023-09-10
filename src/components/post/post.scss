@@ -19,7 +19,7 @@ $btn-color: $lenmon-yellow;
   flex-direction: column;
   gap: 10px;
 
-  .flex{
+  .flex {
     display: flex;
     gap: 30rpx;
     flex-wrap: wrap;
@@ -31,6 +31,15 @@ $btn-color: $lenmon-yellow;
     gap: 50rpx;
     font-size: $forum-fontSize-author;
     color: $btn-color;
+    .at-avatar--normal {
+      width: 80rpx;
+      height: 80rpx;
+      line-height: normal;
+      .at-avatar__img {
+        width: 80rpx;
+        height: 80rpx;
+      }
+    }
   }
   .post-content {
     font-size: $forum-fontSize-b;
@@ -74,18 +83,18 @@ $btn-color: $lenmon-yellow;
       border-radius: 20px;
       font-size: $forum-fontSize;
       cursor: pointer;
-      transition: background-color 0.3s;      
+      transition: background-color 0.3s;
       display: flex;
       align-items: center;
       gap: 10px;
 
       &.like-button {
-        // background-color: #fff; 
+        // background-color: #fff;
         // color: #000;
       }
 
       &.collect-button {
-        // background-color: #fff; 
+        // background-color: #fff;
         // color: #fff;
       }
 
