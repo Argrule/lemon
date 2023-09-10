@@ -145,6 +145,15 @@ button {
       gap: 40rpx;
       font-size: $forum-fontSize-author; // 调整评论作者的字体大小
       color: $btn-color; // 调整评论作者的字体颜色
+      .at-avatar--normal {
+        width: 80rpx;
+        height: 80rpx;
+        line-height: normal;
+        .at-avatar__img {
+          width: 80rpx;
+          height: 80rpx;
+        }
+      }
     }
     .comment-time {
       font-size: $forum-fontSize-s; // 调整评论时间的字体大小
@@ -176,7 +185,14 @@ button {
         padding-top: 10rpx;
         font-size: $forum-fontSize-author-2; // 调整评论作者的字体大小
         color: $btn-color; // 调整评论作者的字体颜色
-        .custom-avatar {
+        .at-avatar--small {
+          width: 60rpx;
+          height: 60rpx;
+          line-height: normal;
+          .at-avatar__img {
+            width: 60rpx;
+            height: 60rpx;
+          }
         }
       }
       .reply-content {
