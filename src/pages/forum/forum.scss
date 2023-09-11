@@ -14,7 +14,7 @@ $btn-color: $lenmon-yellow;
 button {
   line-height: 1.5;
 }
-.flex{
+.flex {
   display: flex;
   gap: 10rpx;
 }
@@ -24,14 +24,13 @@ button {
   right: 10vw;
   // transform: translateX(-50%);
   z-index: 999;
-  &.at-fab--normal{
+  &.at-fab--normal {
     background-color: $button-color;
   }
-  .plus-icon{
+  .plus-icon {
     // font-size: 50rpx;//无效
     color: #fff;
   }
-
 }
 .search-bar {
   // position: fixed;
@@ -50,7 +49,7 @@ button {
   }
 }
 .forum {
-  padding: 20px;
+  padding: 20rpx 0rpx;
   height: 100%;
   display: flex;
   flex-direction: column;
