@@ -2,6 +2,8 @@ import Taro from "@tarojs/taro";
 import { pageToLogin } from "./utils";
 import { HTTP_STATUS } from "./status";
 
+const whiteTable=["/post/show"];
+
 const customInterceptor = (chain) => {
   // ## 请求发出前处理
   const requestParams = chain.requestParams;
@@ -31,14 +33,34 @@ const customInterceptor = (chain) => {
       return Promise.reject("没有权限访问");
     } else if (res.statusCode === HTTP_STATUS.AUTHENTICATE) {
       var url = requestParams.url;
-      if (url.includes("/post/show")) {
-        console.log("字符串中包含 '/post/show'");
+      const isExist=whiteTable.some((item) => {
+        if (url.includes(item)) {
+          console.log("字符串中包含");
+          return true;
+        } else {
+          console.log("字符串中不包含");
+          return false;
+        }
+      });
+      if (isExist) {
+        // console.log("字符串中包含 '/post/show'");
         return res.data;
       } else {
-        console.log("字符串中不包含 '/post/show'");
+        // console.log("字符串中不包含 '/post/show'");
         Taro.setStorageSync("Authorization", "");
-        pageToLogin();
-        return Promise.reject("需要鉴权");
+        console.log('Taro.getStorageSync("isPermitAuthorization")',Taro.getStorageSync("isPermitAuthorization"));
+        if(Taro.getStorageSync("isPermitAuthorization")){
+          Taro.setStorageSync("isPermitAuthorization", !Taro.getStorageSync("isPermitAuthorization"));
+          console.log('Taro.getStorageSync("isPermitAuthorization")',Taro.getStorageSync("isPermitAuthorization"));
+          return res.data;
+
+        } else {
+          Taro.setStorageSync("isPermitAuthorization", true);
+          console.log('Taro.getStorageSync("isPermitAuthorization")',Taro.getStorageSync("isPermitAuthorization"));
+          pageToLogin();
+          return Promise.reject("需要鉴权");
+        }
+
       }
     } else if (res.statusCode === HTTP_STATUS.SUCCESS) {
       return res.data;

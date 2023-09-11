@@ -59,13 +59,13 @@ const pc = () => {
 
   // 页面展示时检测登录状态
   async function checkLogin() {
-    let token = Taro.getStorageSync("Authorization");
+    // let token = Taro.getStorageSync("Authorization");
     let res;
-    if (token === "") {
-      Taro.navigateTo({
-        url: "/pages/login/login",
-      });
-    } else {
+    // if (token === "") {
+    //   Taro.navigateTo({
+    //     url: "/pages/login/login",
+    //   });
+    // } else {
       res = await o.get("/user/info", "");
       setNickname(res.data.nickname);
       setAvatar(res.data.avatarUrl);
@@ -73,7 +73,7 @@ const pc = () => {
       Taro.setStorageSync("avatar", res.data.avatarUrl);
       // console.log("LOGIN RES:", res);
       return res;
-    }
+    // }
   }
   useDidShow(() => {
     console.log("SHOW");
