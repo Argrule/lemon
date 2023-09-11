@@ -35,10 +35,10 @@ const customInterceptor = (chain) => {
       var url = requestParams.url;
       const isExist=whiteTable.some((item) => {
         if (url.includes(item)) {
-          console.log("字符串中包含");
+          // console.log("字符串中包含");
           return true;
         } else {
-          console.log("字符串中不包含");
+          // console.log("字符串中不包含");
           return false;
         }
       });
@@ -48,15 +48,15 @@ const customInterceptor = (chain) => {
       } else {
         // console.log("字符串中不包含 '/post/show'");
         Taro.setStorageSync("Authorization", "");
-        console.log('Taro.getStorageSync("isPermitAuthorization")',Taro.getStorageSync("isPermitAuthorization"));
+        // console.log('Taro.getStorageSync("isPermitAuthorization")',Taro.getStorageSync("isPermitAuthorization"));
         if(Taro.getStorageSync("isPermitAuthorization")){
           Taro.setStorageSync("isPermitAuthorization", !Taro.getStorageSync("isPermitAuthorization"));
-          console.log('Taro.getStorageSync("isPermitAuthorization")',Taro.getStorageSync("isPermitAuthorization"));
+          // console.log('Taro.getStorageSync("isPermitAuthorization")',Taro.getStorageSync("isPermitAuthorization"));
           return res.data;
 
         } else {
           Taro.setStorageSync("isPermitAuthorization", true);
-          console.log('Taro.getStorageSync("isPermitAuthorization")',Taro.getStorageSync("isPermitAuthorization"));
+          // console.log('Taro.getStorageSync("isPermitAuthorization")',Taro.getStorageSync("isPermitAuthorization"));
           pageToLogin();
           return Promise.reject("需要鉴权");
         }
