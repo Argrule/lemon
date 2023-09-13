@@ -1,9 +1,10 @@
 import { Component } from "react";
-import { View, Text, Button, BaseEventOrig } from "@tarojs/components";
+import { View, BaseEventOrig } from "@tarojs/components";
+// import { Text, Button, Image } from "@tarojs/components";
 // import { Input } from "@tarojs/components";
 import { AtIcon } from "taro-ui";
 import { AtFab } from "taro-ui";
-import { AtTag } from "taro-ui";
+// import { AtTag } from "taro-ui";
 import { AtMessage } from "taro-ui";
 import Taro from "@tarojs/taro";
 import "./forum.scss";
@@ -11,7 +12,7 @@ import { InputEventDetail } from "taro-ui/types/input";
 import {
   deletePost,
   getForumList,
-  publishPost,
+  // publishPost,
   likePost,
   cancelLikePost,
   collectPost,
@@ -20,6 +21,9 @@ import {
 } from "$/api/forum";
 import { Item, State } from "./data";
 import { AtSearchBar } from "taro-ui";
+// import { FormatTimeFromNow } from "$/utils/dayjs";
+import PostComponent from "$/components/post/post";
+import SpecialDeal from "./special";
 
 class Forum extends Component<{}, State> {
   /* 状态 */
@@ -28,6 +32,10 @@ class Forum extends Component<{}, State> {
     newPostContent: "", // 新帖子内容
     searchContent: "",
   };
+
+  pageNum = 1;
+  pageSize = 10;
+
   /* 非生命周期，onShow */
   async componentDidShow() {
     const res = (await getForumList({
@@ -35,6 +43,30 @@ class Forum extends Component<{}, State> {
       pageSize: 10,
     })) as { list: Item[] };
     this.setState({ posts: res.list });
+  }
+
+  /**
+   * @description 触底加载更多
+   */
+  async onReachBottom() {
+    console.log("触底了");
+    this.pageNum++;
+    const { posts } = this.state;
+    const res = (await getForumList({
+      pageNum: this.pageNum,
+      pageSize: this.pageSize,
+    })) as { list: Item[] };
+    if (res.list.length === 0) {
+      // @ts-ignore
+      Taro.atMessage({
+        message: "没有更多了",
+        type: "error",
+        duration: 800,
+      });
+      this.pageNum--;
+      return;
+    }
+    this.setState({ posts: [...posts, ...res.list] });
   }
   /**
    * @description 输入框内容变化
@@ -46,38 +78,38 @@ class Forum extends Component<{}, State> {
   /**
    * @description 发布新帖子
    */
-  handleNewPostSubmit = async () => {
-    const { newPostContent, posts } = this.state;
-    if (!newPostContent) {
-      console.log("请输入内容");
-      return;
-    }
-    // ## 假冒的帖子
-    const newMockPost: Item = {
-      id: Date.now(),
-      uid: 1,
-      schoolId: 1,
-      content: newPostContent,
-      likeNum: 0,
-      readNum: 0,
-      collectNum: 0,
-      collectStatus: false,
-      likeStatus: false,
-      createTime: Date(),
-    };
-    const res = await publishPost({
-      content: newPostContent,
-      tagIds: [1, 2],
-    });
-    if (res.code != "00000") {
-      console.log("发布失败");
-      return;
-    }
-    this.setState({
-      posts: [newMockPost, ...posts],
-      newPostContent: "",
-    });
-  };
+  // handleNewPostSubmit = async () => {
+  //   const { newPostContent, posts } = this.state;
+  //   if (!newPostContent) {
+  //     console.log("请输入内容");
+  //     return;
+  //   }
+  //   // ## 假冒的帖子
+  //   const newMockPost: Item = {
+  //     id: Date.now(),
+  //     uid: 1,
+  //     schoolId: 1,
+  //     content: newPostContent,
+  //     likeNum: 0,
+  //     readNum: 0,
+  //     collectNum: 0,
+  //     collectStatus: false,
+  //     likeStatus: false,
+  //     createTime: Date(),
+  //   };
+  //   const res = await publishPost({
+  //     content: newPostContent,
+  //     tagIds: [1, 2],
+  //   });
+  //   if (res.code != "00000") {
+  //     console.log("发布失败");
+  //     return;
+  //   }
+  //   this.setState({
+  //     posts: [newMockPost, ...posts],
+  //     newPostContent: "",
+  //   });
+  // };
   /**
    * @description 点赞及取消点赞
    * @param postId 帖子id
@@ -220,13 +252,15 @@ class Forum extends Component<{}, State> {
     return (
       <View className="forum">
         <AtMessage />
-        <AtFab className="plus">
-          <AtIcon
-            className="plus-icon"
-            value="add"
-            onClick={this.goToPutPost}
-          ></AtIcon>
-        </AtFab>
+        {true ? null : (
+          <AtFab className="plus">
+            <AtIcon
+              className="plus-icon"
+              value="add"
+              onClick={this.goToPutPost}
+            ></AtIcon>
+          </AtFab>
+        )}
         <AtSearchBar
           className="search-bar"
           fixed={true}
@@ -244,12 +278,30 @@ class Forum extends Component<{}, State> {
           <Button onClick={this.handleNewPostSubmit}>发布</Button>
         </View> */}
         <View className="posts">
-          {posts.map((post) => (
-            <>
-              <View className="post" key={post.id}>
-                <Text className="post-content" userSelect>
+          {/* // ### 这里做判断 是防止出现取消发布的数据写回不及时 多出一个空白帖子的bug */}
+          {posts.map((post) =>
+            SpecialDeal(post) ? null : (
+              <>
+                {/* <View className="post" key={post.id}>
+                <Text className="post-nick">{post.nickname}</Text>
+                <Text
+                  className="post-content"
+                  userSelect
+                  onClick={() => this.handleShowComments(post)}
+                >
                   {post.content}
                 </Text>
+                <View
+                  className="flex"
+                  onClick={() => this.handleShowComments(post)}
+                >
+                  {post.images?.map((image) => (
+                    <Image
+                      src={image}
+                      style="width: 100px;height: 100px;background: #fff;"
+                    />
+                  ))}
+                </View>
                 <View className="post-tags">
                   {post.tagName?.map((tag) => (
                     <AtTag size="small" className="tagList" circle>
@@ -258,6 +310,9 @@ class Forum extends Component<{}, State> {
                   ))}
                 </View>
                 <View className="interaction-buttons">
+                  <Text className="post-time">
+                    {FormatTimeFromNow(post.createTime)}
+                  </Text>
                   <Button
                     onClick={() =>
                       this.handleLikePost(post.id, post.likeStatus)
@@ -277,13 +332,7 @@ class Forum extends Component<{}, State> {
                     {post.collectNum}
                   </Button>
                   <Button
-                    type="primary"
-                    className="interaction-button collect-button"
-                    onClick={() => this.handleShowComments(post)}
-                  >
-                    评论
-                  </Button>
-                  <Button
+                    style={"display:none"}
                     type="primary"
                     className="interaction-button collect-button"
                     onClick={() => this.handleDeletePost(post.id)}
@@ -291,16 +340,18 @@ class Forum extends Component<{}, State> {
                     删除
                   </Button>
                 </View>
-              </View>
-              {/* <Button
-                type="primary"
-                className="interaction-button comment-button"
-                onClick={() => this.handleShowComments(post)}
-              >
-                查看评论
-              </Button> */}
-            </>
-          ))}
+              </View> */}
+                {/* 帖子 */}
+                <PostComponent
+                  post={post}
+                  onLike={this.handleLikePost}
+                  onDelete={this.handleDeletePost}
+                  onCollect={this.handleCollectPost}
+                  onShowComments={this.handleShowComments}
+                />
+              </>
+            )
+          )}
         </View>
       </View>
     );

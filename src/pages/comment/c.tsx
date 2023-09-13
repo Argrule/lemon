@@ -1,9 +1,12 @@
 import { View, Text, Button, Input } from "@tarojs/components";
+import { Textarea } from "@tarojs/components";
 // import { useDidShow } from "@tarojs/taro";
 import { useEffect, useRef, useState } from "react";
-import { getComment, publishComment } from "$/api/forum";
+import { getComment, publishComment, replyComment } from "$/api/forum";
 import Taro, { getCurrentInstance, useDidShow } from "@tarojs/taro";
 import { AtMessage } from "taro-ui";
+import { AtAvatar } from "taro-ui";
+import { AtActionSheet, AtActionSheetItem } from "taro-ui";
 // import { AtTag } from "taro-ui";
 import { Item, Comment } from "../forum/data";
 import {
@@ -15,6 +18,7 @@ import {
 } from "$/api/forum";
 import PostComponent from "$/components/post/post";
 import "./c.scss";
+import { FormatTimeFromNow } from "$/utils/dayjs";
 
 export default function CommentDetail() {
   const [post, setPost] = useState<Item>({
@@ -28,13 +32,19 @@ export default function CommentDetail() {
     likeStatus: false,
     collectStatus: false,
     createTime: "",
+    nickname: "",
   });
 
   const [commentsList, setCommentsList] = useState<Comment[]>([]);
   const [newCommentContent, setNewCommentContent] = useState<string>("");
+  const [newReplyContent, setNewReplyContent] = useState<string>("");
+  const CommentIdMark = useRef<number>(0);
 
-  const inputRef = useRef(null);
+  const [isInputDialogOpen, setIsInputDialogOpen] = useState<boolean>(false);
+  const [isCommentDialogOpen, setIsCommentDialogOpen] =
+    useState<boolean>(false);
   const [placeholderStr, setPlaceholderStr] = useState("发布新评论");
+  const [replyToPerson, setReplyToPerson] = useState<string>("");
 
   useDidShow(async () => {
     const instance = getCurrentInstance();
@@ -182,6 +192,8 @@ export default function CommentDetail() {
       return;
     }
     setCommentsList(res2.data.list);
+    // 关闭输入弹窗
+    setIsCommentDialogOpen(false);
 
     //不触发全部重新获取,需要后端返回新评论的数据
     // post.current = post.current;
@@ -194,45 +206,215 @@ export default function CommentDetail() {
     // };
     // setCommentsList([newComment, ...commentsList]);
   };
-  const handleInputBlur = () => {
-    console.log("blur");
-    setPlaceholderStr("发送你的回复哦~");
-    /**
-     * 这个方案不太对啊，切换输入的内容万一不想发回复，又想发新评论怎么办
-     */
-    (inputRef.current as any).focus();
+  const handleNewReplySubmit = async () => {
+    if (!newReplyContent) {
+      console.log("请输入回复内容");
+      //@ts-ignore
+      Taro.atMessage({
+        message: "请输入回复内容",
+        type: "error",
+        duration: 800,
+      });
+      return;
+    }
+    const res = await replyComment({
+      commentId: CommentIdMark.current,
+      content: newReplyContent,
+    });
+    if (res.code != "00000") {
+      console.log("回复失败");
+      return;
+    }
+    setNewReplyContent("");
+
+    // 直接重新获取评论列表,没错就是评论列表，不是回复列表
+    const res2 = await getComment(post.id);
+    if (res2.code != "00000") {
+      console.log("展示评论失败");
+      return;
+    }
+    setCommentsList(res2.data.list);
+    // 关闭输入弹窗
+    setIsInputDialogOpen(false);
   };
+
+  const handleInputBlur = (nickname: string, id?: number) => {
+    scrollToBottom();
+    // 打开输入框
+    switch (id) {
+      case undefined:
+        // ## 还没拿到 用户名
+        setPlaceholderStr("回复 @某人哦~");
+        setReplyToPerson(nickname);
+        setIsCommentDialogOpen(true);
+        break;
+
+      default:
+        setPlaceholderStr("发送你的回复哦~");
+        CommentIdMark.current = id;
+        setReplyToPerson(nickname);
+        setIsInputDialogOpen(true);
+        break;
+    }
+  };
+  function scrollToBottom() {
+    // 获取页面高度
+    Taro.createSelectorQuery()
+      .selectViewport()
+      .scrollOffset((res) => {
+        const scrollTop = res.scrollTop;
+        console.log(scrollTop);
+        // 设置滚动位置为页面底部
+        Taro.pageScrollTo({
+          scrollTop: 100000, // 10000 是一个足够大的值，确保能滚动到页面底部
+          duration: 300, // 滚动持续时间
+        });
+      })
+      .exec();
+  }
+  // useEffect(() => {
+  //   if (isInputDialogOpen) {
+  //     // @ts-ignore
+  //     inputRef.current.focus();
+  //   }
+  // }, [isInputDialogOpen]);
 
   return (
     <View>
+      {/* 顶部消息提示 */}
       <AtMessage />
+      {/* 指示器 用于输入回复 */}
+      <AtActionSheet
+        isOpened={isInputDialogOpen}
+        className="input-container"
+        onClose={() => setIsInputDialogOpen(false)}
+      >
+        <Textarea
+          value={newReplyContent}
+          maxlength={200}
+          placeholder={`回复 @${replyToPerson}`}
+          className="textarea"
+          onInput={(e) => setNewReplyContent((e.target as any).value)}
+          style="min-height:200rpx"
+          cursor-spacing={150}
+          show-confirm-bar={false}
+          autoHeight
+        />
+        <AtActionSheetItem>
+          <View className="rely-main">
+            {/* <Input
+              className="rely-input"
+              // ref={inputRef}
+              value={newCommentContent}
+              onInput={handleNewCommentChange}
+              placeholder={placeholderStr}
+            /> */}
+            <Button
+              className="rely-btn"
+              onClick={() => setIsInputDialogOpen(false)}
+            >
+              预留其他功能
+            </Button>
+            <Button className="rely-btn" onClick={handleNewReplySubmit}>
+              回复
+            </Button>
+          </View>
+        </AtActionSheetItem>
+      </AtActionSheet>
+      {/* 用于输入评论 */}
+      <AtActionSheet
+        isOpened={isCommentDialogOpen}
+        className="input-container"
+        onClose={() => setIsCommentDialogOpen(false)}
+      >
+        <Textarea
+          value={newCommentContent}
+          maxlength={200}
+          placeholder={`回复 @${replyToPerson}`}
+          className="textarea"
+          onInput={handleNewCommentChange}
+          style="min-height:200rpx"
+          cursor-spacing={150}
+          show-confirm-bar={false}
+          autoHeight
+        />
+        <AtActionSheetItem>
+          <View className="rely-main">
+            <Button
+              className="rely-btn"
+              onClick={() => setIsCommentDialogOpen(false)}
+            >
+              预留其他功能
+            </Button>
+            <Button className="rely-btn" onClick={handleNewCommentSubmit}>
+              发布评论
+            </Button>
+          </View>
+        </AtActionSheetItem>
+      </AtActionSheet>
       {/* 帖子 */}
       <PostComponent
         post={post}
         onLike={handleLikePost}
         onDelete={handleDeletePost}
         onCollect={handleCollectPost}
+        onShowComments={() => {}}
       />
-      <View style={"color:#a0aa25"}>comment</View>
+      <View style={"color:#a0aa25;margin-left:15rpx;"}>评论</View>
       {/* 评论展示区域 */}
       <View className="comments">
         {commentsList.map((comment) => (
           <View className="comment" key={comment.id}>
-            <Text className="comment-content" userSelect>
-              {comment.content}
-            </Text>
-            {/* ###### 暂时注释掉因为太丑了 ###### */}
-            {/* <Button className="comment-reply" onClick={handleInputBlur}>
-              回复
-            </Button> */}
+            <View className="author">
+              <AtAvatar size="normal" image={comment.avatarUrl}></AtAvatar>
+              <Text>{comment.nickname}</Text>
+            </View>
+            {/* 评论内容 */}
+            <View className="comment-content">
+              <Text userSelect>{comment.content}</Text>
+            </View>
+            {/* 评论更多功能 */}
+            <View>
+              <Text className="comment-time">
+                {FormatTimeFromNow(comment.createTime)}
+              </Text>
+              <Text
+                className="comment-reply"
+                onClick={() => handleInputBlur(comment.nickname, comment.id)}
+              >
+                回复
+              </Text>
+            </View>
+            {/* 回复评论 */}
+            <View className="reply">
+              {comment.replyList.map((reply) => (
+                <View className="reply-item" key={reply.uid}>
+                  <View className="author">
+                    <AtAvatar
+                      size="small"
+                      className="custom-avatar"
+                      image={reply.avatarUrl}
+                    ></AtAvatar>
+                    <Text>{reply.nickname}</Text>
+                    <Text className="comment-time">
+                      {FormatTimeFromNow(reply.createTime)}
+                    </Text>
+                  </View>
+                  <View className="reply-content">
+                    <Text userSelect>{reply.content}</Text>
+                  </View>
+                </View>
+              ))}
+            </View>
           </View>
         ))}
       </View>
       {/* 评论输入区域 */}
       <View className="new-post">
         <Input
-          ref={inputRef}
           value={newCommentContent}
+          disabled
+          onClick={() => handleInputBlur(post.nickname)}
           onInput={handleNewCommentChange}
           placeholder={placeholderStr}
         />

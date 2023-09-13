@@ -1,0 +1,107 @@
+@import "~taro-ui/dist/style/components/message.scss";
+
+.searchBar{
+  width: 90vw;
+  margin-bottom: 3vh;
+}
+.content{
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+  height: 70%;
+  justify-content: space-around;
+  // align-items: center;
+  .description{
+    // margin-top: 2vh;
+    font-size: 28px;
+  }
+  .others{
+    width: 100%;
+    display: flex;
+    font-size: 20px;
+    justify-content: space-between;
+    .director{
+
+    }
+  }
+
+}
+.fixed-button{
+  position: fixed;
+  top: 86vh;
+  right: 10vw;
+}
+.card{
+  margin-bottom: 3vh;
+  border-radius: 10px;
+  height: 18vh;
+  background-color: #ecc745;
+  width: 90vw;
+  display: flex;
+  .side{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-weight: bold;
+    font-size: 40px;
+    border-radius: 10px;
+    background-color: #a0aa25 ;
+    width:15%
+  }
+  .text{
+    justify-content: space-around;
+    align-items: center;
+    flex-direction: column;
+    display: flex;
+    width: 100%;
+    // height: 100%;
+    .schedule{
+      width: 90%;
+      // height: 15vh
+    }
+  }
+
+}
+.tags{
+  display: flex;
+  flex-wrap: wrap;
+  .tag{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20vw;
+    margin-bottom: 2vh;
+    ::v-deep .u-tag{
+      width: 11vw;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+}
+.joinAndInitiate{
+  margin-bottom: 3vh;
+  width: 100vw;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  .join-button{
+    width: 45vw;
+    background-color: #a0aa25 !important;
+  }
+  .initiate-button{
+    width: 45vw;
+    background-color: #ecc745!important;
+  }
+}
+.container {
+  // height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-direction: column;
+
+}

@@ -1,5 +1,6 @@
 {
-  "extends": ["taro/react"],
+  "extends": ["taro/react","plugin:prettier/recommended"],
+  "jsx-quotes": ["error", "prefer-double"],
   "rules": {
     "react/jsx-uses-react": "off",
     "react/react-in-jsx-scope": "off"

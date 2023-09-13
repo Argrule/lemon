@@ -24,6 +24,9 @@ export interface Item {
   collectStatus: boolean;
   createTime: string;
   tagName?: string[];
+  images?: string[];
+  nickname: string;
+  avatarUrl?: string;
 }
 
 /**
@@ -39,6 +42,8 @@ interface Reply {
   uid: number;
   content: string;
   createTime: string;
+  nickname: string;
+  avatarUrl?: string;
 }
 
 export interface Comment {
@@ -47,6 +52,8 @@ export interface Comment {
   content: string;
   createTime: string;
   replyList: Reply[];
+  nickname: string;
+  avatarUrl?: string;
 }
 
 export interface CommentData {
