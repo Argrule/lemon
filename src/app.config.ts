@@ -41,9 +41,15 @@ export default defineAppConfig({
       },
       {
         pagePath: "pages/index/index",
-        text: "首页",
+        text: "功能",
         iconPath: "./assets/tabbar/func.png",
         selectedIconPath: "./assets/tabbar/func-active.png",
+      },
+      {
+        pagePath: "pages/sendPost/sp",
+        text: "发帖",
+        iconPath: "./assets/tabbar/plus.png",
+        selectedIconPath: "./assets/tabbar/plus-active.png",
       },
       {
         pagePath: "pages/gather/gather",
