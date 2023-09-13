@@ -23,6 +23,7 @@ import { Item, State } from "./data";
 import { AtSearchBar } from "taro-ui";
 // import { FormatTimeFromNow } from "$/utils/dayjs";
 import PostComponent from "$/components/post/post";
+import SpecialDeal from "./special";
 
 class Forum extends Component<{}, State> {
   /* 状态 */
@@ -277,7 +278,7 @@ class Forum extends Component<{}, State> {
         <View className="posts">
           {/* // ### 这里做判断 是防止出现取消发布的数据写回不及时 多出一个空白帖子的bug */}
           {posts.map((post) =>
-            post.content == undefined ? null : (
+            SpecialDeal(post) ? null : (
               <>
                 {/* <View className="post" key={post.id}>
                 <Text className="post-nick">{post.nickname}</Text>
