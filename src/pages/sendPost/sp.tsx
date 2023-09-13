@@ -4,7 +4,7 @@ import { Textarea } from "@tarojs/components";
 import { AtMessage } from "taro-ui";
 import { AtTag } from "taro-ui";
 import { AtImagePicker } from "taro-ui";
-import Taro, { useDidShow } from "@tarojs/taro";
+import Taro, { useDidHide, useDidShow } from "@tarojs/taro";
 import { publishPost, getTags, uploadImage } from "$/api/forum";
 import { CreateDraftAPI, DeleteDraftAPI } from "$/api/forum";
 import { Tag } from "../forum/data";
@@ -115,7 +115,18 @@ function CommentInput() {
     // 创建帖子草稿
     createDraft();
   });
-  // 卸载时删除帖子草稿，useDidHide不行
+  /**
+   * @description 隐藏时删除帖子草稿
+   * @description 作为tabbar时，useEffect就没办法触发了
+   */
+  useDidHide(() => {
+    // 删除帖子草稿
+    deleteDraft();
+  });
+  /**
+   * @description 卸载时删除帖子草稿
+   * @description 作为页面 卸载时删除帖子草稿，useDidHide不行
+   */
   useEffect(() => {
     return () => {
       // setCommentText("");
