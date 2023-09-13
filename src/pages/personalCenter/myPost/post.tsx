@@ -249,13 +249,13 @@ class Forum extends Component<{}, State> {
     return (
       <View className="forum">
         <AtMessage />
-        <AtFab className="plus">
+        {/* <AtFab className="plus">
           <AtIcon
             className="plus-icon"
             value="add"
             onClick={this.goToPutPost}
           ></AtIcon>
-        </AtFab>
+        </AtFab> */}
         <AtSearchBar
           className="search-bar"
           fixed={true}
