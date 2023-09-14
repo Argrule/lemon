@@ -1,5 +1,5 @@
 import { View, Image, ScrollView } from '@tarojs/components';
-import { AtButton,AtMessage } from 'taro-ui';
+import { AtButton,AtMessage,AtFloatLayout } from 'taro-ui';
 import { useState,useEffect, } from 'react';
 
 
@@ -14,6 +14,7 @@ import 'taro-ui/dist/style/components/tag.scss';
 import "taro-ui/dist/style/components/fab.scss";
 import "taro-ui/dist/style/components/icon.scss";
 import "taro-ui/dist/style/components/progress.scss"
+import "taro-ui/dist/style/components/float-layout.scss";
 import './gatherDetail.scss';
 
 
@@ -23,6 +24,12 @@ export default function GatherDetail() {
   const [gatherData, setGatherData] = useState(null);
   const [userInfo, setUserInfo] = useState(null);
   const [avatorList, setAvatorList] = useState([]);
+  const [showProfileModal, setShowProfileModal] = useState(false);
+  const [selectedProfile, setSelectedProfile] = useState(null);
+  const [createTime, setCreateTime] = useState(null);
+
+
+
 
   useEffect(() => {
     const eventChannel = Taro.getCurrentInstance().page.getOpenerEventChannel();
@@ -34,8 +41,11 @@ export default function GatherDetail() {
       setGatherData(data.gather);
       getInfo(data.gather.uid);
       getAvator(data.gather.uidArray)
-      console.log(data.gather.uid);
-      console.log(data.gather.uidArray);
+      setCreateTime(data.gather.createTime)
+      // console.log(data.gather.uid);
+      // console.log(data.gather.uidArray);
+      console.log('gatherData',gatherData);
+
     });
 
 
@@ -56,9 +66,9 @@ export default function GatherDetail() {
         response = await getUserInfo({
           userId:uidArray[i]
         });
-        let avator=[response.avatarUrl];
-        // console.log('avator',avator);
-        console.log('avatorList',avatorList);
+        let avator=[{avatarUrl:response.avatarUrl,uid:uidArray[i]}];
+        console.log('avator',avator);
+        console.log('mergeAvator',mergeAvator);
         mergeAvator=[...mergeAvator,...avator];
       } catch (error) {
         console.error('Error fetching gather list', error);
@@ -77,6 +87,21 @@ export default function GatherDetail() {
       console.log('res',response);
       // 将接收到的数据存储到组件状态中
       setUserInfo(response);
+      console.log('userInfo',userInfo);
+      return response;
+    } catch (error) {
+      console.error('Error fetching gather list', error);
+    }
+  };
+  const getMemberInfo = async (userId) => {
+    try {
+      let response;
+      response = await getUserInfo({
+        userId:userId
+      });
+      console.log('res',response);
+      console.log('userInfo',userInfo);
+      return response;
     } catch (error) {
       console.error('Error fetching gather list', error);
     }
@@ -174,9 +199,38 @@ export default function GatherDetail() {
   const goGather = () => {
     Taro.switchTab({url:'/pages/gather/gather'})
   };
+  const checkInfo = async(item) => {
+    console.log('item',item);
+    const info=await getMemberInfo(item.uid);
+    openProfileModal(info);
+    // Taro.switchTab({url:'/pages/gather/gather'})
+  };
+  const openProfileModal = (item) => {
+    setSelectedProfile(item);
+    setShowProfileModal(true);
+  };
+
+  const closeProfileModal = () => {
+    setShowProfileModal(false);
+  };
 
   return (
     <View className='container'>
+      <AtFloatLayout isOpened={showProfileModal} onClose={closeProfileModal} title="成员资料">
+        {selectedProfile && (
+          <View className='userInfo'>
+            <Image
+              mode='widthFix'
+              src={selectedProfile.avatarUrl}
+              style={{ width: '100px', height: '100px', borderRadius: '50%' }}
+            />
+            <View className='name'>{selectedProfile.nickname}</View>
+            <View className='school'>{selectedProfile.school}</View>
+            {/* 其他个人资料信息 */}
+          </View>
+        )}
+      </AtFloatLayout>
+
       <View className="membersContainer">
         <View className="title">局内成员</View>
         <ScrollView
@@ -185,10 +239,10 @@ export default function GatherDetail() {
           className='avatar'
         >
           {avatorList.map((item, index) => (
-            <View key={index} style={{ display: 'inline-block', marginLeft: '4vw' }}>
+            <View key={index} style={{ display: 'inline-block', marginLeft: '4vw' }} onClick={() => checkInfo(item)}>
               <Image
                 mode='widthFix'
-                src={item}
+                src={item.avatarUrl}
                 style={{ width: '50px', height: '50px', borderRadius: '50%' }}
               />
             </View>
@@ -205,6 +259,7 @@ export default function GatherDetail() {
             />
           </View>
           <View className='name'>{userInfo?.nickname}</View>
+          <View className='time'>{createTime}</View>
         </View>
         <View className='detail'>
           <View className='title'>局情</View>
