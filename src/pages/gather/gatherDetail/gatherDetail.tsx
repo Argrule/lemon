@@ -21,6 +21,7 @@ import './gatherDetail.scss';
 export default function GatherDetail() {
   // const router = useRouter();
   const [isGather, setIsGather] = useState(false);
+  const [isLeader, setisLeader] = useState(false);
   const [gatherData, setGatherData] = useState(null);
   const [userInfo, setUserInfo] = useState(null);
   const [avatorList, setAvatorList] = useState([]);
@@ -37,6 +38,7 @@ export default function GatherDetail() {
     eventChannel.on('acceptDataFromOpenerPage', (data) => {
       console.log('Received data:', data.gather);
       setIsGather(data.isJoined)
+      setisLeader(data.isLeader)
       // 将接收到的数据存储到组件状态中
       setGatherData(data.gather);
       getInfo(data.gather.uid);
@@ -267,17 +269,26 @@ export default function GatherDetail() {
         </View>
       </View>
       <View className='joinButton'>
-        {isGather?
-          <AtButton type='primary' circle onClick={handleQuit} className='buttonItem'>
-            我要出局
-          </AtButton>
-          :
+        {isGather ? (
+          isLeader ? (
+            <><AtButton type='primary' circle onClick={handleQuit} className='buttonItem'>
+              我要出局
+            </AtButton><AtButton type='primary' circle onClick={handleDelete} className='buttonItem'>
+                我要炸局
+              </AtButton></>
+          ) : (
+            <AtButton type='primary' circle onClick={handleQuit} className='buttonItem'>
+              我要出局
+            </AtButton>
+          )
+        ) : (
           <AtButton type='primary' circle onClick={handleSubmit} className='buttonItem'>
             申请入局
           </AtButton>
-        }
+        )}
         <AtMessage />
       </View>
+
     </View>
   );
 }
