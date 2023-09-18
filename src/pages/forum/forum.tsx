@@ -21,6 +21,7 @@ import {
 } from "$/api/forum";
 import { Item, State } from "./data";
 import { AtSearchBar } from "taro-ui";
+import { HotPost } from "$/components/hotPost/hp";
 // import { FormatTimeFromNow } from "$/utils/dayjs";
 import PostComponent from "$/components/post/post";
 import SpecialDeal from "./special";
@@ -269,6 +270,7 @@ class Forum extends Component<{}, State> {
           onConfirm={this.handleSearch}
           onActionClick={this.handleSearch}
         />
+        <HotPost></HotPost>
         {/* <View className="new-post">
           <Input
             value={newPostContent}

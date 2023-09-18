@@ -252,3 +252,11 @@ export const getTags = async (): Promise<BaseResponse<{ list: Tag[] }>> => {
   const res = (await o.get("/post/show/tags")) as any;
   return res;
 };
+
+/**
+ * @description 获取十大热搜帖子
+ */
+export const getHotPost = async (): Promise<BaseResponse<{ list: Item[] }>> => {
+  const res = (await o.get("/post/hot")) as any;
+  return res;
+}
