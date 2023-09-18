@@ -1,5 +1,20 @@
 @import "~taro-ui/dist/style/components/message.scss";
-
+.userInfo{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  width: 100%;
+  height: 100%;
+  .name{
+    margin-top: 4vh;
+    font-size: 40px;
+  }
+  .school{
+    margin-top: 4vh;
+    font-size: 30px;
+  }
+}
 .joinButton{
   width: 90vw;
   .buttonItem{
@@ -24,6 +39,9 @@
   align-items: center;
   font-size: 26px;
   // justify-content: center;
+  .name{
+    margin-right: 5vw;
+  }
   .avator{
     margin-left: 5vw;
     margin-right: 5vw;
