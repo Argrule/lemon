@@ -37,14 +37,11 @@ const PostComponent: FunctionComponent<PostComponentProps> = ({
     <View className="post" key={post.id}>
       {/* 头像/作者，预留位置 */}
       <View className="post-author">
-        <AtAvatar
-          size="normal"
-          image={post.avatarUrl}
-        ></AtAvatar>
-        <Text>{post.nickname}</Text>
+        <AtAvatar size="normal" circle image={post.avatarUrl}></AtAvatar>
+        <Text className="post-author-name">{post.nickname}</Text>
       </View>
       {/* 帖子内容 */}
-      <View className="text-ellipsis">
+      <View className="text-ellipsis post-main">
         <Text
           className="text-ellipsis post-content"
           userSelect
@@ -55,16 +52,16 @@ const PostComponent: FunctionComponent<PostComponentProps> = ({
         </Text>
       </View>
       {/* 帖子图片 */}
-      <View className="flex" onClick={() => onShowComments(post)}>
+      <View className="flex post-main" onClick={() => onShowComments(post)}>
         {post.images?.map((image) => (
           <Image
             src={image}
-            style="width: 100px;height: 100px;background: #fff;"
+            style="width: 80px;height: 80px;background: #fff;"
           />
         ))}
       </View>
       {/* 帖子标签 */}
-      <View className="post-tags">
+      <View className="post-tags post-main">
         {post.tagName?.map((tag) => (
           <AtTag size="small" className="tagList" circle key={tag}>
             {tag}
@@ -73,7 +70,7 @@ const PostComponent: FunctionComponent<PostComponentProps> = ({
       </View>
       {/* 交互按钮 */}
       <View className="interaction-buttons">
-        <Text className="post-time">{FormatTimeFromNow(post.createTime)}</Text>
+        <Text className="post-time post-main">{FormatTimeFromNow(post.createTime)}</Text>
         <View
           onClick={() => onLike(post.id, post.likeStatus)}
           className="interaction-button like-button"
