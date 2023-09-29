@@ -1,4 +1,37 @@
 // hp区分组件和页面，防止样式污染
-.hp-container{
-    margin-top: 80rpx;
+.hp-container {
+  margin: 80rpx 16rpx 0;
+  // 左侧文案
+  .hp-left {
+    color: #fff;
+    background: #fe7d41;
+    border-radius: 15rpx 0 0 15rpx;
+    padding: 8rpx;
+    position: relative;
+    &::after {
+      content: "";
+      border: 20rpx solid transparent;
+      border-right: 20rpx solid #fff9de;
+      color: red;
+      position: absolute;
+      top: 50%;
+      right: -1px;
+      transform: translate(0, -50%);
+    }
+  }
+  // 右侧走马灯
+  .hp-swiper {
+    .hp-swiper-item {
+      height: 50%;
+
+      font-family: PingFang SC;
+      font-size: 28px;
+      font-weight: 600;
+      line-height: 32px;
+      letter-spacing: 0px;
+      text-align: left;
+
+      background: #fff9de;
+    }
+  }
 }
