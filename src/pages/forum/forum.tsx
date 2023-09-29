@@ -1,7 +1,8 @@
 import { Component } from "react";
 import { View, BaseEventOrig } from "@tarojs/components";
 // import { Text, Button, Image } from "@tarojs/components";
-// import { Input } from "@tarojs/components";
+import { Image } from "@tarojs/components";
+import forum_ad from "../../assets/ad/banner.png";
 import { AtIcon } from "taro-ui";
 import { AtFab } from "taro-ui";
 // import { AtTag } from "taro-ui";
@@ -271,6 +272,25 @@ class Forum extends Component<{}, State> {
           onActionClick={this.handleSearch}
         />
         <HotPost></HotPost>
+        {/* 广告 */}
+        <View
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Image
+            src={forum_ad}
+            mode="scaleToFill"
+            style={{
+              width: "100%",
+              height: "97px",
+              padding: "8px 8px",
+              borderRadius: "34px",
+            }}
+          />
+        </View>
         {/* <View className="new-post">
           <Input
             value={newPostContent}
