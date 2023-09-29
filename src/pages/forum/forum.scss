@@ -55,41 +55,42 @@ button {
   flex-direction: column;
   padding-bottom: 100px;
 
-  .new-post {
-    height: 60px;
-    width: 90%;
-    display: flex;
-    align-items: center;
-    padding: 20px;
-    position: fixed;
-    bottom: 0;
-    background-color: #fff;
-    z-index: 100;
+  // 旧的添加帖子输入框的样式
+  // .new-post {
+  //   height: 60px;
+  //   width: 90%;
+  //   display: flex;
+  //   align-items: center;
+  //   padding: 20px;
+  //   position: fixed;
+  //   bottom: 0;
+  //   background-color: #fff;
+  //   z-index: 100;
 
-    input {
-      flex: 1;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 20px;
-      font-size: $forum-fontSize;
-    }
+  //   input {
+  //     flex: 1;
+  //     padding: 10px;
+  //     border: 1px solid #ccc;
+  //     border-radius: 20px;
+  //     font-size: $forum-fontSize;
+  //   }
 
-    button {
-      margin-left: 10px;
-      padding: 10px 20px;
-      background-color: $button-color;
-      color: #fff;
-      border: none;
-      border-radius: 20px; /* Increase the border radius for a more rounded button */
-      font-size: $forum-fontSize; /* Slightly larger font size for better readability */
-      cursor: pointer;
-      transition: background-color 0.3s;
+  //   button {
+  //     margin-left: 10px;
+  //     padding: 10px 20px;
+  //     background-color: $button-color;
+  //     color: #fff;
+  //     border: none;
+  //     border-radius: 20px; /* Increase the border radius for a more rounded button */
+  //     font-size: $forum-fontSize; /* Slightly larger font size for better readability */
+  //     cursor: pointer;
+  //     transition: background-color 0.3s;
 
-      &:hover {
-        background-color: #a0aa25;
-      }
-    }
-  }
+  //     &:hover {
+  //       background-color: #a0aa25;
+  //     }
+  //   }
+  // }
 
   .posts {
     margin-top: 80rpx;
@@ -108,62 +109,5 @@ button {
         }
       }
     }
-    // .post {
-    //   background-color: #fff;
-    //   border-bottom: 1px solid #ccc;
-    //   // border-radius: 10px;
-    //   padding: 15px;
-    //   margin-bottom: 15px;
-    //   display: flex;
-    //   flex-direction: column;
-    //   gap: 10px;
-
-    //   .post-nick{
-    //     font-size: $forum-fontSize-b;
-    //     color: $btn-color;
-    //   }
-    //   .post-content {
-    //     font-size: $forum-fontSize-b; /* Larger font size for post content */
-    //   }
-    //   .post-tags {
-    //     .tagList {
-    //       color: $btn-color;
-    //       // border: $btn-color 1px solid;
-    //     }
-    //   }
-    //   .post-time {
-    //     font-size: $forum-fontSize;
-    //     color: $btn-color;
-    //   }
-
-    //   .interaction-buttons {
-    //     display: flex;
-    //     justify-content: space-between;
-    //     align-items: center;
-
-    //     .interaction-button {
-    //       padding: 8px 15px;
-    //       border: none;
-    //       border-radius: 20px; /* Increase the border radius for a more rounded button */
-    //       font-size: $forum-fontSize; /* Slightly larger font size for better readability */
-    //       cursor: pointer;
-    //       transition: background-color 0.3s;
-
-    //       &.like-button {
-    //         background-color: #e0245e; /* Twitter's like button color */
-    //         color: #fff;
-    //       }
-
-    //       &.collect-button {
-    //         background-color: $btn-color; /* QQ's collect button color */
-    //         color: #fff;
-    //       }
-
-    //       &:hover {
-    //         opacity: 0.8;
-    //       }
-    //     }
-    //   }
-    // }
   }
 }
