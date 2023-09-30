@@ -9,12 +9,15 @@ $forum-fontSize-author: 35rpx; //author
 
 $btn-color: $lenmon-yellow;
 
+// 论坛页面的背景色，样式污染
+.forum {
+  background-color: #f7f7f7;
+}
 .post {
   background-color: #fff;
-  border-bottom: 1px solid #ccc;
   border-radius: 10px;
   padding: 15px;
-  margin-bottom: 15px;
+  margin: 20px;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -28,18 +31,26 @@ $btn-color: $lenmon-yellow;
   .post-author {
     display: flex;
     align-items: center;
-    gap: 50rpx;
-    font-size: $forum-fontSize-author;
-    color: $btn-color;
-    .at-avatar--normal {
-      width: 80rpx;
-      height: 80rpx;
-      line-height: normal;
-      .at-avatar__img {
-        width: 80rpx;
-        height: 80rpx;
-      }
+    // gap: 50rpx;
+    .post-author-name {
+      font-size: $forum-fontSize-author;
+      color: $btn-color;
+      transform: translate(20px, -30%);
     }
+    // 调整taro ui的头像normal大小
+    // .at-avatar--normal {
+    //   width: 80rpx;
+    //   height: 80rpx;
+    //   line-height: normal;
+    //   .at-avatar__img {
+    //     width: 80rpx;
+    //     height: 80rpx;
+    //   }
+    // }
+  }
+  // 内容主题空出100px
+  .post-main {
+    padding-left: 100px;
   }
   .post-content {
     font-size: $forum-fontSize-b;

@@ -10,7 +10,7 @@
  * @param {number} likeStatus 点赞状态
  * @param {number} collectStatus 收藏状态
  * @param {string} createTime 创建时间
- * @param {string[]} tagNames 标签名
+ * @param {string[]} tagName 标签名
  */
 export interface Item {
   id: number;
@@ -36,6 +36,7 @@ export interface State {
   posts: Item[];
   newPostContent: string;
   searchContent: string;
+  hotPosts: Item[];
 }
 
 interface Reply {

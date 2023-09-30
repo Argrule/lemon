@@ -1,7 +1,8 @@
 import { Component } from "react";
 import { View, BaseEventOrig } from "@tarojs/components";
 // import { Text, Button, Image } from "@tarojs/components";
-// import { Input } from "@tarojs/components";
+import { Image } from "@tarojs/components";
+import forum_ad from "../../assets/ad/banner.png";
 import { AtIcon } from "taro-ui";
 import { AtFab } from "taro-ui";
 // import { AtTag } from "taro-ui";
@@ -18,6 +19,7 @@ import {
   collectPost,
   cancelCollectPost,
   searchPost,
+  getHotPost,
 } from "$/api/forum";
 import { Item, State } from "./data";
 import { AtSearchBar } from "taro-ui";
@@ -32,6 +34,7 @@ class Forum extends Component<{}, State> {
     posts: [], // 帖子列表
     newPostContent: "", // 新帖子内容
     searchContent: "",
+    hotPosts: [], // 热搜帖子
   };
 
   pageNum = 1;
@@ -39,6 +42,9 @@ class Forum extends Component<{}, State> {
 
   /* 非生命周期，onShow */
   async componentDidShow() {
+    getHotPost().then((res) => {
+      this.setState({ hotPosts: res.data.list.slice(0, 10) });
+    });
     const res = (await getForumList({
       pageNum: 1,
       pageSize: 10,
@@ -270,7 +276,26 @@ class Forum extends Component<{}, State> {
           onConfirm={this.handleSearch}
           onActionClick={this.handleSearch}
         />
-        <HotPost></HotPost>
+        <HotPost hotPosts={this.state.hotPosts}></HotPost>
+        {/* 广告 */}
+        <View
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Image
+            src={forum_ad}
+            mode="scaleToFill"
+            style={{
+              width: "100%",
+              height: "97px",
+              padding: "8px 8px",
+              borderRadius: "34px",
+            }}
+          />
+        </View>
         {/* <View className="new-post">
           <Input
             value={newPostContent}

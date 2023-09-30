@@ -39,11 +39,17 @@ export default defineAppConfig({
         iconPath: "./assets/tabbar/forum.png",
         selectedIconPath: "./assets/tabbar/forum-active.png",
       },
+      // {
+      //   pagePath: "pages/index/index",
+      //   text: "功能",
+      //   iconPath: "./assets/tabbar/func.png",
+      //   selectedIconPath: "./assets/tabbar/func-active.png",
+      // },
       {
         pagePath: "pages/index/index",
-        text: "功能",
-        iconPath: "./assets/tabbar/func.png",
-        selectedIconPath: "./assets/tabbar/func-active.png",
+        text: "消息",
+        iconPath: "./assets/tabbar/msg.png",
+        selectedIconPath: "./assets/tabbar/msg-active.png",
       },
       {
         pagePath: "pages/sendPost/sp",

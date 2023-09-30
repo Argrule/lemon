@@ -1,2 +1,15 @@
 $lenmon-yellow: #ecc745;
 $lenmon-green: #a0aa25;
+.flex-col{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    &.just-center{
+        justify-content: center;
+    }
+}
+.flex-row{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
