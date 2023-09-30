@@ -1,4 +1,5 @@
 import { View, Text, Image } from "@tarojs/components";
+import NavCustomBar from "$/components/NavCustomBar/nav";
 import info_comment from "../../assets/info/comment.svg";
 import info_support from "../../assets/info/support.svg";
 import info_gather from "../../assets/info/gather.svg";
@@ -39,6 +40,8 @@ export default function Message() {
   ];
   return (
     <View className="info-page">
+      {/* 顶部导航栏 */}
+      <NavCustomBar mainTitle="消息" needBackIcon={false} />
       {/* 4个功能按钮 */}
       <View className="info-func">
         {funcList.map((item) => (
