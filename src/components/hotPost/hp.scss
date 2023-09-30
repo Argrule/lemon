@@ -8,10 +8,12 @@
     border-radius: 15rpx 0 0 15rpx;
     padding: 8rpx;
     position: relative;
+    font-size: 28rpx;
+    line-height: 32rpx;
     &::after {
       content: "";
-      border: 20rpx solid transparent;
-      border-right: 20rpx solid #fff9de;
+      border: 15rpx solid transparent;
+      border-right: 15rpx solid #fff9de;
       color: red;
       position: absolute;
       top: 50%;
@@ -26,12 +28,21 @@
 
       font-family: PingFang SC;
       font-size: 28px;
-      font-weight: 600;
+      font-weight: 500;
       line-height: 32px;
       letter-spacing: 0px;
       text-align: left;
 
       background: #fff9de;
+    
+      .hp-swiper-item-seq {
+        color: #00000080;
+        font-family: PingFang SC;
+        padding: 12rpx 10rpx;
+        display: inline-block;
+        box-sizing: border-box;
+        vertical-align: middle;
+      }
     }
   }
 }
