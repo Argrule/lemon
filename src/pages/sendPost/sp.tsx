@@ -10,60 +10,12 @@ import { CreateDraftAPI, DeleteDraftAPI } from "$/api/forum";
 import { Tag } from "../forum/data";
 import "./sp.scss";
 import { File } from "taro-ui/types/image-picker";
+import NavCustomBar from "$/components/NavCustomBar/nav";
 
 function CommentInput() {
   const [postId, setPostId] = useState<number>(0);
   const [commentText, setCommentText] = useState("");
-  const [tagList, setTagList] = useState<Tag[]>([
-    // {
-    //   id: 1,
-    //   name: "hello",
-    // },
-    // {
-    //   id: 2,
-    //   name: "hllo",
-    // },
-    // {
-    //   id: 3,
-    //   name: "helo",
-    // },
-    // {
-    //   id: 4,
-    //   name: "ello",
-    // },
-    // {
-    //   id: 5,
-    //   name: "ello",
-    // },
-    // {
-    //   id: 6,
-    //   name: "ello",
-    // },
-    // {
-    //   id: 7,
-    //   name: "ello",
-    // },
-    // {
-    //   id: 9,
-    //   name: "ello",
-    // },
-    // {
-    //   id: 8,
-    //   name: "ello",
-    // },
-    // {
-    //   id: 10,
-    //   name: "ello",
-    // },
-    // {
-    //   id: 101,
-    //   name: "ello",
-    // },
-    // {
-    //   id: 11,
-    //   name: "ello",
-    // },
-  ]);
+  const [tagList, setTagList] = useState<Tag[]>([]);
   const [tagIds, setTagIds] = useState<number[]>([]);
 
   const [files, setFiles] = useState<File[]>([
@@ -211,6 +163,7 @@ function CommentInput() {
   };
   return (
     <>
+      <NavCustomBar mainTitle="发帖" needBackIcon={false} />
       <View className="post-new">
         {/* <Input
         className="input-box"
