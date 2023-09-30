@@ -60,7 +60,7 @@ export const HotPost = ({ hotPosts }) => {
                     whiteSpace: "nowrap",
                   }}
                 >
-                  {item[0].content.replace(/[\n]/g, " ")}
+                  {item[0].content?.replace(/[\n]/g, " ")}
                 </Text>
               </View>
               <View className="hp-swiper-item">
@@ -77,7 +77,7 @@ export const HotPost = ({ hotPosts }) => {
                     whiteSpace: "nowrap",
                   }}
                 >
-                  {item[1].content.replace(/[\n]/g, " ")}
+                  {item[1].content?.replace(/[\n]/g, " ")}
                 </Text>
               </View>
             </SwiperItem>
