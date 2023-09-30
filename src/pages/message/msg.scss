@@ -1,0 +1,25 @@
+.info-page {
+  .info-func {
+    margin: 10rpx;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+    .func-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 15rpx;
+      height: 244rpx;
+      .func-icon {
+        width: 118rpx;
+        height: 118rpx;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    }
+  }
+}
