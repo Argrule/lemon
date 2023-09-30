@@ -19,6 +19,7 @@ import {
   collectPost,
   cancelCollectPost,
   searchPost,
+  getHotPost,
 } from "$/api/forum";
 import { Item, State } from "./data";
 import { AtSearchBar } from "taro-ui";
@@ -33,6 +34,7 @@ class Forum extends Component<{}, State> {
     posts: [], // 帖子列表
     newPostContent: "", // 新帖子内容
     searchContent: "",
+    hotPosts: [], // 热搜帖子
   };
 
   pageNum = 1;
@@ -40,6 +42,9 @@ class Forum extends Component<{}, State> {
 
   /* 非生命周期，onShow */
   async componentDidShow() {
+    getHotPost().then((res) => {
+      this.setState({ hotPosts: res.data.list.slice(0, 10) });
+    });
     const res = (await getForumList({
       pageNum: 1,
       pageSize: 10,
@@ -271,7 +276,7 @@ class Forum extends Component<{}, State> {
           onConfirm={this.handleSearch}
           onActionClick={this.handleSearch}
         />
-        <HotPost></HotPost>
+        <HotPost hotPosts={this.state.hotPosts}></HotPost>
         {/* 广告 */}
         <View
           style={{

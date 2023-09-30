@@ -4,6 +4,9 @@ $lenmon-green: #a0aa25;
     display: flex;
     flex-direction: column;
     align-items: center;
+    &.just-center{
+        justify-content: center;
+    }
 }
 .flex-row{
     display: flex;
