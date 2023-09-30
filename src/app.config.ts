@@ -20,6 +20,7 @@ export default defineAppConfig({
     "pages/personalCenter/myPost/post",
     "pages/personalCenter/myCollect/collect",
     "pages/personalCenter/changeUserInfo/changeUserInfo",
+    "pages/message/msg",
   ],
   window: {
     backgroundTextStyle: "light",
@@ -46,7 +47,7 @@ export default defineAppConfig({
       //   selectedIconPath: "./assets/tabbar/func-active.png",
       // },
       {
-        pagePath: "pages/index/index",
+        pagePath: "pages/message/msg",
         text: "消息",
         iconPath: "./assets/tabbar/msg.png",
         selectedIconPath: "./assets/tabbar/msg-active.png",
