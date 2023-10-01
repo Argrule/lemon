@@ -22,7 +22,7 @@ import {
   getHotPost,
 } from "$/api/forum";
 import { Item, State } from "./data";
-import { AtSearchBar } from "taro-ui";
+// import { AtSearchBar } from "taro-ui";
 import { HotPost } from "$/components/hotPost/hp";
 // import { FormatTimeFromNow } from "$/utils/dayjs";
 import PostComponent from "$/components/post/post";
@@ -190,11 +190,9 @@ class Forum extends Component<{}, State> {
       url: `/pages/comment/c?post=${JSON.stringify(postItem)}`,
     });
   };
-  //跳转到发布帖子页面
-  goToPutPost = () => {
-    Taro.navigateTo({
-      url: "/pages/sendPost/sp",
-    });
+  // 跳转到搜索页面
+  goToSearch = () => {
+    Taro.navigateTo({ url: "/pages/search/s" });
   };
   //搜索框内容变化
   handleSearchChange = (value: string) => {
@@ -235,23 +233,24 @@ class Forum extends Component<{}, State> {
             }}
           />
           {/* 搜索跳转按钮 */}
-          {true ? null : (
+          {false ? null : (
             <AtFab className="plus">
               <AtIcon
                 className="plus-icon"
                 value="add"
-                onClick={this.goToPutPost}
+                onClick={this.goToSearch}
               ></AtIcon>
             </AtFab>
           )}
-          <AtSearchBar
+          {/* 废弃搜索框 */}
+          {/* <AtSearchBar
             className="search-bar"
             fixed={true}
             value={this.state.searchContent}
             onChange={this.handleSearchChange}
             onConfirm={this.handleSearch}
             onActionClick={this.handleSearch}
-          />
+          /> */}
           <HotPost hotPosts={this.state.hotPosts}></HotPost>
           {/* 广告 */}
           <View
