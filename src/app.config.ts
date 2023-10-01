@@ -21,6 +21,7 @@ export default defineAppConfig({
     "pages/personalCenter/myCollect/collect",
     "pages/personalCenter/changeUserInfo/changeUserInfo",
     "pages/message/msg",
+    "pages/search/s",
   ],
   window: {
     backgroundTextStyle: "light",
