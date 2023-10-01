@@ -16,6 +16,11 @@ button {
   line-height: 1.5;
 }
 .post-new {
+  .at-message {
+    top: var(--traceNavTop);
+    transform: translate(0, -18%);
+  }
+
   margin: 0px auto;
   width: 90%;
   height: 85vh;
