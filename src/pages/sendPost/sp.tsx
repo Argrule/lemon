@@ -200,7 +200,12 @@ function CommentInput() {
           autoHeight
         />
         <AtImagePicker files={files} onChange={onImageFileChange} />
-        <AtMessage />
+        <AtMessage
+            style={{
+              /* @ts-ignore 传入scss变量调整位置 */
+              "--traceNavTop": Taro.getStorageSync("nav_bar_height") + "px",
+            }}
+          />
         {/* <AtTextarea
         className="textarea"
         count={true}
