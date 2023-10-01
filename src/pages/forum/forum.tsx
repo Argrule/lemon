@@ -27,6 +27,7 @@ import { HotPost } from "$/components/hotPost/hp";
 // import { FormatTimeFromNow } from "$/utils/dayjs";
 import PostComponent from "$/components/post/post";
 import SpecialDeal from "./special";
+import NavCustomBar from "$/components/NavCustomBar/nav";
 
 class Forum extends Component<{}, State> {
   /* 状态 */
@@ -82,41 +83,6 @@ class Forum extends Component<{}, State> {
   handleNewPostChange = (event: BaseEventOrig<InputEventDetail>) => {
     this.setState({ newPostContent: event.detail.value as string });
   };
-  /**
-   * @description 发布新帖子
-   */
-  // handleNewPostSubmit = async () => {
-  //   const { newPostContent, posts } = this.state;
-  //   if (!newPostContent) {
-  //     console.log("请输入内容");
-  //     return;
-  //   }
-  //   // ## 假冒的帖子
-  //   const newMockPost: Item = {
-  //     id: Date.now(),
-  //     uid: 1,
-  //     schoolId: 1,
-  //     content: newPostContent,
-  //     likeNum: 0,
-  //     readNum: 0,
-  //     collectNum: 0,
-  //     collectStatus: false,
-  //     likeStatus: false,
-  //     createTime: Date(),
-  //   };
-  //   const res = await publishPost({
-  //     content: newPostContent,
-  //     tagIds: [1, 2],
-  //   });
-  //   if (res.code != "00000") {
-  //     console.log("发布失败");
-  //     return;
-  //   }
-  //   this.setState({
-  //     posts: [newMockPost, ...posts],
-  //     newPostContent: "",
-  //   });
-  // };
   /**
    * @description 点赞及取消点赞
    * @param postId 帖子id
@@ -255,61 +221,74 @@ class Forum extends Component<{}, State> {
   };
   render() {
     const { posts } = this.state;
-    // const { newPostContent } = this.state;
+
     return (
-      <View className="forum">
-        <AtMessage />
-        {true ? null : (
-          <AtFab className="plus">
-            <AtIcon
-              className="plus-icon"
-              value="add"
-              onClick={this.goToPutPost}
-            ></AtIcon>
-          </AtFab>
-        )}
-        <AtSearchBar
-          className="search-bar"
-          fixed={true}
-          value={this.state.searchContent}
-          onChange={this.handleSearchChange}
-          onConfirm={this.handleSearch}
-          onActionClick={this.handleSearch}
-        />
-        <HotPost hotPosts={this.state.hotPosts}></HotPost>
-        {/* 广告 */}
-        <View
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <Image
-            src={forum_ad}
-            mode="scaleToFill"
+      <>
+        {/* 自定义导航栏 */}
+        <NavCustomBar mainTitle="论坛" needBackIcon={false} />
+        {/* main */}
+        <View className="forum">
+          <AtMessage
             style={{
-              width: "100%",
-              height: "97px",
-              padding: "8px 8px",
-              borderRadius: "34px",
+              /* @ts-ignore 传入scss变量调整位置 */
+              "--traceNavTop": Taro.getStorageSync("nav_bar_height") + "px",
             }}
           />
-        </View>
-        {/* <View className="new-post">
-          <Input
-            value={newPostContent}
-            onInput={this.handleNewPostChange}
-            placeholder="发布新帖子"
+          {/* 搜索跳转按钮 */}
+          {true ? null : (
+            <AtFab className="plus">
+              <AtIcon
+                className="plus-icon"
+                value="add"
+                onClick={this.goToPutPost}
+              ></AtIcon>
+            </AtFab>
+          )}
+          <AtSearchBar
+            className="search-bar"
+            fixed={true}
+            value={this.state.searchContent}
+            onChange={this.handleSearchChange}
+            onConfirm={this.handleSearch}
+            onActionClick={this.handleSearch}
           />
-          <Button onClick={this.handleNewPostSubmit}>发布</Button>
-        </View> */}
-        <View className="posts">
-          {/* // ### 这里做判断 是防止出现取消发布的数据写回不及时 多出一个空白帖子的bug */}
-          {posts.map((post) =>
-            SpecialDeal(post) ? null : (
-              <>
-                {/* <View className="post" key={post.id}>
+          <HotPost hotPosts={this.state.hotPosts}></HotPost>
+          {/* 广告 */}
+          <View
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Image
+              src={forum_ad}
+              mode="scaleToFill"
+              style={{
+                width: "100%",
+                height: "97px",
+                padding: "8px 8px",
+                borderRadius: "34px",
+              }}
+            />
+          </View>
+          {/* 帖子列表 */}
+          <View className="posts">
+            {/* // ### 这里做判断 是防止出现取消发布的数据写回不及时 多出一个空白帖子的bug */}
+            {posts.map((post) =>
+              SpecialDeal(post) ? null : (
+                // {/* 帖子 */}
+                <PostComponent
+                  post={post}
+                  onLike={this.handleLikePost}
+                  onDelete={this.handleDeletePost}
+                  onCollect={this.handleCollectPost}
+                  onShowComments={this.handleShowComments}
+                />
+              )
+            )}
+            {/* 旧post布局 */}
+            {/* <View className="post" key={post.id}>
                 <Text className="post-nick">{post.nickname}</Text>
                 <Text
                   className="post-content"
@@ -368,19 +347,9 @@ class Forum extends Component<{}, State> {
                   </Button>
                 </View>
               </View> */}
-                {/* 帖子 */}
-                <PostComponent
-                  post={post}
-                  onLike={this.handleLikePost}
-                  onDelete={this.handleDeletePost}
-                  onCollect={this.handleCollectPost}
-                  onShowComments={this.handleShowComments}
-                />
-              </>
-            )
-          )}
+          </View>
         </View>
-      </View>
+      </>
     );
   }
 }

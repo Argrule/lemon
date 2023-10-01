@@ -5,8 +5,8 @@
 @import "~taro-ui/dist/style/components/search-bar.scss";
 @import "~taro-ui/dist/style/components/button.scss";
 @import "~taro-ui/dist/style/components/message.scss";
-$forum-fontSize: 25rpx; //input,button,post-content,interaction-button
-$forum-fontSize-b: 30rpx; //content
+$forum-fontSize: 25rpx;
+$forum-fontSize-b: 30rpx;
 // $button-color: #ffc701;
 // $btn-color: #ffaa00;
 $button-color: $lenmon-green;
@@ -33,15 +33,7 @@ button {
   }
 }
 .search-bar {
-  // position: fixed;
-  // top: 0;
-  // left: 0;
-  // width: 100%;
-  // z-index: 999;
-  // .search-bar__input{
-  //   font-size: 30rpx;
-  // }
-  // position: relative;
+  position: relative;
   height: 80rpx;
   .at-search-bar__action {
     // font-size: 30rpx;
@@ -55,42 +47,10 @@ button {
   flex-direction: column;
   padding-bottom: 100px;
 
-  // 旧的添加帖子输入框的样式
-  // .new-post {
-  //   height: 60px;
-  //   width: 90%;
-  //   display: flex;
-  //   align-items: center;
-  //   padding: 20px;
-  //   position: fixed;
-  //   bottom: 0;
-  //   background-color: #fff;
-  //   z-index: 100;
-
-  //   input {
-  //     flex: 1;
-  //     padding: 10px;
-  //     border: 1px solid #ccc;
-  //     border-radius: 20px;
-  //     font-size: $forum-fontSize;
-  //   }
-
-  //   button {
-  //     margin-left: 10px;
-  //     padding: 10px 20px;
-  //     background-color: $button-color;
-  //     color: #fff;
-  //     border: none;
-  //     border-radius: 20px; /* Increase the border radius for a more rounded button */
-  //     font-size: $forum-fontSize; /* Slightly larger font size for better readability */
-  //     cursor: pointer;
-  //     transition: background-color 0.3s;
-
-  //     &:hover {
-  //       background-color: #a0aa25;
-  //     }
-  //   }
-  // }
+  .at-message {
+    top: var(--traceNavTop);
+    transform: translate(0, -40%);
+  }
 
   .posts {
     // margin-top: 80rpx;
