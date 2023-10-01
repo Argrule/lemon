@@ -5,9 +5,9 @@
 @import "~taro-ui/dist/style/components/icon.scss";
 @import "../../app.scss";
 
-// $text: #ffaa00;
-$text: $lenmon-yellow;
-$text-bg: #ffecc5;
+$text: #fe3666;
+$text-bg: #f7e6e7;
+
 $text-plain: #6d6d6d;
 $bgc-yellow: $lenmon-yellow;
 $bgc-green: $lenmon-green;
@@ -23,9 +23,11 @@ button {
 
   margin: 0px auto;
   width: 90%;
-  height: 85vh;
+  height: 68vh;
+  // height: 960rpx;
   // border: 1px solid #ecc745;
   border-radius: 5px;
+  font-family: PingFang SC;
   font-size: 16px;
   padding: 10rpx;
   display: flex;
@@ -41,10 +43,16 @@ button {
     .title {
       position: relative;
       right: 20rpx;
-      font-size: 17rpx;
       background-color: $text;
       padding: 5rpx;
       color: #fff;
+      font-family: PingFang SC;
+      font-size: 20rpx;
+      font-weight: 500;
+      line-height: 26rpx;
+      letter-spacing: 0rpx;
+      text-align: left;
+      border-radius: 5rpx;
     }
   }
 
@@ -57,10 +65,16 @@ button {
       & + .tag-item {
         margin-left: 10rpx;
       }
-      display: inline-block;
-      font-size: 28rpx;
-      // padding: 5rpx 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 8rpx;
+      padding: 30rpx 24rpx;
       color: $text-plain;
+      font-size: 30rpx;
+      font-weight: 400;
+      line-height: 26rpx;
+      letter-spacing: 0px;
+      text-align: left;
     }
     .tag-item-active {
       color: $text;
@@ -71,20 +85,31 @@ button {
   .textarea {
     color: $text;
     border: $text;
-    font-size: 30rpx;
+    font-size: 36rpx;
+    line-height: 32rpx;
     background: #fff;
     width: 100%;
     // min-height: 80rpx;//无效
     padding: 40rpx 30rpx 20rpx;
     .textarea-placeholder {
-      color: $text;
+      // color: $text;
+      color: #00000080;
     }
   }
 }
-.publish-button {
-  height: 5vh;
+
+.newpost-bottom-placeholder {
+  font-size: 24rpx;
+  font-weight: 400;
+  line-height: 32rpx;
+  letter-spacing: 0rpx;
+  margin: 20rpx 34rpx;
+  color: #00000080;
+}
+.newpost-publish-button {
+  height: 120rpx;
   width: 70%;
-  border-radius: 40rpx;
+  border-radius: 104rpx;
   background-color: $text;
   color: #fff;
   // 文字不居中，下面解决bug
