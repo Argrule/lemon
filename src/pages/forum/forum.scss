@@ -21,16 +21,11 @@ button {
 .plus {
   position: fixed;
   top: 86vh;
-  right: 10vw;
-  // transform: translateX(-50%);
+  right: 8vw;
   z-index: 999;
   &.at-fab--normal {
-    background-color: $button-color;
-  }
-  .plus-icon {
-    // font-size: 50rpx;//无效
-    color: #fff;
-  }
+    background-color: #FFD238;
+  }  
 }
 .search-bar {
   position: relative;
