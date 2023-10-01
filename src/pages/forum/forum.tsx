@@ -44,9 +44,10 @@ class Forum extends Component<{}, State> {
     getHotPost().then((res) => {
       this.setState({ hotPosts: res.data.list.slice(0, 10) });
     });
+    this.pageNum = 1; // 重置页码
     const res = (await getForumList({
-      pageNum: 1,
-      pageSize: 10,
+      pageNum: this.pageNum,
+      pageSize: this.pageSize,
     })) as { list: Item[] };
     this.setState({ posts: res.list });
   }
