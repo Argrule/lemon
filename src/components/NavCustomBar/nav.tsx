@@ -47,6 +47,7 @@ class NavCustomBar extends Component {
     this.setState({
       navBarHeight,
     });
+    Taro.setStorageSync("nav_bar_height", navBarHeight);
   }
 
   goBackPage() {
@@ -58,21 +59,29 @@ class NavCustomBar extends Component {
   render() {
     let { needBackIcon = true, mainTitle = "" } = this.props;
     return (
-      <View
-        className="nav_custom_bar"
-        style={{ height: ` ${this.state.navBarHeight}px` }}
-      >
-        <AtIcon
-          className={`nav_custom_bar_back ${needBackIcon ? "" : "hidden"}`}
-          value="chevron-left"
-          size="22"
-          color="#fff"
-          onClick={() => {
-            this.goBackPage();
-          }}
-        ></AtIcon>
-        <Text className="nav_custom_bar_title">{mainTitle}</Text>
-        <View></View>
+      <View className="nav-custom-container">
+        {/* nav custom */}
+        <View
+          className="nav_custom_bar"
+          style={{ height: ` ${this.state.navBarHeight}px` }}
+        >
+          <AtIcon
+            className={`nav_custom_bar_back ${needBackIcon ? "" : "hidden"}`}
+            value="chevron-left"
+            size="22"
+            color="#fff"
+            onClick={() => {
+              this.goBackPage();
+            }}
+          ></AtIcon>
+          <Text className="nav_custom_bar_title">{mainTitle}</Text>
+          <View></View>
+        </View>
+        {/* 占位 */}
+        <View
+          className="nav_custom_bar_layout"
+          style={{ height: ` ${this.state.navBarHeight}px` }}
+        ></View>
       </View>
     );
   }
