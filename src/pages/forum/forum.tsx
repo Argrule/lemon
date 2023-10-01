@@ -1,11 +1,9 @@
 import { Component } from "react";
 import { View, BaseEventOrig } from "@tarojs/components";
-// import { Text, Button, Image } from "@tarojs/components";
 import { Image } from "@tarojs/components";
+import search_icon from "../../assets/info/search.png";
 import forum_ad from "../../assets/ad/banner.png";
-import { AtIcon } from "taro-ui";
 import { AtFab } from "taro-ui";
-// import { AtTag } from "taro-ui";
 import { AtMessage } from "taro-ui";
 import Taro from "@tarojs/taro";
 import "./forum.scss";
@@ -234,12 +232,13 @@ class Forum extends Component<{}, State> {
           />
           {/* 搜索跳转按钮 */}
           {false ? null : (
-            <AtFab className="plus">
-              <AtIcon
-                className="plus-icon"
-                value="add"
-                onClick={this.goToSearch}
-              ></AtIcon>
+            <AtFab className="plus" onClick={this.goToSearch}>
+              <Image
+                src={search_icon}
+                svg
+                mode="aspectFill"
+                style={{ width: "46rpx", height: "46rpx", display: "block" }}
+              />
             </AtFab>
           )}
           {/* 废弃搜索框 */}
