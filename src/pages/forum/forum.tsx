@@ -49,7 +49,14 @@ class Forum extends Component<{}, State> {
       pageNum: this.pageNum,
       pageSize: this.pageSize,
     })) as { list: Item[] };
-    this.setState({ posts: res.list });
+
+    // 保存当前帖子列表的第一个帖子id，用于判断页面是否刷新
+    const cur_id = Taro.getStorageSync("current_posts_first_id");
+    Taro.setStorage({ key: "current_posts_first_id", data: res.list[0].id });
+
+    if (res.list[0].id !== cur_id) {
+      this.setState({ posts: res.list });
+    }
   }
 
   /**
