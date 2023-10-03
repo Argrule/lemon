@@ -1,6 +1,5 @@
 import { Component } from "react";
-import { View, Text, Button, Image } from "@tarojs/components";
-// import { Input } from "@tarojs/components";
+import { View, Text, Image } from "@tarojs/components";
 import { AtTag } from "taro-ui";
 import { AtMessage } from "taro-ui";
 import Taro from "@tarojs/taro";
@@ -13,10 +12,18 @@ import {
   collectPost,
   cancelCollectPost,
 } from "$/api/forum";
-import { Item, State } from "../../forum/data";
+import { Item } from "../../forum/data";
 import { FormatTimeFromNow } from "$/utils/dayjs";
+import lenmon_regular from "$/assets/post/lemonR.svg";
+import lenmon_solid from "$/assets/post/lemonS.svg";
+import star_regular from "$/assets/post/starR.svg";
+import star_solid from "$/assets/post/starS.svg";
+import trash_icon from "$/assets/post/trash.svg";
 
-class Forum extends Component<{}, State> {
+interface State {
+  posts: Item[];
+}
+class MyPost extends Component<{}, State> {
   /* 状态 */
   state: State = {
     posts: [], // 帖子列表
@@ -144,14 +151,30 @@ class Forum extends Component<{}, State> {
 
   handleDeletePost = async (postId: number) => {
     const { posts } = this.state;
-    const res = await deletePost(postId);
-    if (res.code != "00000") {
-      console.log("删除失败");
-      return;
-    }
-    const updatedPosts = posts.filter((post) => post.id !== postId);
-    this.setState({
-      posts: updatedPosts,
+    Taro.showModal({
+      title: "提示",
+      content: "请确认是否删除",
+      success: async (res1) => {
+        if (res1.confirm) {
+          console.log("用户点击确定");
+          const res = await deletePost(postId);
+          if (res.code != "00000") {
+            // @ts-ignore
+            Taro.atMessage({
+              message: "删除失败",
+              type: "error",
+              duration: 800,
+            });
+            return;
+          }
+          const updatedPosts = posts.filter((post) => post.id !== postId);
+          this.setState({
+            posts: updatedPosts,
+          });
+        } else if (res1.cancel) {
+          console.log("用户点击取消");
+        }
+      },
     });
   };
   /**
@@ -179,14 +202,21 @@ class Forum extends Component<{}, State> {
           {posts.map((post) => (
             <>
               <View className="post" key={post.id}>
-                <Text className="post-content" userSelect>
+                <Text
+                  className="post-content"
+                  userSelect
+                  onClick={() => this.handleShowComments(post)}
+                >
                   {post.content}
                 </Text>
-                <View className="flex">
+                <View
+                  className="flex"
+                  onClick={() => this.handleShowComments(post)}
+                >
                   {post.images?.map((image) => (
                     <Image
                       src={image}
-                      style="width: 100px;height: 100px;background: #fff;"
+                      style="width: 80px;height: 80px;background: #fff;"
                     />
                   ))}
                 </View>
@@ -201,38 +231,59 @@ class Forum extends Component<{}, State> {
                   <Text className="post-time">
                     {FormatTimeFromNow(post.createTime)}
                   </Text>
-                  <Button
+                  <View
                     onClick={() =>
                       this.handleLikePost(post.id, post.likeStatus)
                     }
                     className="interaction-button like-button"
                   >
-                    {post.likeStatus ? "取消赞" : "赞"}
+                    {post.likeStatus ? (
+                      <Image
+                        src={lenmon_solid}
+                        mode="scaleToFill"
+                        style="width: 20px; height: 20px;"
+                      ></Image>
+                    ) : (
+                      <Image
+                        src={lenmon_regular}
+                        mode="scaleToFill"
+                        style="width: 20px; height: 20px;"
+                      ></Image>
+                    )}
                     {post.likeNum}
-                  </Button>
-                  <Button
+                  </View>
+                  <View
                     className="interaction-button collect-button"
                     onClick={() =>
                       this.handleCollectPost(post.id, post.collectStatus)
                     }
                   >
-                    {post.collectStatus ? "已收藏" : "收藏"}
+                    {post.collectStatus ? (
+                      <Image
+                        src={star_solid}
+                        mode="scaleToFill"
+                        style="width: 20px; height: 20px;"
+                      ></Image>
+                    ) : (
+                      <Image
+                        src={star_regular}
+                        mode="scaleToFill"
+                        style="width: 20px; height: 20px;"
+                      ></Image>
+                    )}
                     {post.collectNum}
-                  </Button>
-                  <Button
-                    type="primary"
-                    className="interaction-button collect-button"
-                    onClick={() => this.handleShowComments(post)}
-                  >
-                    评论
-                  </Button>
-                  <Button
-                    type="primary"
+                  </View>
+
+                  <View
                     className="interaction-button collect-button"
                     onClick={() => this.handleDeletePost(post.id)}
                   >
-                    删除
-                  </Button>
+                    <Image
+                      src={trash_icon}
+                      mode="scaleToFill"
+                      style="width: 20px; height: 20px;"
+                    ></Image>
+                  </View>
                 </View>
               </View>
             </>
@@ -243,4 +294,4 @@ class Forum extends Component<{}, State> {
   }
 }
 
-export default Forum;
+export default MyPost;
