@@ -11,7 +11,7 @@ import { Item } from "./data";
  */
 export default function SpecialDeal(post: Item): boolean {
   // 无内容,后端的bug
-  if (post.content == undefined) {
+  if (post.content === undefined) {
     return true;
   }
   // 为了过审核，所以前两天不显示

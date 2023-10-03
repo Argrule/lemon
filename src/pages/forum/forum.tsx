@@ -55,7 +55,11 @@ class Forum extends Component<{}, State> {
     Taro.setStorage({ key: "current_posts_first_id", data: res.list[0].id });
 
     if (res.list[0].id !== cur_id) {
-      this.setState({ posts: res.list });
+      // 出于渲染滞后的问题，可能这个生命周期有坑
+      setTimeout(() => {
+        // console.log("刷新了",this);
+        this.setState({ posts: res.list });
+      }, 0);
     }
   }
 
@@ -63,7 +67,6 @@ class Forum extends Component<{}, State> {
    * @description 触底加载更多
    */
   async onReachBottom() {
-    console.log("触底了");
     this.pageNum++;
     const { posts } = this.state;
     const res = (await getForumList({
@@ -101,7 +104,12 @@ class Forum extends Component<{}, State> {
         const res = await cancelLikePost(postId);
         addNum = -1;
         if (res.code != "00000") {
-          console.log("取消点赞失败");
+          // @ts-ignore
+          Taro.atMessage({
+            message: "取消点赞失败",
+            type: "error",
+            duration: 800,
+          });
           return;
         }
         break;
@@ -111,7 +119,12 @@ class Forum extends Component<{}, State> {
         const res = await likePost(postId);
         addNum = 1;
         if (res.code != "00000") {
-          console.log("点赞失败");
+          // @ts-ignore
+          Taro.atMessage({
+            message: "点赞失败",
+            type: "error",
+            duration: 800,
+          });
           return;
         }
         break;
@@ -154,7 +167,12 @@ class Forum extends Component<{}, State> {
     }
 
     if (res.code !== "00000") {
-      console.log(errorMessage);
+      // @ts-ignore
+      Taro.atMessage({
+        message: errorMessage,
+        type: "error",
+        duration: 800,
+      });
       return;
     }
 
@@ -178,7 +196,12 @@ class Forum extends Component<{}, State> {
     const { posts } = this.state;
     const res = await deletePost(postId);
     if (res.code != "00000") {
-      console.log("删除失败");
+      // @ts-ignore
+      Taro.atMessage({
+        message: "删除失败",
+        type: "error",
+        duration: 800,
+      });
       return;
     }
     const updatedPosts = posts.filter((post) => post.id !== postId);
@@ -282,7 +305,9 @@ class Forum extends Component<{}, State> {
           <View className="posts">
             {/* // ### 这里做判断 是防止出现取消发布的数据写回不及时 多出一个空白帖子的bug */}
             {posts.map((post) =>
-              SpecialDeal(post) ? null : (
+              SpecialDeal(post) ? (
+                <></>
+              ) : (
                 // {/* 帖子 */}
                 <PostComponent
                   post={post}
