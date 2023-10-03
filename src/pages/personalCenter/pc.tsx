@@ -6,14 +6,14 @@ import MenuList from "$/components/personalCenter/MenuList";
 import { AtAvatar } from "taro-ui";
 import "taro-ui/dist/style/components/avatar.scss";
 import { useState } from "react";
-import staticAvatar from "../../assets/avatar.jpg";
+// import staticAvatar from "../../assets/avatar.jpg";
 
 const pc = () => {
   const [avatar, setAvatar] = useState("");
   const [nickname, setNickname] = useState("加载中");
   const [school, setSchool] = useState("加载中");
   // 菜单的数据
-  let slogan = "加载中";
+  // let slogan = "加载中";
   const menuList = [
     {
       content: "消息",
@@ -86,22 +86,32 @@ const pc = () => {
     <View className="personalCenter">
       {/* 头像部分 */}
       <View
-        className="head-card"
+        className="pc-head-card"        
+      >
+        <View className="pc-nav-custom"
+         style={{
+          /* @ts-ignore 传入scss变量调整位置 */
+          height: Taro.getStorageSync("nav_bar_height") + "px",
+        }}
+        >
+          <Text>个人中心</Text>
+        </View>
+        <View className="pc-head-body"
         onClick={() =>
           Taro.navigateTo({
             url: "/pages/personalCenter/changeUserInfo/changeUserInfo",
           })
-        }
-      >
-        <AtAvatar
-          image={avatar}
-          size="large"
-          circle={true}
-          className="my-avatar"
-        ></AtAvatar>
-        <View className="name-slogan">
-          <Text className="nickname">{nickname}</Text>
-          <Text className="slogan">{school}</Text>
+        }>
+          <AtAvatar
+            image={avatar}
+            size="large"
+            circle={true}
+            className="my-avatar"
+          ></AtAvatar>
+          <View className="name-slogan">
+            <Text className="nickname">{nickname}</Text>
+            <Text className="slogan">{school}</Text>
+          </View>
         </View>
       </View>
       {/* 跳转列表部分 */}

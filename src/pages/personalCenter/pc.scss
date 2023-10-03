@@ -2,15 +2,31 @@
     height: 100vh;
     background-color: #feffe23b;
 }
-.head-card{
-    height: 10rem;
-    border-radius: 0 0 1rem 1rem;
-    box-shadow:  2px 1px 2px 1px rgba(0, 0, 0, 0.18);
-    background-color: #fff;
-    margin-bottom: 2rem;
+.pc-head-card{
+    // height: 10rem;
+    height: 536rpx;
+    // border-radius: 0 0 1rem 1rem;
+    // box-shadow:  2px 1px 2px 1px rgba(0, 0, 0, 0.18);
+    background-image: url('../../assets/info/pc_bg.png');
+    .pc-nav-custom{
+        display: flex;
+    font-size: 36rpx;
+    font-weight: 600;
+    line-height: 32rpx;
+    letter-spacing: 0rpx;
+    text-align: left;
+    color: #fff;
+
+    text{
+        margin-bottom: 20px;
+    }
+
+        justify-content: center;
+        align-items: flex-end;
+    }
 }
 
-.head-card{
+.pc-head-body{
 display: flex;
 flex-direction: row;
 align-items: center;
