@@ -63,7 +63,7 @@ export default function Message() {
         ))}
       </View>
       {/* 消息列表 */}
-      <Text>Message</Text>
+      {/* <Text>Message</Text> */}
     </View>
   );
 }
