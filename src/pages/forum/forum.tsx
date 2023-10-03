@@ -54,6 +54,18 @@ class Forum extends Component<{}, State> {
     const cur_id = Taro.getStorageSync("current_posts_first_id");
     Taro.setStorage({ key: "current_posts_first_id", data: res.list[0].id });
 
+    const cur_time = Taro.getStorageSync("current_posts_first_time");
+    if (
+      cur_time === undefined ||
+      new Date().getTime() - Number(cur_time) > 3000
+    ) {
+      Taro.setStorage({ key: "current_posts_first_id", data: 0 });
+      Taro.setStorage({
+        key: "current_posts_first_time",
+        data: new Date().getTime() + 3000,
+      });
+    }
+
     if (res.list[0].id !== cur_id) {
       // 出于渲染滞后的问题，可能这个生命周期有坑
       setTimeout(() => {
