@@ -1,33 +1,31 @@
 import { Component } from "react";
-import { View, Text, Button, BaseEventOrig, Image } from "@tarojs/components";
-// import { Input } from "@tarojs/components";
-import { AtIcon } from "taro-ui";
-import { AtFab } from "taro-ui";
+import { View, Text, Image } from "@tarojs/components";
 import { AtTag } from "taro-ui";
 import { AtMessage } from "taro-ui";
 import Taro from "@tarojs/taro";
-import "../myPost/forum.scss";
-import { InputEventDetail } from "taro-ui/types/input";
+import "./collect.scss";
 import {
   deletePost,
   getMyCollectForumList,
-  // publishPost,
   likePost,
   cancelLikePost,
   collectPost,
   cancelCollectPost,
-  searchPost,
 } from "$/api/forum";
-import { Item, State } from "../../forum/data";
-import { AtSearchBar } from "taro-ui";
+import { Item } from "../../forum/data";
 import { FormatTimeFromNow } from "$/utils/dayjs";
+import lenmon_regular from "$/assets/post/lemonR.svg";
+import lenmon_solid from "$/assets/post/lemonS.svg";
+import star_regular from "$/assets/post/starR.svg";
+import star_solid from "$/assets/post/starS.svg";
 
-class Forum extends Component<{}, State> {
+interface State {
+  posts: Item[];
+}
+class MyCollect extends Component<{}, State> {
   /* 状态 */
   state: State = {
     posts: [], // 帖子列表
-    newPostContent: "", // 新帖子内容
-    searchContent: "",
   };
 
   pageNum = 1;
@@ -36,8 +34,8 @@ class Forum extends Component<{}, State> {
   /* 非生命周期，onShow */
   async componentDidShow() {
     const res = (await getMyCollectForumList({
-      pageNum: 1,
-      pageSize: 10,
+      pageNum: (this.pageNum = 1),
+      pageSize: this.pageSize,
     })) as { list: Item[] };
     this.setState({ posts: res.list });
   }
@@ -46,7 +44,6 @@ class Forum extends Component<{}, State> {
    * @description 触底加载更多
    */
   async onReachBottom() {
-    console.log("触底了");
     this.pageNum++;
     const { posts } = this.state;
     const res = (await getMyCollectForumList({
@@ -65,48 +62,8 @@ class Forum extends Component<{}, State> {
     }
     this.setState({ posts: [...posts, ...res.list] });
   }
+
   /**
-   * @description 输入框内容变化
-   * @param event
-   */
-  handleNewPostChange = (event: BaseEventOrig<InputEventDetail>) => {
-    this.setState({ newPostContent: event.detail.value as string });
-  };
-  /**
-   * @description 发布新帖子
-   */
-  // handleNewPostSubmit = async () => {
-  //   const { newPostContent, posts } = this.state;
-  //   if (!newPostContent) {
-  //     console.log("请输入内容");
-  //     return;
-  //   }
-  //   // ## 假冒的帖子
-  //   const newMockPost: Item = {
-  //     id: Date.now(),
-  //     uid: 1,
-  //     schoolId: 1,
-  //     content: newPostContent,
-  //     likeNum: 0,
-  //     readNum: 0,
-  //     collectNum: 0,
-  //     collectStatus: false,
-  //     likeStatus: false,
-  //     createTime: Date(),
-  //   };
-  //   const res = await publishPost({
-  //     content: newPostContent,
-  //     tagIds: [1, 2],
-  //   });
-  //   if (res.code != "00000") {
-  //     console.log("发布失败");
-  //     return;
-  //   }
-  //   this.setState({
-  //     posts: [newMockPost, ...posts],
-  //     newPostContent: "",
-  //   });
-  // };
   /**
    * @description 点赞及取消点赞
    * @param postId 帖子id
@@ -214,76 +171,36 @@ class Forum extends Component<{}, State> {
       url: `/pages/comment/c?post=${JSON.stringify(postItem)}`,
     });
   };
-  //跳转到发布帖子页面
-  goToPutPost = () => {
-    Taro.navigateTo({
-      url: "/pages/sendPost/sp",
-    });
-  };
-  //搜索框内容变化
-  handleSearchChange = (value: string) => {
-    this.setState({ searchContent: value });
-  };
-  //搜索
-  handleSearch = async () => {
-    const { searchContent } = this.state;
-    const res = await searchPost({
-      pageNum: 1,
-      pageSize: 10,
-      content: searchContent,
-    });
-    if (res.code != "00000") {
-      // @ts-ignore
-      Taro.atMessage({
-        message: "搜索失败",
-        type: "error",
-        duration: 800,
-      });
-      return;
-    }
-    this.setState({ posts: res.data.list });
-  };
+
   render() {
     const { posts } = this.state;
-    // const { newPostContent } = this.state;
     return (
-      <View className="forum">
+      <View
+        className="forum"
+        style={{
+          minHeight: "100vh",
+        }}
+      >
         <AtMessage />
-        {/* <AtFab className="plus">
-          <AtIcon
-            className="plus-icon"
-            value="add"
-            onClick={this.goToPutPost}
-          ></AtIcon>
-        </AtFab> */}
-        <AtSearchBar
-          className="search-bar"
-          fixed={true}
-          value={this.state.searchContent}
-          onChange={this.handleSearchChange}
-          onConfirm={this.handleSearch}
-          onActionClick={this.handleSearch}
-        />
-        {/* <View className="new-post">
-          <Input
-            value={newPostContent}
-            onInput={this.handleNewPostChange}
-            placeholder="发布新帖子"
-          />
-          <Button onClick={this.handleNewPostSubmit}>发布</Button>
-        </View> */}
         <View className="my-posts">
           {posts.map((post) => (
             <>
               <View className="post" key={post.id}>
-                <Text className="post-content" userSelect>
+                <Text
+                  className="post-content"
+                  userSelect
+                  onClick={() => this.handleShowComments(post)}
+                >
                   {post.content}
                 </Text>
-                <View className="flex">
+                <View
+                  className="flex"
+                  onClick={() => this.handleShowComments(post)}
+                >
                   {post.images?.map((image) => (
                     <Image
                       src={image}
-                      style="width: 100px;height: 100px;background: #fff;"
+                      style="width: 80px;height: 80px;background: #fff;"
                     />
                   ))}
                 </View>
@@ -298,47 +215,50 @@ class Forum extends Component<{}, State> {
                   <Text className="post-time">
                     {FormatTimeFromNow(post.createTime)}
                   </Text>
-                  <Button
+                  <View
                     onClick={() =>
                       this.handleLikePost(post.id, post.likeStatus)
                     }
                     className="interaction-button like-button"
                   >
-                    {post.likeStatus ? "取消赞" : "赞"}
+                    {post.likeStatus ? (
+                      <Image
+                        src={lenmon_solid}
+                        mode="scaleToFill"
+                        style="width: 20px; height: 20px;"
+                      ></Image>
+                    ) : (
+                      <Image
+                        src={lenmon_regular}
+                        mode="scaleToFill"
+                        style="width: 20px; height: 20px;"
+                      ></Image>
+                    )}
                     {post.likeNum}
-                  </Button>
-                  <Button
+                  </View>
+                  <View
                     className="interaction-button collect-button"
                     onClick={() =>
                       this.handleCollectPost(post.id, post.collectStatus)
                     }
                   >
-                    {post.collectStatus ? "已收藏" : "收藏"}
+                    {post.collectStatus ? (
+                      <Image
+                        src={star_solid}
+                        mode="scaleToFill"
+                        style="width: 20px; height: 20px;"
+                      ></Image>
+                    ) : (
+                      <Image
+                        src={star_regular}
+                        mode="scaleToFill"
+                        style="width: 20px; height: 20px;"
+                      ></Image>
+                    )}
                     {post.collectNum}
-                  </Button>
-                  <Button
-                    type="primary"
-                    className="interaction-button collect-button"
-                    onClick={() => this.handleShowComments(post)}
-                  >
-                    评论
-                  </Button>
-                  <Button
-                    type="primary"
-                    className="interaction-button collect-button"
-                    onClick={() => this.handleDeletePost(post.id)}
-                  >
-                    删除
-                  </Button>
+                  </View>
                 </View>
               </View>
-              {/* <Button
-                type="primary"
-                className="interaction-button comment-button"
-                onClick={() => this.handleShowComments(post)}
-              >
-                查看评论
-              </Button> */}
             </>
           ))}
         </View>
@@ -347,4 +267,4 @@ class Forum extends Component<{}, State> {
   }
 }
 
-export default Forum;
+export default MyCollect;

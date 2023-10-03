@@ -3,7 +3,8 @@ import { View, Text, Image } from "@tarojs/components";
 import { AtTag } from "taro-ui";
 import { AtMessage } from "taro-ui";
 import Taro from "@tarojs/taro";
-import "./forum.scss";
+// import "./forum.scss";
+import "./post.scss";
 import {
   deletePost,
   getMyForumList,
