@@ -1,4 +1,5 @@
-import { View, Text } from "@tarojs/components";
+import { View, Text, Image } from "@tarojs/components";
+import forum_ad from "../../assets/ad/banner.png";
 import "./pc.scss";
 import Taro, { useDidShow } from "@tarojs/taro";
 import o from "$/utils/request";
@@ -135,6 +136,25 @@ const pc = () => {
             <Text>0</Text>
           </View>
         </View>
+      </View>
+      {/* 广告 */}
+      <View
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Image
+          src={forum_ad}
+          mode="scaleToFill"
+          style={{
+            width: "100%",
+            height: "97px",
+            padding: "8px 8px",
+            borderRadius: "34px",
+          }}
+        />
       </View>
       {/* 跳转列表部分 */}
       <MenuList list={menuList}></MenuList>
