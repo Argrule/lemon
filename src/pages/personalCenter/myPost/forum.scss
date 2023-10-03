@@ -5,8 +5,8 @@
 @import "~taro-ui/dist/style/components/search-bar.scss";
 @import "~taro-ui/dist/style/components/button.scss";
 @import "~taro-ui/dist/style/components/message.scss";
-$forum-fontSize: 25rpx; //input,button,post-content,interaction-button
-$forum-fontSize-b: 30rpx; //content
+$forum-fontSize: 25rpx;
+$forum-fontSize-b: 30rpx;
 // $button-color: #ffc701;
 // $btn-color: #ffaa00;
 $button-color: $lenmon-green;
@@ -18,36 +18,6 @@ button {
   display: flex;
   gap: 10rpx;
 }
-.plus {
-  position: fixed;
-  top: 86vh;
-  right: 10vw;
-  // transform: translateX(-50%);
-  z-index: 999;
-  &.at-fab--normal {
-    background-color: $button-color;
-  }
-  .plus-icon {
-    // font-size: 50rpx;//无效
-    color: #fff;
-  }
-}
-.search-bar {
-  // position: fixed;
-  // top: 0;
-  // left: 0;
-  // width: 100%;
-  // z-index: 999;
-  // .search-bar__input{
-  //   font-size: 30rpx;
-  // }
-  // position: relative;
-  height: 80rpx;
-  .at-search-bar__action {
-    // font-size: 30rpx;
-    background-color: $btn-color;
-  }
-}
 .forum {
   padding: 20px;
   height: 100%;
@@ -55,44 +25,7 @@ button {
   flex-direction: column;
   padding-bottom: 100px;
 
-  .new-post {
-    height: 60px;
-    width: 90%;
-    display: flex;
-    align-items: center;
-    padding: 20px;
-    position: fixed;
-    bottom: 0;
-    background-color: #fff;
-    z-index: 100;
-
-    input {
-      flex: 1;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 20px;
-      font-size: $forum-fontSize;
-    }
-
-    button {
-      margin-left: 10px;
-      padding: 10px 20px;
-      background-color: $button-color;
-      color: #fff;
-      border: none;
-      border-radius: 20px; /* Increase the border radius for a more rounded button */
-      font-size: $forum-fontSize; /* Slightly larger font size for better readability */
-      cursor: pointer;
-      transition: background-color 0.3s;
-
-      &:hover {
-        background-color: #a0aa25;
-      }
-    }
-  }
-
   .my-posts {
-    margin-top: 80rpx;
     .comments {
       margin-top: 10px; // 调整评论区域与上方内容的间距
       padding: 10px; // 添加内边距，美化样式
@@ -126,7 +59,7 @@ button {
         color: $btn-color;
       }
       .post-content {
-        font-size: $forum-fontSize-b; /* Larger font size for post content */
+        font-size: $forum-fontSize-b;
       }
       .post-tags {
         .tagList {
@@ -147,18 +80,18 @@ button {
         .interaction-button {
           padding: 8px 15px;
           border: none;
-          border-radius: 20px; /* Increase the border radius for a more rounded button */
-          font-size: $forum-fontSize; /* Slightly larger font size for better readability */
+          border-radius: 20px;
+          font-size: $forum-fontSize;
           cursor: pointer;
           transition: background-color 0.3s;
 
           &.like-button {
-            background-color: #e0245e; /* Twitter's like button color */
+            background-color: #e0245e;
             color: #fff;
           }
 
           &.collect-button {
-            background-color: $btn-color; /* QQ's collect button color */
+            background-color: $btn-color;
             color: #fff;
           }
 
