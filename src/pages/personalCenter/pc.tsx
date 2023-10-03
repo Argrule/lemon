@@ -116,6 +116,25 @@ const pc = () => {
             <Text className="slogan">{school}</Text>
           </View>
         </View>
+        {/* other */}
+        <View className="pc-head-other">
+          <View className="more-item">
+            <Text>人品</Text>
+            <Text>0</Text>
+          </View>
+          <View className="more-item">
+            <Text>收藏</Text>
+            <Text>0</Text>
+          </View>
+          <View className="more-item">
+            <Text>帖子</Text>
+            <Text>0</Text>
+          </View>
+          <View className="more-item">
+            <Text>评论</Text>
+            <Text>0</Text>
+          </View>
+        </View>
       </View>
       {/* 跳转列表部分 */}
       <MenuList list={menuList}></MenuList>
