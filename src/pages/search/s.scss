@@ -1,0 +1,118 @@
+@import "../../app.scss";
+@import "~taro-ui/dist/style/components/icon.scss";
+@import "~taro-ui/dist/style/components/tag.scss";
+@import "~taro-ui/dist/style/components/search-bar.scss";
+@import "~taro-ui/dist/style/components/button.scss";
+@import "~taro-ui/dist/style/components/message.scss";
+$forum-fontSize: 25rpx;
+$forum-fontSize-b: 30rpx;
+// $button-color: #ffc701;
+// $btn-color: #ffaa00;
+$button-color: $lenmon-green;
+$btn-color: $lenmon-yellow;
+button {
+  line-height: 1.5;
+}
+.flex {
+  display: flex;
+  gap: 10rpx;
+}
+
+.search-bar {
+  height: 80rpx;
+  .at-search-bar__action {
+    background-color: #ffd61d;
+  }
+}
+
+.my-forum-post {
+  padding: 0 20px;
+  height: 86vh;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 100px;
+
+  .at-message {
+    top: var(--traceNavTop);
+    transform: translate(0, -130%);
+  }
+
+
+  .my-posts {
+    .comments {
+      margin-top: 10px; // 调整评论区域与上方内容的间距
+      padding: 10px; // 添加内边距，美化样式
+
+      .comment {
+        background-color: #f5f5f5; // 评论区域背景颜色
+        padding: 8px;
+        border-radius: 5px;
+        margin-bottom: 5px; // 调整每个评论之间的间距
+
+        .comment-content {
+          font-size: $forum-fontSize; // 调整评论内容的字体大小
+        }
+      }
+    }
+    .post {
+      background-color: #fff;
+      border-bottom: 1px solid #ccc;
+      // border-radius: 10px;
+      padding: 15px;
+      margin-bottom: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+
+      .post-time {
+        position: static;
+      }
+      .post-nick {
+        font-size: $forum-fontSize-b;
+        color: $btn-color;
+      }
+      .post-content {
+        font-size: $forum-fontSize-b;
+      }
+      .post-tags {
+        .tagList {
+          color: $btn-color;
+          // border: $btn-color 1px solid;
+        }
+      }
+      .post-time {
+        font-size: $forum-fontSize;
+        color: $btn-color;
+      }
+
+      .interaction-buttons {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .interaction-button {
+          padding: 8px 15px;
+          border: none;
+          border-radius: 20px;
+          font-size: $forum-fontSize;
+          cursor: pointer;
+          transition: background-color 0.3s;
+
+          &.like-button {
+            background-color: #e0245e;
+            color: #fff;
+          }
+
+          &.collect-button {
+            background-color: $btn-color;
+            color: #fff;
+          }
+
+          &:hover {
+            opacity: 0.8;
+          }
+        }
+      }
+    }
+  }
+}
