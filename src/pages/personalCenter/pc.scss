@@ -1,53 +1,56 @@
-.personalCenter{
-    height: 100vh;
-    background-color: #feffe23b;
+.personalCenter {
+  height: 100vh;
+  background-color: #feffe23b;
 }
-.pc-head-card{
-    // height: 10rem;
-    height: 536rpx;
-    // border-radius: 0 0 1rem 1rem;
-    // box-shadow:  2px 1px 2px 1px rgba(0, 0, 0, 0.18);
-    background-image: url('../../assets/info/pc_bg.png');
-    .pc-nav-custom{
-        display: flex;
+.pc-head-card {
+  // height: 10rem;
+  height: 536rpx;
+  // border-radius: 0 0 1rem 1rem;
+  // box-shadow:  2px 1px 2px 1px rgba(0, 0, 0, 0.18);
+  background-image: url("../../assets/info/pc_bg.png");
+  .pc-nav-custom {
     font-size: 36rpx;
     font-weight: 600;
     line-height: 32rpx;
     letter-spacing: 0rpx;
-    text-align: left;
     color: #fff;
 
-    text{
-        margin-bottom: 20px;
+    text {
+      margin-bottom: 20px;
     }
-
-        justify-content: center;
-        align-items: flex-end;
-    }
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+  }
 }
 
-.pc-head-body{
-display: flex;
-flex-direction: row;
-align-items: center;
-justify-content: space-evenly;
-    .name-slogan{
-        width: 50%;
-        height: 7rem;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: space-evenly;
-        .nickname {
-            font-size: 1.2rem;
-        }
-        .slogan {
-            color: rgb(112, 112, 112);
-        }
+.pc-head-body {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-left: 48rpx;
+  .name-slogan {
+    width: 50%;
+    height: 5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    .nickname {
+      font-size: 1.2rem;
     }
-}
-.my-avatar{
-    width: 220rpx !important; 
-    height: 220rpx !important;
-
+    .slogan {
+      color: rgb(112, 112, 112);
+      background: #feeaa3;
+      font-size: 24rpx;
+      font-weight: 500;
+      line-height: 32rpx;
+      padding: 12rpx 32rpx;
+      border-radius: 215rpx 45rpx;
+    }
+  }
+  .my-avatar {
+    width: 150rpx !important;
+    height: 150rpx !important;
+  }
 }

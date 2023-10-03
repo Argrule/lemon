@@ -66,13 +66,13 @@ const pc = () => {
     //     url: "/pages/login/login",
     //   });
     // } else {
-      res = await o.get("/user/info", "");
-      setNickname(res.data.nickname);
-      setAvatar(res.data.avatarUrl);
-      setSchool(res.data.school);
-      Taro.setStorageSync("avatar", res.data.avatarUrl);
-      // console.log("LOGIN RES:", res);
-      return res;
+    res = await o.get("/user/info", "");
+    setNickname(res.data.nickname);
+    setAvatar(res.data.avatarUrl);
+    setSchool(res.data.school);
+    Taro.setStorageSync("avatar", res.data.avatarUrl);
+    // console.log("LOGIN RES:", res);
+    return res;
     // }
   }
   useDidShow(() => {
@@ -85,23 +85,26 @@ const pc = () => {
   return (
     <View className="personalCenter">
       {/* 头像部分 */}
-      <View
-        className="pc-head-card"        
-      >
-        <View className="pc-nav-custom"
-         style={{
-          /* @ts-ignore 传入scss变量调整位置 */
-          height: Taro.getStorageSync("nav_bar_height") + "px",
-        }}
+      <View className="pc-head-card">
+        {/* nav */}
+        <View
+          className="pc-nav-custom"
+          style={{
+            /* @ts-ignore 传入scss变量调整位置 */
+            height: Taro.getStorageSync("nav_bar_height") + "px",
+          }}
         >
           <Text>个人中心</Text>
         </View>
-        <View className="pc-head-body"
-        onClick={() =>
-          Taro.navigateTo({
-            url: "/pages/personalCenter/changeUserInfo/changeUserInfo",
-          })
-        }>
+        {/* head */}
+        <View
+          className="pc-head-body"
+          onClick={() =>
+            Taro.navigateTo({
+              url: "/pages/personalCenter/changeUserInfo/changeUserInfo",
+            })
+          }
+        >
           <AtAvatar
             image={avatar}
             size="large"
