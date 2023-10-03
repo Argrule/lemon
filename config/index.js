@@ -5,6 +5,7 @@ const config = {
     '$/components': path.resolve(__dirname, '..', 'src/components'),
     '$/utils': path.resolve(__dirname, '..', 'src/utils'),
     '$/api': path.resolve(__dirname, '..', 'src/api'),
+    '$/assets': path.resolve(__dirname,'..','src/assets')
   },
   projectName: 'lemon',
   date: '2023-7-8',

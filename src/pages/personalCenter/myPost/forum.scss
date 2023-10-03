@@ -26,21 +26,7 @@ button {
   padding-bottom: 100px;
 
   .my-posts {
-    .comments {
-      margin-top: 10px; // 调整评论区域与上方内容的间距
-      padding: 10px; // 添加内边距，美化样式
-
-      .comment {
-        background-color: #f5f5f5; // 评论区域背景颜色
-        padding: 8px;
-        border-radius: 5px;
-        margin-bottom: 5px; // 调整每个评论之间的间距
-
-        .comment-content {
-          font-size: $forum-fontSize; // 调整评论内容的字体大小
-        }
-      }
-    }
+    
     .post {
       background-color: #fff;
       border-bottom: 1px solid #ccc;
@@ -70,13 +56,12 @@ button {
       .post-time {
         font-size: $forum-fontSize;
         color: $btn-color;
-      }
-
+      }      
       .interaction-buttons {
         display: flex;
-        justify-content: space-between;
+        justify-content: space-evenly;
         align-items: center;
-
+    
         .interaction-button {
           padding: 8px 15px;
           border: none;
@@ -84,17 +69,20 @@ button {
           font-size: $forum-fontSize;
           cursor: pointer;
           transition: background-color 0.3s;
-
-          &.like-button {
-            background-color: #e0245e;
-            color: #fff;
-          }
-
-          &.collect-button {
-            background-color: $btn-color;
-            color: #fff;
-          }
-
+          display: flex;
+          align-items: center;
+          gap: 10px;
+    
+          // &.like-button {
+            // background-color: #fff;
+            // color: #000;
+          // }
+    
+          // &.collect-button {
+            // background-color: #fff;
+            // color: #fff;
+          // }
+    
           &:hover {
             opacity: 0.8;
           }
