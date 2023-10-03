@@ -1,0 +1,32 @@
+.nav-custom-container {
+  position: relative;
+  .nav_custom_bar {
+    width: 100%;
+    // background: linear-gradient(90deg,#ffa15b, #ff7954);
+    background-image: url("../../assets/nav_bg.png");
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-end;
+    // position: relative;
+    position: fixed;
+    z-index: 100;
+    flex-shrink: 0;
+    .nav_custom_bar_back {
+      position: absolute;
+      bottom: 20px;
+      left: 22px;
+      &.hidden {
+        display: none;
+      }
+    }
+    .nav_custom_bar_title {
+      font-size: 32px;
+      font-family: Microsoft YaHei, Microsoft YaHei-Regular;
+      font-weight: 400;
+      text-align: left;
+      color: #f7f7f7;
+      margin-bottom: 20px;
+    }
+  }
+}

@@ -1,6 +1,5 @@
-@import "../../../app.scss";
+@import "../../app.scss";
 @import "~taro-ui/dist/style/components/icon.scss";
-@import "~taro-ui/dist/style/components/fab.scss";
 @import "~taro-ui/dist/style/components/tag.scss";
 @import "~taro-ui/dist/style/components/search-bar.scss";
 @import "~taro-ui/dist/style/components/button.scss";
@@ -18,12 +17,26 @@ button {
   display: flex;
   gap: 10rpx;
 }
-.forum {
-  padding: 20px;
-  height: 100%;
+
+.search-bar {
+  height: 80rpx;
+  .at-search-bar__action {
+    background-color: #ffd61d;
+  }
+}
+
+.my-forum-post {
+  padding: 0 20px;
+  height: 86vh;
   display: flex;
   flex-direction: column;
   padding-bottom: 100px;
+
+  .at-message {
+    top: var(--traceNavTop);
+    transform: translate(0, -130%);
+  }
+
 
   .my-posts {
     .comments {

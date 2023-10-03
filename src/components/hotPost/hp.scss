@@ -1,6 +1,6 @@
 // hp区分组件和页面，防止样式污染
 .hp-container {
-  margin: 80rpx 16rpx 0;
+  margin: 0 16rpx;
   // 左侧文案
   .hp-left {
     color: #fff;
@@ -10,11 +10,11 @@
     position: relative;
     font-size: 28rpx;
     line-height: 32rpx;
+    // 三角形
     &::after {
       content: "";
       border: 15rpx solid transparent;
       border-right: 15rpx solid #fff9de;
-      color: red;
       position: absolute;
       top: 50%;
       right: -1px;
@@ -28,7 +28,7 @@
 
       font-family: PingFang SC;
       font-size: 28px;
-      font-weight: 500;
+      font-weight: 800;
       line-height: 32px;
       letter-spacing: 0px;
       text-align: left;
@@ -38,6 +38,7 @@
       .hp-swiper-item-seq {
         color: #00000080;
         font-family: PingFang SC;
+        font-weight: 500;
         padding: 12rpx 10rpx;
         display: inline-block;
         box-sizing: border-box;

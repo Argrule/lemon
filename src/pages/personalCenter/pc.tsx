@@ -1,4 +1,5 @@
-import { View, Text } from "@tarojs/components";
+import { View, Text, Image } from "@tarojs/components";
+import forum_ad from "../../assets/ad/banner.png";
 import "./pc.scss";
 import Taro, { useDidShow } from "@tarojs/taro";
 import o from "$/utils/request";
@@ -6,14 +7,14 @@ import MenuList from "$/components/personalCenter/MenuList";
 import { AtAvatar } from "taro-ui";
 import "taro-ui/dist/style/components/avatar.scss";
 import { useState } from "react";
-import staticAvatar from "../../assets/avatar.jpg";
+// import staticAvatar from "../../assets/avatar.jpg";
 
 const pc = () => {
   const [avatar, setAvatar] = useState("");
   const [nickname, setNickname] = useState("加载中");
   const [school, setSchool] = useState("加载中");
   // 菜单的数据
-  let slogan = "加载中";
+  // let slogan = "加载中";
   const menuList = [
     {
       content: "消息",
@@ -66,13 +67,13 @@ const pc = () => {
     //     url: "/pages/login/login",
     //   });
     // } else {
-      res = await o.get("/user/info", "");
-      setNickname(res.data.nickname);
-      setAvatar(res.data.avatarUrl);
-      setSchool(res.data.school);
-      Taro.setStorageSync("avatar", res.data.avatarUrl);
-      // console.log("LOGIN RES:", res);
-      return res;
+    res = await o.get("/user/info", "");
+    setNickname(res.data.nickname);
+    setAvatar(res.data.avatarUrl);
+    setSchool(res.data.school);
+    Taro.setStorageSync("avatar", res.data.avatarUrl);
+    // console.log("LOGIN RES:", res);
+    return res;
     // }
   }
   useDidShow(() => {
@@ -85,24 +86,75 @@ const pc = () => {
   return (
     <View className="personalCenter">
       {/* 头像部分 */}
-      <View
-        className="head-card"
-        onClick={() =>
-          Taro.navigateTo({
-            url: "/pages/personalCenter/changeUserInfo/changeUserInfo",
-          })
-        }
-      >
-        <AtAvatar
-          image={avatar}
-          size="large"
-          circle={true}
-          className="my-avatar"
-        ></AtAvatar>
-        <View className="name-slogan">
-          <Text className="nickname">{nickname}</Text>
-          <Text className="slogan">{school}</Text>
+      <View className="pc-head-card">
+        {/* nav */}
+        <View
+          className="pc-nav-custom"
+          style={{
+            /* @ts-ignore 传入scss变量调整位置 */
+            height: Taro.getStorageSync("nav_bar_height") + "px",
+          }}
+        >
+          <Text>个人中心</Text>
         </View>
+        {/* head */}
+        <View
+          className="pc-head-body"
+          onClick={() =>
+            Taro.navigateTo({
+              url: "/pages/personalCenter/changeUserInfo/changeUserInfo",
+            })
+          }
+        >
+          <AtAvatar
+            image={avatar}
+            size="large"
+            circle={true}
+            className="my-avatar"
+          ></AtAvatar>
+          <View className="name-slogan">
+            <Text className="nickname">{nickname}</Text>
+            <Text className="slogan">{school}</Text>
+          </View>
+        </View>
+        {/* other */}
+        <View className="pc-head-other">
+          <View className="more-item">
+            <Text>人品</Text>
+            <Text>0</Text>
+          </View>
+          <View className="more-item">
+            <Text>收藏</Text>
+            <Text>0</Text>
+          </View>
+          <View className="more-item">
+            <Text>帖子</Text>
+            <Text>0</Text>
+          </View>
+          <View className="more-item">
+            <Text>评论</Text>
+            <Text>0</Text>
+          </View>
+        </View>
+      </View>
+      {/* 广告 */}
+      <View
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Image
+          src={forum_ad}
+          mode="scaleToFill"
+          style={{
+            width: "100%",
+            height: "97px",
+            padding: "8px 8px",
+            borderRadius: "34px",
+          }}
+        />
       </View>
       {/* 跳转列表部分 */}
       <MenuList list={menuList}></MenuList>

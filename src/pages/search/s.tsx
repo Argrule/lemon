@@ -1,13 +1,10 @@
+// import { Text } from "@tarojs/components";
+import { AtSearchBar } from "taro-ui";
 import { Component } from "react";
-import { View, BaseEventOrig } from "@tarojs/components";
-import { Image } from "@tarojs/components";
-import search_icon from "../../assets/info/search.png";
-import forum_ad from "../../assets/ad/banner.png";
-import { AtFab } from "taro-ui";
+import { View } from "@tarojs/components";
+// import forum_ad from "../../assets/ad/banner.png";
 import { AtMessage } from "taro-ui";
 import Taro from "@tarojs/taro";
-import "./forum.scss";
-import { InputEventDetail } from "taro-ui/types/input";
 import {
   deletePost,
   getForumList,
@@ -17,17 +14,16 @@ import {
   collectPost,
   cancelCollectPost,
   searchPost,
-  getHotPost,
 } from "$/api/forum";
-import { Item, State } from "./data";
-// import { AtSearchBar } from "taro-ui";
-import { HotPost } from "$/components/hotPost/hp";
+import { Item, State } from "../forum/data";
+// import { HotPost } from "$/components/hotPost/hp";
 // import { FormatTimeFromNow } from "$/utils/dayjs";
 import PostComponent from "$/components/post/post";
-import SpecialDeal from "./special";
+import SpecialDeal from "../forum/special";
 import NavCustomBar from "$/components/NavCustomBar/nav";
+import "./s.scss";
 
-class Forum extends Component<{}, State> {
+class Search extends Component<{}, State> {
   /* 状态 */
   state: State = {
     posts: [], // 帖子列表
@@ -41,9 +37,6 @@ class Forum extends Component<{}, State> {
 
   /* 非生命周期，onShow */
   async componentDidShow() {
-    getHotPost().then((res) => {
-      this.setState({ hotPosts: res.data.list.slice(0, 10) });
-    });
     this.pageNum = 1; // 重置页码
     const res = (await getForumList({
       pageNum: this.pageNum,
@@ -51,16 +44,15 @@ class Forum extends Component<{}, State> {
     })) as { list: Item[] };
 
     // 保存当前帖子列表的第一个帖子id，用于判断页面是否刷新
-    const cur_id = Taro.getStorageSync("current_posts_first_id");
-    Taro.setStorage({ key: "current_posts_first_id", data: res.list[0].id });
+    // const cur_id = Taro.getStorageSync("current_posts_first_id");
+    // Taro.setStorage({ key: "current_posts_first_id", data: res.list[0].id });
 
-    if (res.list[0].id !== cur_id) {
-      // 出于渲染滞后的问题，可能这个生命周期有坑
-      setTimeout(() => {
-        // console.log("刷新了",this);
-        this.setState({ posts: res.list });
-      }, 0);
-    }
+    // if (res.list[0].id !== cur_id) {
+    // 出于渲染滞后的问题，可能这个生命周期有坑
+    setTimeout(() => {
+      this.setState({ posts: res.list });
+    }, 0);
+    // }
   }
 
   /**
@@ -69,11 +61,12 @@ class Forum extends Component<{}, State> {
   async onReachBottom() {
     this.pageNum++;
     const { posts } = this.state;
-    const res = (await getForumList({
+    const res = await searchPost({
       pageNum: this.pageNum,
       pageSize: this.pageSize,
-    })) as { list: Item[] };
-    if (res.list.length === 0) {
+      content: this.state.searchContent,
+    });
+    if (res.data.list.length === 0) {
       // @ts-ignore
       Taro.atMessage({
         message: "没有更多了",
@@ -83,15 +76,8 @@ class Forum extends Component<{}, State> {
       this.pageNum--;
       return;
     }
-    this.setState({ posts: [...posts, ...res.list] });
+    this.setState({ posts: [...posts, ...res.data.list] });
   }
-  /**
-   * @description 输入框内容变化
-   * @param event
-   */
-  handleNewPostChange = (event: BaseEventOrig<InputEventDetail>) => {
-    this.setState({ newPostContent: event.detail.value as string });
-  };
   /**
    * @description 点赞及取消点赞
    * @param postId 帖子id
@@ -219,10 +205,7 @@ class Forum extends Component<{}, State> {
       url: `/pages/comment/c?post=${JSON.stringify(postItem)}`,
     });
   };
-  // 跳转到搜索页面
-  goToSearch = () => {
-    Taro.navigateTo({ url: "/pages/search/s" });
-  };
+
   //搜索框内容变化
   handleSearchChange = (value: string) => {
     this.setState({ searchContent: value });
@@ -230,9 +213,10 @@ class Forum extends Component<{}, State> {
   //搜索
   handleSearch = async () => {
     const { searchContent } = this.state;
+    this.pageNum = 1;
     const res = await searchPost({
-      pageNum: 1,
-      pageSize: 10,
+      pageNum: this.pageNum,
+      pageSize: this.pageSize,
       content: searchContent,
     });
     if (res.code != "00000") {
@@ -251,39 +235,28 @@ class Forum extends Component<{}, State> {
 
     return (
       <>
-        {/* 自定义导航栏 */}
-        <NavCustomBar mainTitle="论坛" needBackIcon={false} />
+        {/* nav */}
+        <NavCustomBar mainTitle="Search" needBackIcon={true} />
+        {/* 废弃搜索框 */}
+        <AtSearchBar
+          className="search-bar"
+          fixed={false}
+          value={this.state.searchContent}
+          onChange={this.handleSearchChange}
+          onConfirm={this.handleSearch}
+          onActionClick={this.handleSearch}
+        />
         {/* main */}
-        <View className="forum">
+        <View className="my-forum-post">
           <AtMessage
             style={{
               /* @ts-ignore 传入scss变量调整位置 */
               "--traceNavTop": Taro.getStorageSync("nav_bar_height") + "px",
             }}
           />
-          {/* 搜索跳转按钮 */}
-          {false ? null : (
-            <AtFab className="plus" onClick={this.goToSearch}>
-              <Image
-                src={search_icon}
-                svg
-                mode="aspectFill"
-                style={{ width: "46rpx", height: "46rpx", display: "block" }}
-              />
-            </AtFab>
-          )}
-          {/* 废弃搜索框 */}
-          {/* <AtSearchBar
-            className="search-bar"
-            fixed={true}
-            value={this.state.searchContent}
-            onChange={this.handleSearchChange}
-            onConfirm={this.handleSearch}
-            onActionClick={this.handleSearch}
-          /> */}
-          <HotPost hotPosts={this.state.hotPosts}></HotPost>
+          {/* <HotPost hotPosts={this.state.hotPosts}></HotPost> */}
           {/* 广告 */}
-          <View
+          {/* <View
             style={{
               display: "flex",
               alignItems: "center",
@@ -300,7 +273,7 @@ class Forum extends Component<{}, State> {
                 borderRadius: "34px",
               }}
             />
-          </View>
+          </View> */}
           {/* 帖子列表 */}
           <View className="posts">
             {/* // ### 这里做判断 是防止出现取消发布的数据写回不及时 多出一个空白帖子的bug */}
@@ -385,4 +358,4 @@ class Forum extends Component<{}, State> {
   }
 }
 
-export default Forum;
+export default Search;
