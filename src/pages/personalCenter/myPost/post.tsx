@@ -1,33 +1,25 @@
 import { Component } from "react";
-import { View, Text, Button, BaseEventOrig, Image } from "@tarojs/components";
+import { View, Text, Button, Image } from "@tarojs/components";
 // import { Input } from "@tarojs/components";
-import { AtIcon } from "taro-ui";
-import { AtFab } from "taro-ui";
 import { AtTag } from "taro-ui";
 import { AtMessage } from "taro-ui";
 import Taro from "@tarojs/taro";
 import "./forum.scss";
-import { InputEventDetail } from "taro-ui/types/input";
 import {
   deletePost,
   getMyForumList,
-  // publishPost,
   likePost,
   cancelLikePost,
   collectPost,
   cancelCollectPost,
-  searchPost,
 } from "$/api/forum";
 import { Item, State } from "../../forum/data";
-import { AtSearchBar } from "taro-ui";
 import { FormatTimeFromNow } from "$/utils/dayjs";
 
 class Forum extends Component<{}, State> {
   /* 状态 */
   state: State = {
     posts: [], // 帖子列表
-    newPostContent: "", // 新帖子内容
-    searchContent: "",
   };
 
   pageNum = 1;
@@ -65,48 +57,6 @@ class Forum extends Component<{}, State> {
     }
     this.setState({ posts: [...posts, ...res.list] });
   }
-  /**
-   * @description 输入框内容变化
-   * @param event
-   */
-  handleNewPostChange = (event: BaseEventOrig<InputEventDetail>) => {
-    this.setState({ newPostContent: event.detail.value as string });
-  };
-  /**
-   * @description 发布新帖子
-   */
-  // handleNewPostSubmit = async () => {
-  //   const { newPostContent, posts } = this.state;
-  //   if (!newPostContent) {
-  //     console.log("请输入内容");
-  //     return;
-  //   }
-  //   // ## 假冒的帖子
-  //   const newMockPost: Item = {
-  //     id: Date.now(),
-  //     uid: 1,
-  //     schoolId: 1,
-  //     content: newPostContent,
-  //     likeNum: 0,
-  //     readNum: 0,
-  //     collectNum: 0,
-  //     collectStatus: false,
-  //     likeStatus: false,
-  //     createTime: Date(),
-  //   };
-  //   const res = await publishPost({
-  //     content: newPostContent,
-  //     tagIds: [1, 2],
-  //   });
-  //   if (res.code != "00000") {
-  //     console.log("发布失败");
-  //     return;
-  //   }
-  //   this.setState({
-  //     posts: [newMockPost, ...posts],
-  //     newPostContent: "",
-  //   });
-  // };
   /**
    * @description 点赞及取消点赞
    * @param postId 帖子id
@@ -214,64 +164,17 @@ class Forum extends Component<{}, State> {
       url: `/pages/comment/c?post=${JSON.stringify(postItem)}`,
     });
   };
-  //跳转到发布帖子页面
-  goToPutPost = () => {
-    Taro.navigateTo({
-      url: "/pages/sendPost/sp",
-    });
-  };
-  //搜索框内容变化
-  handleSearchChange = (value: string) => {
-    this.setState({ searchContent: value });
-  };
-  //搜索
-  handleSearch = async () => {
-    const { searchContent } = this.state;
-    const res = await searchPost({
-      pageNum: 1,
-      pageSize: 10,
-      content: searchContent,
-    });
-    if (res.code != "00000") {
-      // @ts-ignore
-      Taro.atMessage({
-        message: "搜索失败",
-        type: "error",
-        duration: 800,
-      });
-      return;
-    }
-    this.setState({ posts: res.data.list });
-  };
+
   render() {
     const { posts } = this.state;
-    // const { newPostContent } = this.state;
     return (
-      <View className="forum">
+      <View
+        className="forum"
+        style={{
+          minHeight: "100vh",
+        }}
+      >
         <AtMessage />
-        {/* <AtFab className="plus">
-          <AtIcon
-            className="plus-icon"
-            value="add"
-            onClick={this.goToPutPost}
-          ></AtIcon>
-        </AtFab> */}
-        <AtSearchBar
-          className="search-bar"
-          fixed={true}
-          value={this.state.searchContent}
-          onChange={this.handleSearchChange}
-          onConfirm={this.handleSearch}
-          onActionClick={this.handleSearch}
-        />
-        {/* <View className="new-post">
-          <Input
-            value={newPostContent}
-            onInput={this.handleNewPostChange}
-            placeholder="发布新帖子"
-          />
-          <Button onClick={this.handleNewPostSubmit}>发布</Button>
-        </View> */}
         <View className="my-posts">
           {posts.map((post) => (
             <>
@@ -332,13 +235,6 @@ class Forum extends Component<{}, State> {
                   </Button>
                 </View>
               </View>
-              {/* <Button
-                type="primary"
-                className="interaction-button comment-button"
-                onClick={() => this.handleShowComments(post)}
-              >
-                查看评论
-              </Button> */}
             </>
           ))}
         </View>
