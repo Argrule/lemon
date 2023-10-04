@@ -26,7 +26,25 @@ import { HotPost } from "$/components/hotPost/hp";
 import PostComponent from "$/components/post/post";
 import SpecialDeal from "./special";
 import NavCustomBar from "$/components/NavCustomBar/nav";
+import { connect } from "react-redux";
+import { updatePost } from "../../store/use/post";
 
+/**
+ * @description connect装饰器
+ * @param mapState (state_all)=>{} --> state_all是整个redux的state (initialState)
+ * @param mapDispatch (dispatch)=>{} --> dispatch是dispatch函数
+ */
+// @ts-ignore
+@connect(
+  ({postInfo}:{postInfo:Item}) => ({
+  postInfo 
+  }),
+  (dispatch) => ({
+    updatePostStore(postInfo:Item) {
+      dispatch(updatePost(postInfo));
+    },
+  })
+)
 class Forum extends Component<{}, State> {
   /* 状态 */
   state: State = {
@@ -41,6 +59,7 @@ class Forum extends Component<{}, State> {
 
   /* 非生命周期，onShow */
   async componentDidShow() {
+    // console.log("forum did show", this.props.postInfo,this.props.updatePostStore);
     getHotPost().then((res) => {
       this.setState({ hotPosts: res.data.list.slice(0, 10) });
     });
@@ -226,9 +245,15 @@ class Forum extends Component<{}, State> {
    * @param postId 帖子id
    */
   handleShowComments = async (postItem: Item) => {
+    // ts-ignore
+    this.props.updatePostStore(postItem);
+
     // redux存储当前帖子，跳转到评论页面
+    // Taro.navigateTo({
+    //   url: `/pages/comment/c?post=${JSON.stringify(postItem)}`,
+    // });
     Taro.navigateTo({
-      url: `/pages/comment/c?post=${JSON.stringify(postItem)}`,
+      url: `/pages/comment/c`,
     });
   };
   // 跳转到搜索页面

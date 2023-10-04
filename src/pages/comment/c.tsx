@@ -3,7 +3,8 @@ import { Textarea } from "@tarojs/components";
 // import { useDidShow } from "@tarojs/taro";
 import { useEffect, useRef, useState } from "react";
 import { getComment, publishComment, replyComment } from "$/api/forum";
-import Taro, { getCurrentInstance, useDidShow } from "@tarojs/taro";
+import Taro, { useDidShow } from "@tarojs/taro";
+// import { getCurrentInstance } from "@tarojs/taro";
 import { AtMessage } from "taro-ui";
 import { AtAvatar } from "taro-ui";
 import { AtActionSheet, AtActionSheetItem } from "taro-ui";
@@ -19,6 +20,7 @@ import {
 import PostComponent from "$/components/post/post";
 import "./c.scss";
 import { FormatTimeFromNow } from "$/utils/dayjs";
+import { useSelector } from 'react-redux'
 
 export default function CommentDetail() {
   const [post, setPost] = useState<Item>({
@@ -46,9 +48,15 @@ export default function CommentDetail() {
   const [placeholderStr, setPlaceholderStr] = useState("发布新评论");
   const [replyToPerson, setReplyToPerson] = useState<string>("");
 
+  // 更好的获取post的方式，redux 替代 url传参
+  const betterPost = useSelector((state:{postInfo:Item})=>state.postInfo);
   useDidShow(async () => {
-    const instance = getCurrentInstance();
-    setPost(JSON.parse((instance as any).router.params.post) as Item);
+    // const instance = getCurrentInstance();
+    // console.log('show get post==>',((instance as any).router.params.post));
+    // setPost(JSON.parse((instance as any).router.params.post) as Item);
+    
+    console.log('show get post==>',betterPost);
+    setPost(betterPost);
   });
   useEffect(() => {
     (async () => {

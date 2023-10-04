@@ -20,7 +20,7 @@ const UnitList = (props: UnitData) => {
   return (
     <View className="unitlist" onClick={() => handleClick(path)}>
       <Text>{content}</Text>
-      <AtIcon value={icon} size="30" color="rgb(122,122,122)"></AtIcon>
+      <AtIcon value={icon} size="16" color="rgb(122,122,122)"></AtIcon>
     </View>
   );
 };

@@ -18,10 +18,22 @@ import lenmon_regular from "$/assets/post/lemonR.svg";
 import lenmon_solid from "$/assets/post/lemonS.svg";
 import star_regular from "$/assets/post/starR.svg";
 import star_solid from "$/assets/post/starS.svg";
-
+import { connect } from "react-redux";
+import { updatePost } from "../../../store/use/post";
 interface State {
   posts: Item[];
 }
+// @ts-ignore
+@connect(
+  ({ postInfo }: { postInfo: Item }) => ({
+    postInfo,
+  }),
+  (dispatch) => ({
+    updatePostStore(postInfo: Item) {
+      dispatch(updatePost(postInfo));
+    },
+  })
+)
 class MyCollect extends Component<{}, State> {
   /* 状态 */
   state: State = {
@@ -167,8 +179,9 @@ class MyCollect extends Component<{}, State> {
    */
   handleShowComments = async (postItem: Item) => {
     // redux存储当前帖子，跳转到评论页面
+    this.props.updatePostStore(postItem);
     Taro.navigateTo({
-      url: `/pages/comment/c?post=${JSON.stringify(postItem)}`,
+      url: `/pages/comment/c`,
     });
   };
 
