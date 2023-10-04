@@ -34,9 +34,9 @@ class NavCustomBar extends Component {
 
   getNavHeight() {
     let menuButtonObject = Taro.getMenuButtonBoundingClientRect();
-    console.log("wx.getMenuButtonBoundingClientRect()", menuButtonObject);
+    // console.log("wx.getMenuButtonBoundingClientRect()", menuButtonObject);
     var sysinfo = Taro.getSystemInfoSync();
-    console.log("wx.getSystemInfoSync()", sysinfo);
+    // console.log("wx.getSystemInfoSync()", sysinfo);
     let statusBarHeight = sysinfo.statusBarHeight as number;
     let menuBottonHeight = menuButtonObject.height;
     let menuBottonTop = menuButtonObject.top;
