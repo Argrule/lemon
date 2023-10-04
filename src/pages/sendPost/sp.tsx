@@ -212,7 +212,14 @@ function CommentInput() {
       /> */}
       </View>
       <View className="newpost-bottom-placeholder">
-        *请务必遵守 社区规范 ，如有违规会被删帖、禁言乃至封号
+        *请务必遵守
+        <Text
+          onClick={() => Taro.navigateTo({ url: "/pages/commentRule/cr" })}
+          style={{ color: "#fe3666" }}
+        >
+          社区规范
+        </Text>
+        ，如有违规会被删帖、禁言乃至封号
       </View>
       <Button className="newpost-publish-button" onClick={handlePublish}>
         发布
