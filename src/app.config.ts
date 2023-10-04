@@ -22,6 +22,7 @@ export default defineAppConfig({
     "pages/personalCenter/changeUserInfo/changeUserInfo",
     "pages/message/msg",
     "pages/search/s",
+    "pages/commentRule/cr",
   ],
   window: {
     backgroundTextStyle: "light",
