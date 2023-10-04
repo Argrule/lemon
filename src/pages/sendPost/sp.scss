@@ -19,6 +19,9 @@ button {
   .at-message {
     top: var(--traceNavTop);
     transform: translate(0, -18%);
+  }  
+  .at-message--hidden{
+    visibility: hidden;
   }
 
   margin: 0px auto;
