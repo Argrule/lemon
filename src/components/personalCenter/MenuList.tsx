@@ -43,6 +43,7 @@ const MenuList = (props: { list: UnitData[] }) => {
         return (
           <UnitList
             content={item.content}
+            pre={item.pre}
             icon={item.icon}
             path={item.path}
             isOther={item.isOther ?? false}
