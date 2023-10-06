@@ -64,6 +64,7 @@ const pc = () => {
     {
       content: "人品",
       val: "good",
+      // path: "/pages/developing/developing"
     },
     {
       content: "收藏",

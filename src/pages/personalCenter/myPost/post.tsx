@@ -22,6 +22,7 @@ import star_solid from "$/assets/post/starS.svg";
 import trash_icon from "$/assets/post/trash.svg";
 import { connect } from "react-redux";
 import { updatePost } from "../../../store/use/post";
+import DevelopingCom from "../../developing/developing";
 interface State {
   posts: Item[];
 }
@@ -196,6 +197,7 @@ class MyPost extends Component<{}, State> {
    */
   handleShowComments = async (postItem: Item) => {
     // redux存储当前帖子，跳转到评论页面
+    // @ts-ignore
     this.props.updatePostStore(postItem);
     Taro.navigateTo({
       url: `/pages/comment/c`,
@@ -212,7 +214,11 @@ class MyPost extends Component<{}, State> {
         }}
       >
         <AtMessage />
-        <View className="my-posts">
+        {          
+          posts.length === 0 ? (
+            <DevelopingCom content="暂无帖子" />
+          ):(
+            <View className="my-posts">
           {posts.map((post) => (
             <>
               <View className="post" key={post.id}>
@@ -303,6 +309,8 @@ class MyPost extends Component<{}, State> {
             </>
           ))}
         </View>
+          )
+        }        
       </View>
     );
   }
