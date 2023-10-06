@@ -18,9 +18,7 @@ const customInterceptor = (chain) => {
   }
 
   // ## 请求后处理响应
-  return chain.proceed(requestParams).then((res) => {
-    console.log('requestParams',requestParams.url);
-    console.log('res',res);
+  return chain.proceed(requestParams).then((res) => {    
     // 只要请求成功，不管返回什么状态码，都走这个回调
     if (res.statusCode === HTTP_STATUS.NOT_FOUND) {
       return Promise.reject("请求资源不存在");
@@ -48,15 +46,12 @@ const customInterceptor = (chain) => {
       } else {
         // console.log("字符串中不包含 '/post/show'");
         Taro.setStorageSync("Authorization", "");
-        // console.log('Taro.getStorageSync("isPermitAuthorization")',Taro.getStorageSync("isPermitAuthorization"));
         if(Taro.getStorageSync("isPermitAuthorization")){
           Taro.setStorageSync("isPermitAuthorization", !Taro.getStorageSync("isPermitAuthorization"));
-          // console.log('Taro.getStorageSync("isPermitAuthorization")',Taro.getStorageSync("isPermitAuthorization"));
           return res.data;
 
         } else {
           Taro.setStorageSync("isPermitAuthorization", true);
-          // console.log('Taro.getStorageSync("isPermitAuthorization")',Taro.getStorageSync("isPermitAuthorization"));
           pageToLogin();
           return Promise.reject("需要鉴权");
         }

@@ -22,6 +22,7 @@ import star_solid from "$/assets/post/starS.svg";
 import trash_icon from "$/assets/post/trash.svg";
 import { connect } from "react-redux";
 import { updatePost } from "../../../store/use/post";
+import DevelopingCom from "../../developing/developing";
 interface State {
   posts: Item[];
 }
@@ -196,6 +197,7 @@ class MyPost extends Component<{}, State> {
    */
   handleShowComments = async (postItem: Item) => {
     // redux存储当前帖子，跳转到评论页面
+    // @ts-ignore
     this.props.updatePostStore(postItem);
     Taro.navigateTo({
       url: `/pages/comment/c`,
@@ -212,97 +214,101 @@ class MyPost extends Component<{}, State> {
         }}
       >
         <AtMessage />
-        <View className="my-posts">
-          {posts.map((post) => (
-            <>
-              <View className="post" key={post.id}>
-                <Text
-                  className="post-content"
-                  userSelect
-                  onClick={() => this.handleShowComments(post)}
-                >
-                  {post.content}
-                </Text>
-                <View
-                  className="flex"
-                  onClick={() => this.handleShowComments(post)}
-                >
-                  {post.images?.map((image) => (
-                    <Image
-                      src={image}
-                      style="width: 80px;height: 80px;background: #fff;"
-                    />
-                  ))}
-                </View>
-                <View className="post-tags">
-                  {post.tagName?.map((tag) => (
-                    <AtTag size="small" className="tagList" circle>
-                      {tag}
-                    </AtTag>
-                  ))}
-                </View>
-                <View className="interaction-buttons">
-                  <Text className="post-time">
-                    {FormatTimeFromNow(post.createTime)}
+        {posts.length === 0 ? (
+          <DevelopingCom content="暂无帖子" />
+        ) : (
+          <View className="my-posts">
+            {posts.map((post) => (
+              <>
+                <View className="post" key={post.id}>
+                  <Text
+                    className="post-content"
+                    userSelect
+                    onClick={() => this.handleShowComments(post)}
+                  >
+                    {post.content}
                   </Text>
                   <View
-                    onClick={() =>
-                      this.handleLikePost(post.id, post.likeStatus)
-                    }
-                    className="interaction-button like-button"
+                    className="flex"
+                    onClick={() => this.handleShowComments(post)}
                   >
-                    {post.likeStatus ? (
+                    {post.images?.map((image) => (
                       <Image
-                        src={lenmon_solid}
-                        mode="scaleToFill"
-                        style="width: 20px; height: 20px;"
-                      ></Image>
-                    ) : (
-                      <Image
-                        src={lenmon_regular}
-                        mode="scaleToFill"
-                        style="width: 20px; height: 20px;"
-                      ></Image>
-                    )}
-                    {post.likeNum}
+                        src={image}
+                        style="width: 80px;height: 80px;background: #fff;"
+                      />
+                    ))}
                   </View>
-                  <View
-                    className="interaction-button collect-button"
-                    onClick={() =>
-                      this.handleCollectPost(post.id, post.collectStatus)
-                    }
-                  >
-                    {post.collectStatus ? (
-                      <Image
-                        src={star_solid}
-                        mode="scaleToFill"
-                        style="width: 20px; height: 20px;"
-                      ></Image>
-                    ) : (
-                      <Image
-                        src={star_regular}
-                        mode="scaleToFill"
-                        style="width: 20px; height: 20px;"
-                      ></Image>
-                    )}
-                    {post.collectNum}
+                  <View className="post-tags">
+                    {post.tagName?.map((tag) => (
+                      <AtTag size="small" className="tagList" circle>
+                        {tag}
+                      </AtTag>
+                    ))}
                   </View>
+                  <View className="interaction-buttons">
+                    <Text className="post-time">
+                      {FormatTimeFromNow(post.createTime)}
+                    </Text>
+                    <View
+                      onClick={() =>
+                        this.handleLikePost(post.id, post.likeStatus)
+                      }
+                      className="interaction-button like-button"
+                    >
+                      {post.likeStatus ? (
+                        <Image
+                          src={lenmon_solid}
+                          mode="scaleToFill"
+                          style="width: 20px; height: 20px;"
+                        ></Image>
+                      ) : (
+                        <Image
+                          src={lenmon_regular}
+                          mode="scaleToFill"
+                          style="width: 20px; height: 20px;"
+                        ></Image>
+                      )}
+                      {post.likeNum}
+                    </View>
+                    <View
+                      className="interaction-button collect-button"
+                      onClick={() =>
+                        this.handleCollectPost(post.id, post.collectStatus)
+                      }
+                    >
+                      {post.collectStatus ? (
+                        <Image
+                          src={star_solid}
+                          mode="scaleToFill"
+                          style="width: 20px; height: 20px;"
+                        ></Image>
+                      ) : (
+                        <Image
+                          src={star_regular}
+                          mode="scaleToFill"
+                          style="width: 20px; height: 20px;"
+                        ></Image>
+                      )}
+                      {post.collectNum}
+                    </View>
 
-                  <View
-                    className="interaction-button collect-button"
-                    onClick={() => this.handleDeletePost(post.id)}
-                  >
-                    <Image
-                      src={trash_icon}
-                      mode="scaleToFill"
-                      style="width: 20px; height: 20px;"
-                    ></Image>
+                    <View
+                      className="interaction-button collect-button"
+                      onClick={() => this.handleDeletePost(post.id)}
+                    >
+                      <Image
+                        src={trash_icon}
+                        mode="scaleToFill"
+                        style="width: 20px; height: 20px;"
+                      ></Image>
+                    </View>
                   </View>
                 </View>
-              </View>
-            </>
-          ))}
-        </View>
+              </>
+            ))}
+          </View>
+        )}
       </View>
     );
   }
