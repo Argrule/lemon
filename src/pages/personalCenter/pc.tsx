@@ -15,25 +15,13 @@ const pc = () => {
   const [school, setSchool] = useState("加载中");
   // 菜单的数据
   // let slogan = "加载中";
-  const menuList = [
+  const menuList1 = [
     {
       content: "我创建的局",
       pre: "alert-circle",
       icon: "chevron-right",
       path: "/pages/personalCenter/myJoinedGather/joinedGather",
     },
-    // {
-    //   content: "我收藏的帖子",
-    //   pre: "alert-circle",
-    //   icon: "chevron-right",
-    //   path: "/pages/personalCenter/myCollect/collect",
-    // },
-    // {
-    //   content: "我发的帖子",
-    //   pre: "alert-circle",
-    //   icon: "chevron-right",
-    //   path: "/pages/personalCenter/myPost/post",
-    // },
     {
       content: "我的消息",
       pre: "mail",
@@ -47,12 +35,16 @@ const pc = () => {
       path: "/pages/developing/developing",
       isOther: true,
     },
+  ];
+  const menuList2 = [
     {
       content: "设置",
       pre: "settings",
       icon: "chevron-right",
       path: "/pages/personalCenter/setting/setting",
     },
+  ];
+  const menuList3 = [
     {
       content: "版本更新",
       pre: "alert-circle",
@@ -183,22 +175,6 @@ const pc = () => {
               <Text>{moreListValue[more.val]}</Text>
             </View>
           ))}
-          {/* <View className="more-item">
-            <Text>人品</Text>
-            <Text>0</Text>
-          </View>
-          <View className="more-item">
-            <Text>收藏</Text>
-            <Text>0</Text>
-          </View>
-          <View className="more-item">
-            <Text>帖子</Text>
-            <Text>0</Text>
-          </View>
-          <View className="more-item">
-            <Text>评论</Text>
-            <Text>0</Text>
-          </View> */}
         </View>
       </View>
       {/* 广告 */}
@@ -221,7 +197,9 @@ const pc = () => {
         />
       </View>
       {/* 跳转列表部分 */}
-      <MenuList list={menuList}></MenuList>
+      <MenuList list={menuList1}></MenuList>
+      <MenuList list={menuList2}></MenuList>
+      <MenuList list={menuList3}></MenuList>
     </View>
   );
 };
