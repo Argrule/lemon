@@ -25,6 +25,7 @@ const pc = () => {
       content: "推荐好友",
       icon: "chevron-right",
       path: "/pages/developing/developing",
+      isOther: true,
     },
     {
       content: "设置",
