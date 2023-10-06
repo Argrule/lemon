@@ -6,7 +6,7 @@ import { UnitData } from "./personalCenter";
 import Taro from "@tarojs/taro";
 
 const UnitList = (props: UnitData) => {
-  const { content, icon, path, isOther } = props;
+  const { content, pre, icon, path, isOther } = props;
 
   // let isOpened = false;
   const handleClick = (path: string) => {
@@ -21,7 +21,11 @@ const UnitList = (props: UnitData) => {
     <View className="unitlist" onClick={() => handleClick(path)}>
       {isOther ? (
         <>
-          <Label for={new Date().getTime().toString()} style="width:100%">
+          <AtIcon value={pre} size="18" color="rgb(122,122,122)"></AtIcon>
+          <Label
+            for={new Date().getTime().toString()}
+            style="width:100%;margin-left:10rpx"
+          >
             {content}
           </Label>
           <Button
@@ -36,7 +40,10 @@ const UnitList = (props: UnitData) => {
         </>
       ) : (
         <>
-          <Text>{content}</Text>
+          <View>
+            <AtIcon value={pre} size="18" color="rgb(122,122,122)"></AtIcon>
+            <Text style="margin-left:10rpx">{content}</Text>
+          </View>
           <AtIcon value={icon} size="16" color="rgb(122,122,122)"></AtIcon>
         </>
       )}

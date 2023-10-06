@@ -17,45 +17,53 @@ const pc = () => {
   // let slogan = "加载中";
   const menuList = [
     {
-      content: "消息",
+      content: "我创建的局",
+      pre: "alert-circle",
+      icon: "chevron-right",
+      path: "/pages/personalCenter/myJoinedGather/joinedGather",
+    },
+    {
+      content: "我收藏的帖子",
+      pre: "alert-circle",
+      icon: "chevron-right",
+      path: "/pages/personalCenter/myCollect/collect",
+    },
+    {
+      content: "我发的帖子",
+      pre: "alert-circle",
+      icon: "chevron-right",
+      path: "/pages/personalCenter/myPost/post",
+    },
+    {
+      content: "我的消息",
+      pre: "mail",
       icon: "chevron-right",
       path: "/pages/developing/developing",
     },
     {
       content: "推荐好友",
+      pre: "share",
       icon: "chevron-right",
       path: "/pages/developing/developing",
       isOther: true,
     },
     {
       content: "设置",
+      pre: "settings",
       icon: "chevron-right",
       path: "/pages/personalCenter/setting/setting",
     },
     {
-      content: "用户协议",
-      icon: "chevron-right",
-      path: "/pages/personalCenter/userAgreement/userAgreement",
-    },
-    {
-      content: "版本",
+      content: "版本更新",
+      pre: "alert-circle",
       icon: "chevron-right",
       path: "/pages/developing/developing",
     },
     {
-      content: "我创建的局",
+      content: "用户协议",
+      pre: "menu",
       icon: "chevron-right",
-      path: "/pages/personalCenter/myJoinedGather/joinedGather",
-    },
-    {
-      content: "我收藏的",
-      icon: "chevron-right",
-      path: "/pages/personalCenter/myCollect/collect",
-    },
-    {
-      content: "我发的帖子",
-      icon: "chevron-right",
-      path: "/pages/personalCenter/myPost/post",
+      path: "/pages/personalCenter/userAgreement/userAgreement",
     },
   ];
 
