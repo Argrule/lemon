@@ -22,18 +22,18 @@ const pc = () => {
       icon: "chevron-right",
       path: "/pages/personalCenter/myJoinedGather/joinedGather",
     },
-    {
-      content: "我收藏的帖子",
-      pre: "alert-circle",
-      icon: "chevron-right",
-      path: "/pages/personalCenter/myCollect/collect",
-    },
-    {
-      content: "我发的帖子",
-      pre: "alert-circle",
-      icon: "chevron-right",
-      path: "/pages/personalCenter/myPost/post",
-    },
+    // {
+    //   content: "我收藏的帖子",
+    //   pre: "alert-circle",
+    //   icon: "chevron-right",
+    //   path: "/pages/personalCenter/myCollect/collect",
+    // },
+    // {
+    //   content: "我发的帖子",
+    //   pre: "alert-circle",
+    //   icon: "chevron-right",
+    //   path: "/pages/personalCenter/myPost/post",
+    // },
     {
       content: "我的消息",
       pre: "mail",
@@ -67,6 +67,35 @@ const pc = () => {
     },
   ];
 
+  // 4个更多的数据
+  const moreList = [
+    {
+      content: "人品",
+      val: "good",
+    },
+    {
+      content: "收藏",
+      val: "collect",
+      path: "/pages/personalCenter/myCollect/collect",
+    },
+    {
+      content: "帖子",
+      val: "post",
+      path: "/pages/personalCenter/myPost/post",
+    },
+    {
+      content: "评论",
+      val: "comment",
+    },
+  ];
+  // 4个更多的数据的值
+  const moreListValue = {
+    collect: 0,
+    post: 0,
+    comment: 0,
+    good: 0,
+  };
+
   // 页面展示时检测登录状态
   async function checkLogin() {
     // let token = Taro.getStorageSync("Authorization");
@@ -85,6 +114,22 @@ const pc = () => {
     return res;
     // }
   }
+  /**
+   * @description 根据path返回跳转函数
+   * @param path 跳转路径
+   * @returns () => void
+   */
+  const navGotoPath = (path: string | undefined): (() => void) => {
+    if (path) {
+      return () =>
+        Taro.navigateTo({
+          url: path,
+        });
+    } else {
+      return () => void 0;
+    }
+  };
+
   useDidShow(() => {
     console.log("SHOW");
     checkLogin();
@@ -128,7 +173,17 @@ const pc = () => {
         </View>
         {/* other */}
         <View className="pc-head-other">
-          <View className="more-item">
+          {moreList.map((more) => (
+            <View
+              className="more-item"
+              key={more.content}
+              onClick={navGotoPath(more.path)}
+            >
+              <Text>{more.content}</Text>
+              <Text>{moreListValue[more.val]}</Text>
+            </View>
+          ))}
+          {/* <View className="more-item">
             <Text>人品</Text>
             <Text>0</Text>
           </View>
@@ -143,7 +198,7 @@ const pc = () => {
           <View className="more-item">
             <Text>评论</Text>
             <Text>0</Text>
-          </View>
+          </View> */}
         </View>
       </View>
       {/* 广告 */}
