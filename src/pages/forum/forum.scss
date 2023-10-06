@@ -39,7 +39,7 @@ button {
   padding: 20rpx 0rpx;
   // height: 100%;
   // 用高度占位，防止列表渲染太少时scorll无效，触底加载不起作用
-  height: calc(100vh - 80rpx);
+  min-height: calc(100vh - 80rpx);
   display: flex;
   flex-direction: column;
   padding-bottom: 100px;
