@@ -368,7 +368,7 @@ export default function CommentDetail() {
         onCollect={handleCollectPost}
         onShowComments={() => {}}
       />
-      <View style={"color:#a0aa25;margin-left:15rpx;"}>评论</View>
+      <View style={"color:#a0aa25;margin-left:15rpx;"}>共{commentsList.length}条评论</View>
       {/* 评论展示区域 */}
       <View className="comments">
         {commentsList.map((comment) => (
