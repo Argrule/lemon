@@ -20,6 +20,9 @@ export default defineAppConfig({
     "pages/personalCenter/myPost/post",
     "pages/personalCenter/myCollect/collect",
     "pages/personalCenter/changeUserInfo/changeUserInfo",
+    "pages/message/msg",
+    "pages/search/s",
+    "pages/commentRule/cr",
   ],
   window: {
     backgroundTextStyle: "light",
@@ -39,11 +42,17 @@ export default defineAppConfig({
         iconPath: "./assets/tabbar/forum.png",
         selectedIconPath: "./assets/tabbar/forum-active.png",
       },
+      // {
+      //   pagePath: "pages/index/index",
+      //   text: "功能",
+      //   iconPath: "./assets/tabbar/func.png",
+      //   selectedIconPath: "./assets/tabbar/func-active.png",
+      // },
       {
-        pagePath: "pages/index/index",
-        text: "功能",
-        iconPath: "./assets/tabbar/func.png",
-        selectedIconPath: "./assets/tabbar/func-active.png",
+        pagePath: "pages/message/msg",
+        text: "消息",
+        iconPath: "./assets/tabbar/msg.png",
+        selectedIconPath: "./assets/tabbar/msg-active.png",
       },
       {
         pagePath: "pages/sendPost/sp",

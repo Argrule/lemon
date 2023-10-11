@@ -1,37 +1,70 @@
-.personalCenter{
-    height: 100vh;
-    background-color: #feffe23b;
+.personalCenter {
+  height: 100vh;
+  background-color: #f7f7f7;
 }
-.head-card{
-    height: 10rem;
-    border-radius: 0 0 1rem 1rem;
-    box-shadow:  2px 1px 2px 1px rgba(0, 0, 0, 0.18);
-    background-color: #fff;
-    margin-bottom: 2rem;
-}
+.pc-head-card {
+  // height: 10rem;
+  height: 536rpx;
+  // border-radius: 0 0 1rem 1rem;
+  // box-shadow:  2px 1px 2px 1px rgba(0, 0, 0, 0.18);
+  background-image: url("../../assets/info/pc_bg.png");
+  .pc-nav-custom {
+    font-size: 36rpx;
+    font-weight: 600;
+    line-height: 32rpx;
+    letter-spacing: 0rpx;
+    color: #000000;
 
-.head-card{
-display: flex;
-flex-direction: row;
-align-items: center;
-justify-content: space-evenly;
-    .name-slogan{
-        width: 50%;
-        height: 7rem;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: space-evenly;
-        .nickname {
-            font-size: 1.2rem;
-        }
-        .slogan {
-            color: rgb(112, 112, 112);
-        }
+    text {
+      margin-bottom: 20px;
     }
-}
-.my-avatar{
-    width: 220rpx !important; 
-    height: 220rpx !important;
-
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    // position: fixed;
+  }
+  .pc-head-body {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin: 20rpx;
+    margin-left: 48rpx;
+    .name-slogan {
+      width: 50%;
+      height: 5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-evenly;
+      .nickname {
+        font-size: 1.2rem;
+      }
+      .slogan {
+        color: rgb(112, 112, 112);
+        background: #feeaa3;
+        font-size: 24rpx;
+        font-weight: 500;
+        line-height: 32rpx;
+        padding: 12rpx 32rpx;
+        border-radius: 215rpx 45rpx;
+      }
+    }
+    .my-avatar {
+      width: 150rpx !important;
+      height: 150rpx !important;
+    }
+  }
+  .pc-head-other {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    position: relative;
+    top: 50rpx;
+    .more-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+  }
 }

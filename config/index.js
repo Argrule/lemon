@@ -5,6 +5,7 @@ const config = {
     '$/components': path.resolve(__dirname, '..', 'src/components'),
     '$/utils': path.resolve(__dirname, '..', 'src/utils'),
     '$/api': path.resolve(__dirname, '..', 'src/api'),
+    '$/assets': path.resolve(__dirname,'..','src/assets')
   },
   projectName: 'lemon',
   date: '2023-7-8',
@@ -31,6 +32,14 @@ const config = {
     enable: false // Webpack 持久化缓存配置，建议开启。默认配置请参考：https://docs.taro.zone/docs/config-detail#cache
   },
   mini: {
+    // 开启分包
+    optimizeMainPackage: {
+      enable: true,
+      // exclude: [
+      //   path.resolve(__dirname, '../src/utils/moduleName.js'),
+      //   (module) => module.resource?.indexOf('moduleName') >= 0,
+      // ],
+    },
     postcss: {
       pxtransform: {
         enable: true,

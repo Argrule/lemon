@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { View, Button, ScrollView } from "@tarojs/components";
+import { View, Button, ScrollView, Text } from "@tarojs/components";
 import { Textarea } from "@tarojs/components";
 import { AtMessage } from "taro-ui";
 import { AtTag } from "taro-ui";
@@ -10,60 +10,12 @@ import { CreateDraftAPI, DeleteDraftAPI } from "$/api/forum";
 import { Tag } from "../forum/data";
 import "./sp.scss";
 import { File } from "taro-ui/types/image-picker";
+import NavCustomBar from "$/components/NavCustomBar/nav";
 
 function CommentInput() {
   const [postId, setPostId] = useState<number>(0);
   const [commentText, setCommentText] = useState("");
-  const [tagList, setTagList] = useState<Tag[]>([
-    // {
-    //   id: 1,
-    //   name: "hello",
-    // },
-    // {
-    //   id: 2,
-    //   name: "hllo",
-    // },
-    // {
-    //   id: 3,
-    //   name: "helo",
-    // },
-    // {
-    //   id: 4,
-    //   name: "ello",
-    // },
-    // {
-    //   id: 5,
-    //   name: "ello",
-    // },
-    // {
-    //   id: 6,
-    //   name: "ello",
-    // },
-    // {
-    //   id: 7,
-    //   name: "ello",
-    // },
-    // {
-    //   id: 9,
-    //   name: "ello",
-    // },
-    // {
-    //   id: 8,
-    //   name: "ello",
-    // },
-    // {
-    //   id: 10,
-    //   name: "ello",
-    // },
-    // {
-    //   id: 101,
-    //   name: "ello",
-    // },
-    // {
-    //   id: 11,
-    //   name: "ello",
-    // },
-  ]);
+  const [tagList, setTagList] = useState<Tag[]>([]);
   const [tagIds, setTagIds] = useState<number[]>([]);
 
   const [files, setFiles] = useState<File[]>([
@@ -211,13 +163,8 @@ function CommentInput() {
   };
   return (
     <>
+      <NavCustomBar mainTitle="发帖" needBackIcon={false} />
       <View className="post-new">
-        {/* <Input
-        className="input-box"
-        value={commentText}
-        onInput={(e) => setCommentText(e.detail.value)}
-        placeholder="请输入评论内容"
-      /> */}
         <View className="header">
           <View className="title">热搜</View>
           <ScrollView scrollX className="scroll-container">
@@ -232,7 +179,8 @@ function CommentInput() {
                 }
                 onClick={() => handleTagChange(tag.id)}
               >
-                # {tag.name}
+                <Text>#</Text>
+                <Text>{tag.name}</Text>
               </AtTag>
             ))}
           </ScrollView>
@@ -247,7 +195,12 @@ function CommentInput() {
           autoHeight
         />
         <AtImagePicker files={files} onChange={onImageFileChange} />
-        <AtMessage />
+        <AtMessage
+          style={{
+            /* @ts-ignore 传入scss变量调整位置 */
+            "--traceNavTop": Taro.getStorageSync("nav_bar_height") + "px",
+          }}
+        />
         {/* <AtTextarea
         className="textarea"
         count={true}
@@ -258,7 +211,17 @@ function CommentInput() {
         placeholder="请输入帖子内容..."
       /> */}
       </View>
-      <Button className="publish-button" onClick={handlePublish}>
+      <View className="newpost-bottom-placeholder">
+        *请务必遵守
+        <Text
+          onClick={() => Taro.navigateTo({ url: "/pages/commentRule/cr" })}
+          style={{ color: "#fe3666" }}
+        >
+          社区规范
+        </Text>
+        ，如有违规会被删帖、禁言乃至封号
+      </View>
+      <Button className="newpost-publish-button" onClick={handlePublish}>
         发布
       </Button>
     </>

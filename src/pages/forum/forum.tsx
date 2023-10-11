@@ -1,10 +1,9 @@
 import { Component } from "react";
 import { View, BaseEventOrig } from "@tarojs/components";
-// import { Text, Button, Image } from "@tarojs/components";
-// import { Input } from "@tarojs/components";
-import { AtIcon } from "taro-ui";
+import { Image } from "@tarojs/components";
+import search_icon from "../../assets/info/search.png";
+import forum_ad from "../../assets/ad/banner.png";
 import { AtFab } from "taro-ui";
-// import { AtTag } from "taro-ui";
 import { AtMessage } from "taro-ui";
 import Taro from "@tarojs/taro";
 import "./forum.scss";
@@ -18,20 +17,41 @@ import {
   collectPost,
   cancelCollectPost,
   searchPost,
+  getHotPost,
 } from "$/api/forum";
 import { Item, State } from "./data";
-import { AtSearchBar } from "taro-ui";
+// import { AtSearchBar } from "taro-ui";
 import { HotPost } from "$/components/hotPost/hp";
 // import { FormatTimeFromNow } from "$/utils/dayjs";
 import PostComponent from "$/components/post/post";
 import SpecialDeal from "./special";
+import NavCustomBar from "$/components/NavCustomBar/nav";
+import { connect } from "react-redux";
+import { updatePost } from "../../store/use/post";
 
+/**
+ * @description connect装饰器
+ * @param mapState (state_all)=>{} --> state_all是整个redux的state (initialState)
+ * @param mapDispatch (dispatch)=>{} --> dispatch是dispatch函数
+ */
+// @ts-ignore
+@connect(
+  ({postInfo}:{postInfo:Item}) => ({
+  postInfo 
+  }),
+  (dispatch) => ({
+    updatePostStore(postInfo:Item) {
+      dispatch(updatePost(postInfo));
+    },
+  })
+)
 class Forum extends Component<{}, State> {
   /* 状态 */
   state: State = {
     posts: [], // 帖子列表
     newPostContent: "", // 新帖子内容
     searchContent: "",
+    hotPosts: [], // 热搜帖子
   };
 
   pageNum = 1;
@@ -39,18 +59,45 @@ class Forum extends Component<{}, State> {
 
   /* 非生命周期，onShow */
   async componentDidShow() {
+    // console.log("forum did show", this.props.postInfo,this.props.updatePostStore);
+    getHotPost().then((res) => {
+      this.setState({ hotPosts: res.data.list.slice(0, 10) });
+    });
+    this.pageNum = 1; // 重置页码
     const res = (await getForumList({
-      pageNum: 1,
-      pageSize: 10,
+      pageNum: this.pageNum,
+      pageSize: this.pageSize,
     })) as { list: Item[] };
-    this.setState({ posts: res.list });
+
+    // 保存当前帖子列表的第一个帖子id，用于判断页面是否刷新
+    const cur_id = Taro.getStorageSync("current_posts_first_id");
+    Taro.setStorage({ key: "current_posts_first_id", data: res.list[0].id });
+
+    const cur_time = Taro.getStorageSync("current_posts_first_time");
+    if (
+      cur_time === undefined ||
+      new Date().getTime() - Number(cur_time) > 3000
+    ) {
+      Taro.setStorage({ key: "current_posts_first_id", data: 0 });
+      Taro.setStorage({
+        key: "current_posts_first_time",
+        data: new Date().getTime() + 3000,
+      });
+    }
+
+    if (res.list[0].id !== cur_id) {
+      // 出于渲染滞后的问题，可能这个生命周期有坑
+      setTimeout(() => {
+        // console.log("刷新了",this);
+        this.setState({ posts: res.list });
+      }, 0);
+    }
   }
 
   /**
    * @description 触底加载更多
    */
   async onReachBottom() {
-    console.log("触底了");
     this.pageNum++;
     const { posts } = this.state;
     const res = (await getForumList({
@@ -77,41 +124,6 @@ class Forum extends Component<{}, State> {
     this.setState({ newPostContent: event.detail.value as string });
   };
   /**
-   * @description 发布新帖子
-   */
-  // handleNewPostSubmit = async () => {
-  //   const { newPostContent, posts } = this.state;
-  //   if (!newPostContent) {
-  //     console.log("请输入内容");
-  //     return;
-  //   }
-  //   // ## 假冒的帖子
-  //   const newMockPost: Item = {
-  //     id: Date.now(),
-  //     uid: 1,
-  //     schoolId: 1,
-  //     content: newPostContent,
-  //     likeNum: 0,
-  //     readNum: 0,
-  //     collectNum: 0,
-  //     collectStatus: false,
-  //     likeStatus: false,
-  //     createTime: Date(),
-  //   };
-  //   const res = await publishPost({
-  //     content: newPostContent,
-  //     tagIds: [1, 2],
-  //   });
-  //   if (res.code != "00000") {
-  //     console.log("发布失败");
-  //     return;
-  //   }
-  //   this.setState({
-  //     posts: [newMockPost, ...posts],
-  //     newPostContent: "",
-  //   });
-  // };
-  /**
    * @description 点赞及取消点赞
    * @param postId 帖子id
    */
@@ -123,7 +135,12 @@ class Forum extends Component<{}, State> {
         const res = await cancelLikePost(postId);
         addNum = -1;
         if (res.code != "00000") {
-          console.log("取消点赞失败");
+          // @ts-ignore
+          Taro.atMessage({
+            message: "取消点赞失败",
+            type: "error",
+            duration: 800,
+          });
           return;
         }
         break;
@@ -133,7 +150,12 @@ class Forum extends Component<{}, State> {
         const res = await likePost(postId);
         addNum = 1;
         if (res.code != "00000") {
-          console.log("点赞失败");
+          // @ts-ignore
+          Taro.atMessage({
+            message: "点赞失败",
+            type: "error",
+            duration: 800,
+          });
           return;
         }
         break;
@@ -176,7 +198,12 @@ class Forum extends Component<{}, State> {
     }
 
     if (res.code !== "00000") {
-      console.log(errorMessage);
+      // @ts-ignore
+      Taro.atMessage({
+        message: errorMessage,
+        type: "error",
+        duration: 800,
+      });
       return;
     }
 
@@ -200,7 +227,12 @@ class Forum extends Component<{}, State> {
     const { posts } = this.state;
     const res = await deletePost(postId);
     if (res.code != "00000") {
-      console.log("删除失败");
+      // @ts-ignore
+      Taro.atMessage({
+        message: "删除失败",
+        type: "error",
+        duration: 800,
+      });
       return;
     }
     const updatedPosts = posts.filter((post) => post.id !== postId);
@@ -213,16 +245,20 @@ class Forum extends Component<{}, State> {
    * @param postId 帖子id
    */
   handleShowComments = async (postItem: Item) => {
+    // ts-ignore
+    this.props.updatePostStore(postItem);
+
     // redux存储当前帖子，跳转到评论页面
+    // Taro.navigateTo({
+    //   url: `/pages/comment/c?post=${JSON.stringify(postItem)}`,
+    // });
     Taro.navigateTo({
-      url: `/pages/comment/c?post=${JSON.stringify(postItem)}`,
+      url: `/pages/comment/c`,
     });
   };
-  //跳转到发布帖子页面
-  goToPutPost = () => {
-    Taro.navigateTo({
-      url: "/pages/sendPost/sp",
-    });
+  // 跳转到搜索页面
+  goToSearch = () => {
+    Taro.navigateTo({ url: "/pages/search/s" });
   };
   //搜索框内容变化
   handleSearchChange = (value: string) => {
@@ -249,42 +285,78 @@ class Forum extends Component<{}, State> {
   };
   render() {
     const { posts } = this.state;
-    // const { newPostContent } = this.state;
+
     return (
-      <View className="forum">
-        <AtMessage />
-        {true ? null : (
-          <AtFab className="plus">
-            <AtIcon
-              className="plus-icon"
-              value="add"
-              onClick={this.goToPutPost}
-            ></AtIcon>
-          </AtFab>
-        )}
-        <AtSearchBar
-          className="search-bar"
-          fixed={true}
-          value={this.state.searchContent}
-          onChange={this.handleSearchChange}
-          onConfirm={this.handleSearch}
-          onActionClick={this.handleSearch}
-        />
-        <HotPost></HotPost>
-        {/* <View className="new-post">
-          <Input
-            value={newPostContent}
-            onInput={this.handleNewPostChange}
-            placeholder="发布新帖子"
+      <>
+        {/* 自定义导航栏 */}
+        <NavCustomBar mainTitle="论坛" needBackIcon={false} />
+        {/* main */}
+        <View className="forum">
+          <AtMessage
+            style={{
+              /* @ts-ignore 传入scss变量调整位置 */
+              "--traceNavTop": Taro.getStorageSync("nav_bar_height") + "px",
+            }}
           />
-          <Button onClick={this.handleNewPostSubmit}>发布</Button>
-        </View> */}
-        <View className="posts">
-          {/* // ### 这里做判断 是防止出现取消发布的数据写回不及时 多出一个空白帖子的bug */}
-          {posts.map((post) =>
-            SpecialDeal(post) ? null : (
-              <>
-                {/* <View className="post" key={post.id}>
+          {/* 搜索跳转按钮 */}
+          {false ? null : (
+            <AtFab className="plus" onClick={this.goToSearch}>
+              <Image
+                src={search_icon}
+                svg
+                mode="aspectFill"
+                style={{ width: "46rpx", height: "46rpx", display: "block" }}
+              />
+            </AtFab>
+          )}
+          {/* 废弃搜索框 */}
+          {/* <AtSearchBar
+            className="search-bar"
+            fixed={true}
+            value={this.state.searchContent}
+            onChange={this.handleSearchChange}
+            onConfirm={this.handleSearch}
+            onActionClick={this.handleSearch}
+          /> */}
+          <HotPost hotPosts={this.state.hotPosts}></HotPost>
+          {/* 广告 */}
+          <View
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Image
+              src={forum_ad}
+              mode="scaleToFill"
+              style={{
+                width: "100%",
+                height: "97px",
+                padding: "8px 8px",
+                borderRadius: "34px",
+              }}
+            />
+          </View>
+          {/* 帖子列表 */}
+          <View className="posts">
+            {/* // ### 这里做判断 是防止出现取消发布的数据写回不及时 多出一个空白帖子的bug */}
+            {posts.map((post) =>
+              SpecialDeal(post) ? (
+                <></>
+              ) : (
+                // {/* 帖子 */}
+                <PostComponent
+                  post={post}
+                  onLike={this.handleLikePost}
+                  onDelete={this.handleDeletePost}
+                  onCollect={this.handleCollectPost}
+                  onShowComments={this.handleShowComments}
+                />
+              )
+            )}
+            {/* 旧post布局 */}
+            {/* <View className="post" key={post.id}>
                 <Text className="post-nick">{post.nickname}</Text>
                 <Text
                   className="post-content"
@@ -343,19 +415,9 @@ class Forum extends Component<{}, State> {
                   </Button>
                 </View>
               </View> */}
-                {/* 帖子 */}
-                <PostComponent
-                  post={post}
-                  onLike={this.handleLikePost}
-                  onDelete={this.handleDeletePost}
-                  onCollect={this.handleCollectPost}
-                  onShowComments={this.handleShowComments}
-                />
-              </>
-            )
-          )}
+          </View>
         </View>
-      </View>
+      </>
     );
   }
 }
