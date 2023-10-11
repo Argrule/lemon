@@ -3,9 +3,10 @@ import Taro from "@tarojs/taro";
 import houseWork from "../../assets/doHouseWork.svg";
 import "./developing.scss";
 
-const developing = ({ content }) => {
+const developing = ({ content, title }) => {
+   
   Taro.setNavigationBarTitle({
-    title: content || "开发中",
+    title: title || "开发中",
   });
 
   return (
