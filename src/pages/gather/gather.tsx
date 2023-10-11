@@ -1,4 +1,4 @@
-import { View } from '@tarojs/components';
+import { View,Image } from '@tarojs/components';
 import { AtButton, AtTag,AtFab,AtIcon,AtProgress,AtMessage } from 'taro-ui';
 import { useState,useEffect,} from 'react';
 
@@ -98,40 +98,88 @@ export default function Gather() {
           tagId: tagId
         });
         console.log('res',response);
-        for (let item of response.list) {
+
+        console.log('response.list',response.list);
+        // 创建一个映射对象，将 tagname 映射到 tagid 的关系
+        const tagnameToTagidMap = {
+          '全部': 0,
+          '自习': 1,
+          '电影': 2,
+          '聚餐': 3,
+          '拼车': 4,
+          '拼单': 5,
+          '运动': 6,
+          '游戏': 7,
+          '旅行': 8,
+          '其他': 9,
+        };
+
+        // 使用 map 函数遍历数组并为每个对象添加 tagid 属性
+        const newData = response.list.map(item => {
+          const tagname = item.tagName;
+          const tagid = tagnameToTagidMap[tagname];
+          return { ...item, tagid };
+        });
+
+        for (let item of newData) {
           console.log(item.tagName);
           if (item.tagName) {
             item.tagName = item.tagName.split('');
           }
         }
-        console.log('res',response.list);
-        setGatherList(response.list); // Update the gatherList state
+
+        // 新的数组 newData 包含了每个对象的 tagid 属性
+        console.log('newData',newData);
+
+        setGatherList(newData); // Update the gatherList state
       } else {
         console.log('进了下面');
         response = await getGatherList({
           pageNum: pageNum,
           tagId: tagId
         });
-        console.log('res',response);
-        for (let item of response.list) {
-          console.log(item.tagName);
-          if (item.tagName) {
-            item.tagName = item.tagName.split('');
-          }
-        }
-        console.log('res',response.list);
+          // 创建一个映射对象，将 tagname 映射到 tagid 的关系
+          const tagnameToTagidMap = {
+            '全部': 0,
+            '自习': 1,
+            '电影': 2,
+            '聚餐': 3,
+            '拼车': 4,
+            '拼单': 5,
+            '运动': 6,
+            '游戏': 7,
+            '旅行': 8,
+            '其他': 9,
+          };
 
+          // 使用 map 函数遍历数组并为每个对象添加 tagid 属性
+          const newData = response.list.map(item => {
+            const tagname = item.tagName;
+            const tagid = tagnameToTagidMap[tagname];
+            return { ...item, tagid };
+          });
+
+          for (let item of newData) {
+            console.log(item.tagName);
+            if (item.tagName) {
+              item.tagName = item.tagName.split('');
+            }
+          }
+
+          // 新的数组 newData 包含了每个对象的 tagid 属性
+          console.log('newData',newData);
         if(pageNum===1){
-          setGatherList(response.list); // Update the gatherList state
+          setGatherList(newData); // Update the gatherList state
         } else if(pageNum>1){
-          console.log('response.list',response.list);
-          if(response.list.length==0){
+          console.log('response.list',newData);
+          if(newData.length==0){
+            // @ts-ignore
             Taro.atMessage({
               message: '没有更多数据了',
               type: 'error',
             });
           }
-          setGatherList([...gatherList,...response.list]);
+          setGatherList([...gatherList,...newData]);
 
         }
       }
@@ -199,12 +247,27 @@ export default function Gather() {
 
   return (
     <View className='container'>
-      <View className='fixed-button'>
+
+
+      {/* <View className='fixed-button'>
         <AtFab onClick={() => fixedButtonClick()}>
           <AtIcon value='search' size='25' color='white'></AtIcon>
         </AtFab>
+      </View> */}
+      <View style={{ display: 'flex', alignItems: 'center',justifyContent:'flex-start',width:'96%',marginBottom:'1vh' }}>
+        <View className='little'>
+          已攒
+        </View>
+        <View className='big'>
+          99999
+        </View>
+        <View className='little'>
+          人
+        </View>
       </View>
-
+      {/* <View className='imgContainer'> */}
+        <Image src={require('../../assets/简洁.png')} style={{ width: '95vw', height: '18vh' }}/>
+      {/* </View> */}
       <View className='joinAndInitiate'>
         <AtButton className='join-button' type='primary' circle onClick={goJoinedGather}>
           我加入的局
@@ -234,7 +297,7 @@ export default function Gather() {
       <View className='cards'>
           {gatherList.map((gather, index) => (
             <View className='card' key={index} onClick={() => cardClick(gather)}>
-              <View className='side'>
+              <View className={`${'side' + gather.tagid}`}>
                 <View>{gather.tagName?gather.tagName[0]:''}</View>
                 <View>{gather.tagName?gather.tagName[1]:''}</View>
               </View>
@@ -249,9 +312,9 @@ export default function Gather() {
                   </View>
 
                 </View>
-                <View className='schedule'>
+                {/* <View className='schedule'>
                     <AtProgress percent={Math.floor(gather.currentNum*100/gather.maxNum)} />
-                  </View>
+                  </View> */}
               </View>
 
             </View>
