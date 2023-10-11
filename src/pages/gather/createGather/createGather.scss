@@ -1,16 +1,49 @@
 @import "~taro-ui/dist/style/components/message.scss";
 
+.at-input{
+  border: black;
+  border-style: solid;
+  border-width: 0.5px;
+  border-radius: 15px;
+  margin: 0 0 0 0;
+  padding-left: 4vw;
+}
+.at-tag{
+  background-color: #FBEDB0;
+}
 .bottonContainer{
   width: 100%;
+  height: 15vh;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  color: white !important;
   .botton{
-    width: 90vw;
+    margin-top: 2vh;
+    width: 80vw;
+    background-color: #FE3666 !important;
+    border-radius: 100px;
+    color: white !important;
+    height: 10vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 48px;
   }
+  .bottonText{
+    margin-top: 2vh;
+    height: 3vh;
+    width: 100%;
+    color:black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
 }
 .numContainer{
-  margin-bottom: 5vh;
+  margin-bottom: 1vh;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -107,16 +140,16 @@
   // justify-content: space-around;
   align-items: center;
   flex-direction: column;
-
+  background-color: #FFF9DE;
 }
 
 .textarea {
-  border-style:solid;
-  border-width:5px;
-  // color: #ffaa00;
-  border-color: #e7eef4;
+  border: black;
+  border-style: solid;
+  border-width: 0.5px;
+  border-radius: 15px;
   font-size: 30rpx;
-  // background: #ffaa00;
+  background: white;
   width: 82vw;
   // min-height: 80rpx;//无效
   padding: 2vh 4vw 1vh 4vw;
