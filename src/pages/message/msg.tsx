@@ -1,10 +1,14 @@
-import { View, Text, Image } from "@tarojs/components";
+import { View, Image } from "@tarojs/components";
 import NavCustomBar from "$/components/NavCustomBar/nav";
 import info_comment from "../../assets/info/comment.svg";
 import info_support from "../../assets/info/support.svg";
 import info_gather from "../../assets/info/gather.svg";
 import info_privchat from "../../assets/info/privchat.svg";
 import "./msg.scss";
+import { getMessages, MessageItem } from "$/api/message";
+import { useDidShow } from "@tarojs/taro";
+import PostMsg from "$/components/postMsg/pm";
+import { useState } from "react";
 
 export default function Message() {
   // 4个功能按钮的配置项
@@ -38,6 +42,19 @@ export default function Message() {
       height: "40rpx",
     },
   ];
+
+  const [msgList, setMsgList] = useState<MessageItem[]>([]);
+
+  useDidShow(() => {
+    getMessages({
+      typeId: 1, // 1评论
+      pageNum: 1,
+      pageSize: 10,
+    }).then((res) => {
+      setMsgList(res.msgDtoList);
+    });
+  });
+
   return (
     <View className="info-page">
       {/* 顶部导航栏 */}
@@ -63,7 +80,9 @@ export default function Message() {
         ))}
       </View>
       {/* 消息列表 */}
-      {/* <Text>Message</Text> */}
+      <View style={{ background: "#F7F7F7", border: "1rpx solid transparent" }}>
+        <PostMsg msg={msgList} />
+      </View>
     </View>
   );
 }
