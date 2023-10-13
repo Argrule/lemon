@@ -15,3 +15,11 @@ dayjs.locale("zh-cn"); // 使用本地化语言
 export const FormatTimeFromNow = (time: string): string => {
   return dayjs(time).fromNow();
 };
+/**
+ * @description 格式化时间转为距离当前时间的提示
+ * @param string time
+ * @returns 格式化后的时间提示
+ */
+export const FormatTimeYearMonthDay = (time: string): string => {
+  return dayjs(time).format('YYYY-MM-DD');
+};
