@@ -215,7 +215,7 @@ class MyPost extends Component<{}, State> {
       >
         <AtMessage />
         {posts.length === 0 ? (
-          <DevelopingCom content="暂无帖子" />
+          <DevelopingCom content="暂无帖子" title="我的帖子" />
         ) : (
           <View className="my-posts">
             {posts.map((post) => (

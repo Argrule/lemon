@@ -191,7 +191,7 @@ function CommentInput() {
           placeholder="请输入帖子内容..."
           className="textarea"
           onInput={(e) => setCommentText(e.detail.value)}
-          style="min-height:200rpx"
+          style="min-height:43vh"
           autoHeight
         />
         <AtImagePicker files={files} onChange={onImageFileChange} />

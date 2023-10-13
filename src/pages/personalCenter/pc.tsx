@@ -2,17 +2,25 @@ import { View, Text, Image } from "@tarojs/components";
 import forum_ad from "../../assets/ad/banner.png";
 import "./pc.scss";
 import Taro, { useDidShow } from "@tarojs/taro";
-import o from "$/utils/request";
 import MenuList from "$/components/personalCenter/MenuList";
 import { AtAvatar } from "taro-ui";
 import "taro-ui/dist/style/components/avatar.scss";
 import { useState } from "react";
+import { getPersonInfo, PersonInfo } from "$/api/other";
 // import staticAvatar from "../../assets/avatar.jpg";
 
 const pc = () => {
-  const [avatar, setAvatar] = useState("");
-  const [nickname, setNickname] = useState("加载中");
-  const [school, setSchool] = useState("加载中");
+  // 个人信息
+  const [personInfo, setPersonInfo] = useState<PersonInfo>({
+    avatarUrl: "",
+    nickname: "加载中",
+    school: "加载中",
+    amount: 0,
+    collectNum: 0,
+    commentNum: 0,
+    hashId: "",
+    publishNum: 0,
+  });
   // 菜单的数据
   // let slogan = "加载中";
   const menuList1 = [
@@ -26,7 +34,7 @@ const pc = () => {
       content: "我的消息",
       pre: "mail",
       icon: "chevron-right",
-      path: "/pages/developing/developing",
+      path: "/pages/message/msg",
     },
     {
       content: "推荐好友",
@@ -63,49 +71,30 @@ const pc = () => {
   const moreList = [
     {
       content: "人品",
-      val: "good",
+      val: "amount",
       // path: "/pages/developing/developing"
     },
     {
       content: "收藏",
-      val: "collect",
+      val: "collectNum",
       path: "/pages/personalCenter/myCollect/collect",
     },
     {
       content: "帖子",
-      val: "post",
+      val: "publishNum",
       path: "/pages/personalCenter/myPost/post",
     },
     {
       content: "评论",
-      val: "comment",
+      val: "commentNum",
     },
   ];
-  // 4个更多的数据的值
-  const moreListValue = {
-    collect: 0,
-    post: 0,
-    comment: 0,
-    good: 0,
-  };
 
   // 页面展示时检测登录状态
   async function checkLogin() {
-    // let token = Taro.getStorageSync("Authorization");
-    let res;
-    // if (token === "") {
-    //   Taro.navigateTo({
-    //     url: "/pages/login/login",
-    //   });
-    // } else {
-    res = await o.get("/user/info", "");
-    setNickname(res.data.nickname);
-    setAvatar(res.data.avatarUrl);
-    setSchool(res.data.school);
-    Taro.setStorageSync("avatar", res.data.avatarUrl);
-    // console.log("LOGIN RES:", res);
-    return res;
-    // }
+    const res = await getPersonInfo();
+    setPersonInfo(res);
+    Taro.setStorage({ key: "avatar", data: res.avatarUrl }); //异步
   }
   /**
    * @description 根据path返回跳转函数
@@ -124,11 +113,8 @@ const pc = () => {
   };
 
   useDidShow(() => {
-    console.log("SHOW");
     checkLogin();
   });
-  // console.log("TOKEN:", Taro.getStorageSync("Authorization"));
-  Taro.getStorageSync("Authorization");
 
   return (
     <View className="personalCenter">
@@ -154,14 +140,14 @@ const pc = () => {
           }
         >
           <AtAvatar
-            image={avatar}
+            image={personInfo.avatarUrl}
             size="large"
             circle={true}
             className="my-avatar"
           ></AtAvatar>
           <View className="name-slogan">
-            <Text className="nickname">{nickname}</Text>
-            <Text className="slogan">{school}</Text>
+            <Text className="nickname">{personInfo.nickname}</Text>
+            <Text className="slogan">{personInfo.school}</Text>
           </View>
         </View>
         {/* other */}
@@ -173,7 +159,7 @@ const pc = () => {
               onClick={navGotoPath(more.path)}
             >
               <Text>{more.content}</Text>
-              <Text>{moreListValue[more.val]}</Text>
+              <Text>{personInfo[more.val]}</Text>
             </View>
           ))}
         </View>
