@@ -26,7 +26,7 @@ const pc = () => {
       content: "我的消息",
       pre: "mail",
       icon: "chevron-right",
-      path: "/pages/developing/developing",
+      path: "/pages/message/msg",
     },
     {
       content: "推荐好友",
