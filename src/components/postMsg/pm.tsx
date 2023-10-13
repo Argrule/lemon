@@ -3,7 +3,6 @@ import "./pm.scss";
 import { FormatTimeYearMonthDay } from "$/utils/dayjs";
 
 export default function PostMsg({ msg }) {
-  console.log(msg);
   return (
     <View className="msg-container">
       <View className="msg-container-title">帖子动态</View>

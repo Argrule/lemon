@@ -66,17 +66,12 @@ button {
     //   font-size: $forum-fontSize;
     // }
     .rely-btn {
-      // margin-left: 20rpx;
-      padding: 0 20rpx;
-      background-color: $button-color;
-      color: #fff;
-      border: none;
+      padding: 0.5em 1em;
+      background-color: #fbf2d5;
+      color: #ecc754;
+      border: 1px solid transparent;
       border-radius: 15rpx;
       font-size: $forum-fontSize-s;
-      transition: background-color 0.3s;
-      &:hover {
-        background-color: #a0aa25;
-      }
     }
   }
   .at-action-sheet__container {
