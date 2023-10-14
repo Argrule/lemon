@@ -30,6 +30,18 @@ export const getTagList = async (params: {}) => {
 };
 
 /**
+ * @description 获取攒局总人数
+ * @returns
+ */
+export const getCount = async (params: {}) => {
+  const paramsStr = Object.keys(params)
+    .map((key) => `${key}=${params[key]}`)
+    .join("&");
+  const res = await request.get("/team/count" + `?${paramsStr}`);
+  return res.data;
+};
+
+/**
  * @description 创建攒局
  * @param {string} params.topic
  * @param {string} params.description
