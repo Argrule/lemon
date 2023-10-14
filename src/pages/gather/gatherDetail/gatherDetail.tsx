@@ -123,7 +123,10 @@ export default function GatherDetail() {
         message: '加入成功',
         type: 'success',
       });
-      goGather();
+      setTimeout(() => {
+        goGather();
+      }, 2000);
+
       //更改为已加入状态//todo
     } else if(res.code === 'A0400'){
       Taro.atMessage({
@@ -153,7 +156,10 @@ export default function GatherDetail() {
         message: '退出成功',
         type: 'success',
       });
-      goGather();
+      setTimeout(() => {
+        goGather();
+      }, 2000);
+
       //更改为已加入状态//todo
     } else if(res.code === 'A0400'){
       Taro.atMessage({
@@ -183,7 +189,9 @@ export default function GatherDetail() {
         message: '炸局成功',
         type: 'success',
       });
-      goGather();
+      setTimeout(() => {
+        goGather();
+      }, 2000);
       //更改为已加入状态//todo
     } else if(res.code === 'A0400'){
       Taro.atMessage({

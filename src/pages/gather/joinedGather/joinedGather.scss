@@ -1,3 +1,71 @@
+.detail{
+  .title{
+    margin-left: 5vw;
+    font-weight: bold;
+    margin-bottom: 2vh;
+  }
+  .content{
+    margin-left: 5vw;
+    font-size: 26px;
+    margin-bottom: 2vh;
+  }
+}
+.directorInfo{
+  height: 12vh;
+  display: flex;
+  align-items: center;
+  font-size: 26px;
+  // justify-content: center;
+  .name{
+    color: #5C6B90;
+    margin-right: 5vw;
+    margin-bottom: 1vh;
+  }
+  .avator{
+    margin-left: 5vw;
+    margin-right: 5vw;
+    // height: 5vh;
+    // width: 100%;
+
+  }
+}
+.detailContainer{
+  display: flex;
+  flex-direction: column;
+  // align-items: center;
+  padding-top: 2vh 0 2vh 0;
+  border-radius: 20px;
+  width: 90vw;
+  // height: 60vh;
+  border-style: solid;
+  border-width:1px;
+  margin-bottom: 3vh;
+  background-color: white;
+}
+.at-tag{
+  background-color: #FBEDB0;
+}
+.tags{
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 2vh;
+  .tag{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20vw;
+    margin-bottom: 2vh;
+    ::v-deep .u-tag{
+      width: 11vw;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+}
+.cards{
+  margin-top: 2vh;
+}
 .content{
   display: flex;
   flex-direction: column;
@@ -91,10 +159,11 @@
   }
 }
 .container {
-  // height: 100vh;
+  background-color: #FFF9DE;
+  height: 100vh;
   width: 100vw;
   display: flex;
-  justify-content: space-around;
+  // justify-content: space-around;
   align-items: center;
   flex-direction: column;
 
