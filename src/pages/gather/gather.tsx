@@ -1,6 +1,7 @@
 import { View,Image } from '@tarojs/components';
 import { AtButton, AtTag,AtFab,AtIcon,AtProgress,AtMessage } from 'taro-ui';
 import { useState,useEffect,} from 'react';
+import { FormatTimeFromNow } from "$/utils/dayjs";
 
 import { getGatherList,getTagList,getCount } from "$/api/gather";
 
@@ -327,7 +328,7 @@ export default function Gather() {
                   </View>
                   <View className='others'>
                     <View className='director'>局长：{gather.nickname}</View>
-                    <View className='time'>{gather.createTime}</View>
+                    <View className='time'>{FormatTimeFromNow(gather.createTime)}</View>
                   </View>
 
                 </View>
