@@ -1,10 +1,11 @@
-import { View } from '@tarojs/components';
-import { AtProgress } from 'taro-ui';
+import { View ,Image} from '@tarojs/components';
+import { AtProgress ,AtTag} from 'taro-ui';
 import { useState,useEffect } from 'react';
+import { FormatTimeFromNow } from "$/utils/dayjs";
 
-import { getTeamList,getTagList } from "$/api/gather";
+import { getMyTeamList,getTagList } from "$/api/gather";
 
-import Taro from "@tarojs/taro";
+import Taro,{ useDidShow }  from "@tarojs/taro";
 
 import 'taro-ui/dist/style/components/button.scss';
 import 'taro-ui/dist/style/components/tag.scss';
@@ -35,7 +36,7 @@ export default function Gather() {
   const [selectedTagIndex, setSelectedTagIndex] = useState<number>(0);
   const [gatherList, setGatherList] = useState<GatherItemType[]>([]); // 初始化为空数组
   const [classification, setClassification] = useState<ClassificationItem[]>([
-    { name: '空位', checked: false },
+    { name: '全部', checked: false },
     { name: '自习', checked: false },
     { name: '电影', checked: false },
     { name: '聚餐', checked: false },
@@ -53,7 +54,15 @@ export default function Gather() {
     fetchGatherList(0)
 
   }, []);
-
+  useDidShow(() => {
+    // setPageNum(1);
+    // fetchGatherList(0,1);
+    const updatedClassification = classification.map((item, i) => ({
+      ...item,
+      checked: false,
+    }));
+    setClassification(updatedClassification);
+  });
   // 使用 usePullDownRefresh 钩子来处理下拉刷新
   Taro.usePullDownRefresh(() => {
     refreshData();
@@ -68,12 +77,14 @@ export default function Gather() {
     try {
       let response;
       if(tagId){
-        response = await getTeamList({
+        response = await getMyTeamList({
+          tagId: tagId,
           pageNum: 1,
           pageSize: 30
         });
       } else {
-        response = await getTeamList({
+        response = await getMyTeamList({
+          tagId: tagId,
           pageNum: 1,
           pageSize: 30
         });
@@ -136,31 +147,47 @@ export default function Gather() {
 
   return (
     <View className='container'>
+      <View className='tags'>
+        {classification.map((item, index) => (
+          <View
+            className={`tag ${item.checked ? 'checked' : ''}`}
+            key={index}
+            onClick={() => tagClick(index)}
+          >
+            <AtTag
+              className='tag-text'
+              type='primary'
+              circle
+              active={item.checked}
+            >
+              {item.name}
+            </AtTag>
+          </View>
+        ))}
+      </View>
       <View className='cards'>
-          {gatherList.map((gather, index) => (
-            <View className='card' key={index} onClick={() => cardClick(gather)}>
-              <View className='side'>
-                <View>{gather.tagName?gather.tagName[0]:''}</View>
-                <View>{gather.tagName?gather.tagName[1]:''}</View>
-              </View>
-              <View className='text'>
-                <View className='content'>
-                  <View className='description'>
-                    {gather.topic}
-                  </View>
-                  <View className='others'>
-                    <View className='director'>局长：{gather.nickname}</View>
-                    <View className='time'>{gather.createTime}</View>
-                  </View>
+        {gatherList.map((gather, index) => (
+        <View className='detailContainer' onClick={() => cardClick(gather)}>
+        <View className='directorInfo'>
+          <View className='avatar'>
+            <Image
+              mode='widthFix'
+              src={gather?.avatarUrl}
+              style='width: 50px; height: 50px; border-radius: 50%;margin-left: 4vw; margin-right: 5vw'
+            />
+          </View>
+          <View className='owner'>
+            <View className='name'>{gather?.nickname}</View>
+            <View className='time'>{FormatTimeFromNow(gather.createTime)}</View>
+          </View>
 
-                </View>
-                <View className='schedule'>
-                    <AtProgress percent={Math.floor(gather.currentNum*100/gather.maxNum)} />
-                  </View>
-              </View>
-
-            </View>
-          ))}
+        </View>
+        <View className='detail'>
+          {/* <View className='title'>局情</View> */}
+        <View className='content'>{gather?.topic}</View>
+        </View>
+      </View>
+            ))}
 
       </View>
     </View>

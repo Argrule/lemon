@@ -1,3 +1,4 @@
+// import { getComment } from '$/api/forum';
 import request from "$/utils/request";
 
 /**
@@ -27,6 +28,49 @@ export const getTagList = async (params: {}) => {
     .join("&");
   const res = await request.get("/team/show/tags" + `?${paramsStr}`);
   return res.data;
+};
+
+/**
+ * @description 获取攒局总人数
+ * @returns
+ */
+export const getCount = async (params: {}) => {
+  const paramsStr = Object.keys(params)
+    .map((key) => `${key}=${params[key]}`)
+    .join("&");
+  const res = await request.get("/team/count" + `?${paramsStr}`);
+  return res.data;
+};
+
+/**
+ * @description 获取攒局评论
+ * @returns
+ */
+export const getComment = async (params: {
+  teamId: number;
+}) => {
+  const paramsStr = Object.keys(params)
+    .map((key) => `${key}=${params[key]}`)
+    .join("&");
+  const res = await request.get("/team/comment/show" + `?${paramsStr}`);
+  return res.data;
+};
+
+/**
+ * @description 发布攒局评论
+ * @param {number} params.teamId
+ * @param {string} params.content
+ * @returns
+ */
+export const publishComment = async (params: {
+  content: string;
+  teamId: number;
+}) => {
+  // const paramsStr = Object.keys(params)
+  //   .map((key) => `${key}=${params[key]}`)
+  //   .join("&");
+  const res = await request.post("/team/comment", params);
+  return res;
 };
 
 /**
