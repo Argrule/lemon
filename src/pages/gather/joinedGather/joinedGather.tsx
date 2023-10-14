@@ -148,7 +148,7 @@ export default function Gather() {
 
   return (
     <View className='container'>
-            <View className='tags'>
+      <View className='tags'>
         {classification.map((item, index) => (
           <View
             className={`tag ${item.checked ? 'checked' : ''}`}
@@ -167,53 +167,28 @@ export default function Gather() {
         ))}
       </View>
       <View className='cards'>
-      {gatherList.map((gather, index) => (
-      <View className='detailContainer' onClick={() => cardClick(gather)}>
-      <View className='directorInfo'>
-        <View className='avatar'>
-          <Image
-            mode='widthFix'
-            src={gather?.avatarUrl}
-            style='width: 50px; height: 50px; border-radius: 50%;margin-left: 4vw; margin-right: 5vw'
-          />
+        {gatherList.map((gather, index) => (
+        <View className='detailContainer' onClick={() => cardClick(gather)}>
+        <View className='directorInfo'>
+          <View className='avatar'>
+            <Image
+              mode='widthFix'
+              src={gather?.avatarUrl}
+              style='width: 50px; height: 50px; border-radius: 50%;margin-left: 4vw; margin-right: 5vw'
+            />
+          </View>
+          <View className='owner'>
+            <View className='name'>{gather?.nickname}</View>
+            <View className='time'>{FormatTimeFromNow(gather.createTime)}</View>
+          </View>
+
         </View>
-        <View className='owner'>
-          <View className='name'>{gather?.nickname}</View>
-          <View className='time'>{FormatTimeFromNow(gather.createTime)}</View>
+        <View className='detail'>
+          {/* <View className='title'>局情</View> */}
+        <View className='content'>{gather?.topic}</View>
         </View>
-
       </View>
-      <View className='detail'>
-        {/* <View className='title'>局情</View> */}
-      <View className='content'>{gather?.topic}</View>
-      </View>
-    </View>
-          ))}
-
-          {/* {gatherList.map((gather, index) => (
-            <View className='card' key={index} onClick={() => cardClick(gather)}>
-              <View className='side'>
-                <View>{gather.tagName?gather.tagName[0]:''}</View>
-                <View>{gather.tagName?gather.tagName[1]:''}</View>
-              </View>
-              <View className='text'>
-                <View className='content'>
-                  <View className='description'>
-                    {gather.topic}
-                  </View>
-                  <View className='others'>
-                    <View className='director'>局长：{gather.nickname}</View>
-                    <View className='time'>{gather.createTime}</View>
-                  </View>
-
-                </View>
-                <View className='schedule'>
-                    <AtProgress percent={Math.floor(gather.currentNum*100/gather.maxNum)} />
-                  </View>
-              </View>
-
-            </View>
-          ))} */}
+            ))}
 
       </View>
     </View>
