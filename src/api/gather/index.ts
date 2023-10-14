@@ -67,9 +67,11 @@ export const joinGather = async (params: { teamId: number }) => {
  * @description 获取我的组队
  * @param {number} params.pageNum
  * @param {number} params.pageSize
+ * @param {number} params.tagId
  * @returns
  */
 export const getTeamList = async (params: {
+  tagId: number,
   pageNum: number;
   pageSize: number;
 }) => {
@@ -84,9 +86,11 @@ export const getTeamList = async (params: {
  * @description 获取我创建的组队
  * @param {number} params.pageNum
  * @param {number} params.pageSize
+ * @param {number} params.tagId
  * @returns
  */
 export const getMyTeamList = async (params: {
+  tagId: number,
   pageNum: number;
   pageSize: number;
 }) => {
