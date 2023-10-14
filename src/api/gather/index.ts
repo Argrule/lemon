@@ -57,6 +57,23 @@ export const getComment = async (params: {
 };
 
 /**
+ * @description 发布攒局评论
+ * @param {number} params.teamId
+ * @param {string} params.content
+ * @returns
+ */
+export const publishComment = async (params: {
+  content: string;
+  teamId: number;
+}) => {
+  // const paramsStr = Object.keys(params)
+  //   .map((key) => `${key}=${params[key]}`)
+  //   .join("&");
+  const res = await request.post("/team/comment", params);
+  return res;
+};
+
+/**
  * @description 创建攒局
  * @param {string} params.topic
  * @param {string} params.description
