@@ -1,12 +1,15 @@
-import { View, Image, ScrollView } from '@tarojs/components';
+import { View, Image, ScrollView,Input,Button } from '@tarojs/components';
+import { Textarea } from "@tarojs/components";
 import { AtButton,AtMessage,AtFloatLayout,AtIcon } from 'taro-ui';
-import { useState,useEffect, } from 'react';
+import { AtActionSheet, AtActionSheetItem } from "taro-ui";
+import { useState,useEffect,useRef } from 'react';
 import { FormatTimeFromNow } from "$/utils/dayjs";
 
 
+
 // import { getGatherList,getTagList } from "$/api/gather";
-import { joinGather,quitGather,deleteGather,getUserInfo,getComment} from "$/api/gather";
-import Taro from "@tarojs/taro";
+import { joinGather,quitGather,deleteGather,getUserInfo,getComment,publishComment} from "$/api/gather";
+import Taro, { useDidShow } from "@tarojs/taro";
 
 // import request from '$/utils/request'
 
@@ -32,8 +35,12 @@ export default function GatherDetail() {
   const [createTime, setCreateTime] = useState(null);
   const [commentList, setCommentList] = useState([]);
 
-
-
+  const [newCommentContent, setNewCommentContent] = useState<string>("");
+  const [isInputDialogOpen, setIsInputDialogOpen] = useState<boolean>(false);
+  const [isCommentDialogOpen, setIsCommentDialogOpen] =
+    useState<boolean>(false);
+  const [placeholderStr, setPlaceholderStr] = useState("在此输入公开讨论的内容");
+  const [replyToPerson, setReplyToPerson] = useState<string>("");
 
   useEffect(() => {
     const eventChannel = Taro.getCurrentInstance().page.getOpenerEventChannel();
@@ -60,6 +67,84 @@ export default function GatherDetail() {
     };
 
   }, []);
+
+  function scrollToBottom() {
+    // 获取页面高度
+    Taro.createSelectorQuery()
+      .selectViewport()
+      .scrollOffset((res) => {
+        const scrollTop = res.scrollTop;
+        console.log(scrollTop);
+        // 设置滚动位置为页面底部
+        Taro.pageScrollTo({
+          scrollTop: 100000, // 10000 是一个足够大的值，确保能滚动到页面底部
+          duration: 300, // 滚动持续时间
+        });
+      })
+      .exec();
+  }
+  const handleInputBlur = (nickname: string, id?: number) => {
+    scrollToBottom();
+    // 打开输入框
+    switch (id) {
+      case undefined:
+        // ## 还没拿到 用户名
+        setPlaceholderStr("在此输入公开讨论内容");
+        setReplyToPerson(nickname);
+        setIsCommentDialogOpen(true);
+        break;
+
+      default:
+        setPlaceholderStr("发送你的回复哦~");
+        CommentIdMark.current = id;
+        setReplyToPerson(nickname);
+        setIsInputDialogOpen(true);
+        break;
+    }
+  };
+  const handleNewCommentChange = (e: any) => {
+    setNewCommentContent(e.target.value);
+  };
+  const handleNewCommentSubmit = async () => {
+    if (!newCommentContent) {
+      console.log("请输入评论内容");
+      //@ts-ignore
+      Taro.atMessage({
+        message: "请输入评论内容",
+        type: "error",
+        duration: 800,
+      });
+      return;
+    }
+    console.log('gatherData',gatherData);
+
+    const res = await publishComment({
+      teamId: gatherData.id,
+      content: newCommentContent,
+    });
+    if (res.code != "00000") {
+      console.log("发布评论失败");
+      return;
+    }
+    setNewCommentContent("");
+
+    // 直接重新获取评论列表
+    getCommentList(gatherData.id)
+    // setCommentList(res2.data.list);
+    // 关闭输入弹窗
+    setIsCommentDialogOpen(false);
+
+    //不触发全部重新获取,需要后端返回新评论的数据
+    // post.current = post.current;
+    // const newComment: Comment = {
+    //   id: 0,
+    //   uid: 0,
+    //   postId: 0,
+    //   content: newCommentContent,
+    //   createTime: "",
+    // };
+    // setCommentList([newComment, ...commentsList]);
+  };
   const getCommentList = async (teamId) => {
     try {
       let response;
@@ -309,7 +394,7 @@ export default function GatherDetail() {
               )
             ) : (
               <AtButton type='primary' circle onClick={handleSubmit} className='buttonItem'>
-                申请入局
+                我想去
               </AtButton>
             )}
             <AtMessage />
@@ -349,6 +434,48 @@ export default function GatherDetail() {
 
       </View>
 
+      {/* 用于输入评论 */}
+      <AtActionSheet
+        isOpened={isCommentDialogOpen}
+        className="input-container"
+        onClose={() => setIsCommentDialogOpen(false)}
+      >
+        <Textarea
+          value={newCommentContent}
+          maxlength={200}
+          placeholder={`评论 @${replyToPerson}`}
+          className="textarea"
+          onInput={handleNewCommentChange}
+          style="min-height:200rpx"
+          cursor-spacing={150}
+          show-confirm-bar={false}
+          autoHeight
+        />
+        <AtActionSheetItem>
+          <View className="rely-main">
+            {/* <Button
+              className="rely-btn"
+              onClick={() => setIsCommentDialogOpen(false)}
+            >
+              预留其他功能
+            </Button> */}
+            <Button className="rely-btn" onClick={handleNewCommentSubmit}>
+              发布评论
+            </Button>
+          </View>
+        </AtActionSheetItem>
+      </AtActionSheet>
+      {/* 评论输入区域 */}
+      <View className="new-post">
+        <Input
+          value={newCommentContent}
+          disabled
+          onClick={() => handleInputBlur(gatherData.nickname)}
+          onInput={handleNewCommentChange}
+          placeholder={placeholderStr}
+        />
+        <Button onClick={handleNewCommentSubmit}>发布</Button>
+      </View>
     </View>
   );
 }
