@@ -1,5 +1,18 @@
 @import "~taro-ui/dist/style/components/message.scss";
-
+.little{
+  font-size: 32px !important;
+}
+.big {
+  font-size: 48px !important;
+  color: #FF4141;
+}
+.imgContainer{
+  height: 5vh;
+  width: 90vw;
+}
+.at-tag{
+  background-color: #FBEDB0;
+}
 .content{
   display: flex;
   flex-direction: column;
@@ -9,15 +22,16 @@
   // align-items: center;
   .description{
     // margin-top: 2vh;
-    font-size: 28px;
+    font-size: 32px;
   }
   .others{
     width: 100%;
     display: flex;
-    font-size: 20px;
+    font-size: 28px;
     justify-content: space-between;
-    .director{
 
+    .director{
+      color: #5C6B90;
     }
   }
 
@@ -28,13 +42,111 @@
   right: 10vw;
 }
 .card{
+  border-style: solid;
+  border-width: 1px;
   margin-bottom: 3vh;
   border-radius: 10px;
   height: 18vh;
-  background-color: #ecc745;
+  background-color: white;
   width: 90vw;
   display: flex;
-  .side{
+  .side1{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-weight: bold;
+    font-size: 40px;
+    border-radius: 10px;
+    background-color: #FE7D41 ;
+    width:15%
+  }
+  .side2{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-weight: bold;
+    font-size: 40px;
+    border-radius: 10px;
+    background-color: #FF655B ;
+    width:15%
+  }
+  .side3{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-weight: bold;
+    font-size: 40px;
+    border-radius: 10px;
+    background-color: #F6A40E ;
+    width:15%
+  }
+  .side4{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-weight: bold;
+    font-size: 40px;
+    border-radius: 10px;
+    background-color: #5C6B90 ;
+    width:15%
+  }
+  .side5{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-weight: bold;
+    font-size: 40px;
+    border-radius: 10px;
+    background-color: #F6A40E ;
+    width:15%
+  }
+  .side6{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-weight: bold;
+    font-size: 40px;
+    border-radius: 10px;
+    background-color: #FE3666 ;
+    width:15%
+  }
+  .side7{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-weight: bold;
+    font-size: 40px;
+    border-radius: 10px;
+    background-color: #FE7D41 ;
+    width:15%
+  }
+  .side8{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-weight: bold;
+    font-size: 40px;
+    border-radius: 10px;
+    background-color: #FF655B ;
+    width:15%
+  }
+  .side9{
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -78,6 +190,7 @@
   }
 }
 .joinAndInitiate{
+  margin-top: 3vh;
   margin-bottom: 3vh;
   width: 100vw;
   display: flex;
@@ -85,15 +198,16 @@
   align-items: center;
   .join-button{
     width: 45vw;
-    background-color: #a0aa25 !important;
+    background-color: #FE3666 !important;
   }
   .initiate-button{
     width: 45vw;
-    background-color: #ecc745!important;
+    background-color: #FE3666!important;
   }
 }
 .container {
   // height: 100vh;
+  background-color: #FFF9DE;
   width: 100vw;
   display: flex;
   justify-content: space-around;

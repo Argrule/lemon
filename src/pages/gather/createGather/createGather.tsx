@@ -26,6 +26,7 @@ interface GatherData {
   maxNum: number;
   description: string;
   topic: string;
+  position: string;
 }
 
 export default function Gather() {
@@ -34,6 +35,7 @@ export default function Gather() {
     maxNum: NaN,
     description: '',
     topic: '',
+    position: ''
   };
   const initialClassification: ClassificationItem[] = [
     { name: '自习', checked: false },
@@ -51,6 +53,7 @@ export default function Gather() {
     maxNum: NaN,
     description: '',
     topic: '',
+    position: ''
   });
 
   const [classification, setClassification] = useState<ClassificationItem[]>([
@@ -118,7 +121,7 @@ export default function Gather() {
   return (
     <View className='container'>
       <View className='tagContainer'>
-        <View className='title'>攒局类别</View>
+        <View className='title'>活动类型</View>
         <View className='tags'>
           {classification.map((item, index) => (
             <View className='tag' key={index}>
@@ -135,12 +138,12 @@ export default function Gather() {
         </View>
       </View>
       <View className='titleContainer'>
-        <View className='title'>攒局主题</View>
+        <View className='title'>活动主题</View>
         <View className='inputTitle'>
           <View className='inputNormal'>
             <AtInput
               value={gatherData.topic}
-              placeholder='请输入内容'
+              // placeholder='请输入内容'
               onChange={(value) => setGatherData({ ...gatherData, topic: value })} name='topic'
             />
           </View>
@@ -148,13 +151,13 @@ export default function Gather() {
       </View>
 
       <View className='detailContainer'>
-        <View className='title'>攒局详情</View>
+        <View className='title'>活动详情</View>
         <View className='inputDetail'>
           <View className='inputNormal'>
                   <Textarea
                     value={gatherData.description}
                     maxlength={200}
-                    placeholder='在此输入攒局详情，例如时间、地点和攒局内容'
+                    // placeholder='在此输入攒局详情，例如时间、地点和攒局内容'
                     className='textarea'
                     onInput={(e) => handleDescriptionChange(e.detail.value)}
                     style='min-height:200rpx'
@@ -164,13 +167,26 @@ export default function Gather() {
         </View>
       </View>
 
+      {/* <View className='numContainer'>
+        <View className='title'>位置信息</View>
+        <View className='inputNum'>
+          <View className='inputNormal'>
+            <AtInput
+              value={gatherData.position}
+              // placeholder='请输入总人数'
+              onChange={(value) => setGatherData({ ...gatherData, position: value })} name='position'
+            />
+          </View>
+        </View>
+      </View> */}
+
       <View className='numContainer'>
-        <View className='title'>总人数</View>
+        <View className='title'>活动人数</View>
         <View className='inputNum'>
           <View className='inputNormal'>
             <AtInput
               value={gatherData.maxNum}
-              placeholder='请输入总人数'
+              // placeholder='请输入总人数'
               onChange={(value) => setGatherData({ ...gatherData, maxNum: value })} name='maxNum'
             />
           </View>
@@ -178,11 +194,12 @@ export default function Gather() {
       </View>
 
       <View className='bottonContainer'>
-        <View className='botton'>
-          <AtButton type='primary' onClick={handleSubmit}>
-            提交
-          </AtButton>
+        <View className='botton' onClick={handleSubmit}>
+        发起攒局
           <AtMessage />
+        </View>
+        <View className='bottonText' onClick={handleSubmit}>
+        攒局需消耗 100 人品
         </View>
       </View>
     </View>
