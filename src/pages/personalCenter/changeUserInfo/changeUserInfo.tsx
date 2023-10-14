@@ -61,34 +61,38 @@ const changeUserInfo = () => {
       nickName: nickname,
       phoneNum,
     }).then((res) => {
-      //   console.log("RES::::", res);
+      // @ts-ignore
       if (res.code === "00000") {
         Taro.navigateBack({ delta: 1 });
       }
     });
   }
   return (
-    <View className="root">
+    <View className="change-user-info-root">
       <Image
         src={avatarUrl}
         mode="aspectFit"
-        style={{ width: "70vw", height: "70vw" }}
+        style={{ width: "50vw", height: "50vw" }}
         onClick={chooseImage}
       />
-      <Text>点击头像上传</Text>
+      <Text className="text-click">点击头像上传</Text>
       <AtInput
         name="昵称"
+        className="custom-input"
         value={nickname}
         placeholder="昵称"
         onChange={(val) => handleNickname(val)}
       ></AtInput>
       <AtInput
         name="手机号"
+        className="custom-input"
         value={phoneNum}
         placeholder="手机号"
         onChange={(val) => handlePhoneNum(val)}
       ></AtInput>
-      <Button onClick={() => submit()}>更改用户信息</Button>
+      <Button className="btn-submit-info" onClick={() => submit()}>
+        更改用户信息
+      </Button>
     </View>
   );
 };

@@ -12,15 +12,22 @@ const UnitList = (props: UnitData) => {
   const handleClick = (path: string) => {
     if (!isOther && path !== "") {
       console.log(path);
-      Taro.navigateTo({
-        url: path,
-      });
+      // 暂时处理跳转到我的消息的逻辑
+      if (content === "我的消息") {
+        Taro.switchTab({
+          url: path,
+        });
+      } else
+        Taro.navigateTo({
+          url: path,
+        });
     }
   };
   return (
     <View className="unitlist" onClick={() => handleClick(path)}>
       {isOther ? (
         <>
+          {/* 特殊处理，用于分享小程序 */}
           <AtIcon value={pre} size="18" color="rgb(122,122,122)"></AtIcon>
           <Label
             for={new Date().getTime().toString()}
@@ -40,6 +47,7 @@ const UnitList = (props: UnitData) => {
         </>
       ) : (
         <>
+          {/* 一般处理 */}
           <View>
             <AtIcon value={pre} size="18" color="rgb(122,122,122)"></AtIcon>
             <Text style="margin-left:10rpx">{content}</Text>
