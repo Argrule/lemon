@@ -398,7 +398,7 @@ export default function GatherDetail() {
             <AtMessage />
           </View>
           <View className='shareButton'>
-            <AtButton type='primary' circle >
+            <AtButton type='primary' circle openType="share">
               <AtIcon value='external-link' size='20' color='white'></AtIcon>
             </AtButton>
           </View>
