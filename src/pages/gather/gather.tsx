@@ -2,7 +2,7 @@ import { View,Image } from '@tarojs/components';
 import { AtButton, AtTag,AtFab,AtIcon,AtProgress,AtMessage } from 'taro-ui';
 import { useState,useEffect,} from 'react';
 
-import { getGatherList,getTagList } from "$/api/gather";
+import { getGatherList,getTagList,getCount } from "$/api/gather";
 
 import Taro, { useDidShow } from "@tarojs/taro";
 
@@ -33,6 +33,7 @@ interface GatherItemType {
 
 export default function Gather() {
   const [selectedTagIndex, setSelectedTagIndex] = useState<number>(0);
+  const [count, setCount] = useState<number>(0);
   const [gatherList, setGatherList] = useState<GatherItemType[]>([]); // 初始化为空数组
   const [classification, setClassification] = useState<ClassificationItem[]>([
     { name: '全部', checked: false },
@@ -51,6 +52,7 @@ export default function Gather() {
   useEffect(() => {
     getTagList({});
     fetchGatherList(0,1)
+    getNum()
 
   }, []);
   useDidShow(() => {
@@ -84,6 +86,23 @@ export default function Gather() {
   const refreshData = () => {
     // 在这里触发下拉刷新
     fetchGatherList(0,1);
+  };
+
+  const getNum = async () => {
+
+    try {
+      let response;
+
+        response = await getCount({
+        });
+        console.log('getNum',response);
+
+
+        setCount(response.totalNum); // Update the gatherList state
+
+    } catch (error) {
+      console.error('Error fetching gather list', error);
+    }
   };
 
   const fetchGatherList = async (tagId,initPageNum) => {
@@ -259,7 +278,7 @@ export default function Gather() {
           已攒
         </View>
         <View className='big'>
-          99999
+            {count}
         </View>
         <View className='little'>
           人
