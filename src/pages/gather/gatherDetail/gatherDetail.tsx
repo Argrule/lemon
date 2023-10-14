@@ -1,10 +1,11 @@
 import { View, Image, ScrollView } from '@tarojs/components';
-import { AtButton,AtMessage,AtFloatLayout } from 'taro-ui';
+import { AtButton,AtMessage,AtFloatLayout,AtIcon } from 'taro-ui';
 import { useState,useEffect, } from 'react';
+import { FormatTimeFromNow } from "$/utils/dayjs";
 
 
 // import { getGatherList,getTagList } from "$/api/gather";
-import { joinGather,quitGather,deleteGather,getUserInfo} from "$/api/gather";
+import { joinGather,quitGather,deleteGather,getUserInfo,getComment} from "$/api/gather";
 import Taro from "@tarojs/taro";
 
 // import request from '$/utils/request'
@@ -15,6 +16,7 @@ import "taro-ui/dist/style/components/fab.scss";
 import "taro-ui/dist/style/components/icon.scss";
 import "taro-ui/dist/style/components/progress.scss"
 import "taro-ui/dist/style/components/float-layout.scss";
+import "taro-ui/dist/style/components/icon.scss";
 import './gatherDetail.scss';
 
 
@@ -28,6 +30,7 @@ export default function GatherDetail() {
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [selectedProfile, setSelectedProfile] = useState(null);
   const [createTime, setCreateTime] = useState(null);
+  const [commentList, setCommentList] = useState([]);
 
 
 
@@ -47,7 +50,7 @@ export default function GatherDetail() {
       // console.log(data.gather.uid);
       // console.log(data.gather.uidArray);
       console.log('gatherData',gatherData);
-
+      getCommentList(data.gather.id)
     });
 
 
@@ -57,7 +60,21 @@ export default function GatherDetail() {
     };
 
   }, []);
-
+  const getCommentList = async (teamId) => {
+    try {
+      let response;
+      response = await getComment({
+        teamId:teamId
+      });
+      console.log('commentList',response.list);
+      // 将接收到的数据存储到组件状态中
+      setCommentList(response.list);
+      console.log('commentList',commentList);
+      // return response.list;
+    } catch (error) {
+      console.error('Error fetching gather list', error);
+    }
+  };
   const getAvator = async (uidArray) => {
     let mergeAvator =[];
     for(let i = 0; i < uidArray.length; i++) {
@@ -268,33 +285,68 @@ export default function GatherDetail() {
               style='width: 50px; height: 50px; border-radius: 50%;margin-left: 4vw; margin-right: 5vw'
             />
           </View>
-          <View className='name'>{userInfo?.nickname}</View>
-          <View className='time'>{createTime}</View>
+          <View>
+            <View className='name'>{userInfo?.nickname}</View>
+            <View className='time'>{FormatTimeFromNow(createTime)}</View>
+          </View>
+
         </View>
         <View className='detail'>
           <View className='title'>局情</View>
-        <View className='content'>{gatherData?.description}</View>
-        </View>
-      </View>
-      <View className='joinButton'>
-        {isGather ? (
-          isLeader ? (
-            <><AtButton type='primary' circle onClick={handleQuit} className='buttonItem'>
-              我要出局
-            </AtButton><AtButton type='primary' circle onClick={handleDelete} className='buttonItem'>
-                我要炸局
-              </AtButton></>
-          ) : (
-            <AtButton type='primary' circle onClick={handleQuit} className='buttonItem'>
-              我要出局
+          <View className='content'>{gatherData?.description}</View>
+          <View className='joinButton'>
+            {isGather ? (
+              isLeader ? (
+                <><AtButton type='primary' circle onClick={handleQuit} className='buttonItem'>
+                  我要出局
+                </AtButton><AtButton type='primary' circle onClick={handleDelete} className='buttonItem'>
+                    我要炸局
+                  </AtButton></>
+              ) : (
+                <AtButton type='primary' circle onClick={handleQuit} className='buttonItem'>
+                  我要出局
+                </AtButton>
+              )
+            ) : (
+              <AtButton type='primary' circle onClick={handleSubmit} className='buttonItem'>
+                申请入局
+              </AtButton>
+            )}
+            <AtMessage />
+          </View>
+          <View className='shareButton'>
+            <AtButton type='primary' circle >
+              <AtIcon value='external-link' size='20' color='white'></AtIcon>
             </AtButton>
-          )
-        ) : (
-          <AtButton type='primary' circle onClick={handleSubmit} className='buttonItem'>
-            申请入局
-          </AtButton>
-        )}
-        <AtMessage />
+          </View>
+        </View>
+
+      </View>
+      <View className='commentContainer'>
+
+          <View className='title'>公开讨论</View>
+          <View className='content'>
+            {commentList.map((comment, index) => (
+              <View className='commentItem'>
+                <View className='commentorInfo'>
+                  <View className='avatar'>
+                    <Image
+                      mode='widthFix'
+                      src={comment?.avatarUrl}
+                      style='width: 40px; height: 50px; border-radius: 50%;margin-left: 2vw; margin-right: 2vw'
+                    />
+                  </View>
+                  <View>
+                    <View className='commentName'>{comment?.nickname}</View>
+                    <View className='time'>{FormatTimeFromNow(comment?.createTime)}</View>
+                  </View>
+
+                </View>
+                <View className='commentContent'>{comment?.content}</View>
+              </View>
+            ))}
+          </View>
+
       </View>
 
     </View>

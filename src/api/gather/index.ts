@@ -1,3 +1,4 @@
+// import { getComment } from '$/api/forum';
 import request from "$/utils/request";
 
 /**
@@ -38,6 +39,20 @@ export const getCount = async (params: {}) => {
     .map((key) => `${key}=${params[key]}`)
     .join("&");
   const res = await request.get("/team/count" + `?${paramsStr}`);
+  return res.data;
+};
+
+/**
+ * @description 获取攒局评论
+ * @returns
+ */
+export const getComment = async (params: {
+  teamId: number;
+}) => {
+  const paramsStr = Object.keys(params)
+    .map((key) => `${key}=${params[key]}`)
+    .join("&");
+  const res = await request.get("/team/comment/show" + `?${paramsStr}`);
   return res.data;
 };
 
