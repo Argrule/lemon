@@ -1,5 +1,5 @@
 export default definePageConfig({
-    navigationBarTitleText: '',
+    navigationBarTitleText: '局情',
     // navigationBarBackgroundColor: '#fff',
     navigationBarTextStyle: 'black',
     enablePullDownRefresh: true,
