@@ -242,6 +242,9 @@ export default function Gather() {
 
   const cardClick = (gather) => {
     console.log('gather',gather);
+    Taro.setStorageSync('teamId', gather.id);
+    console.log('Taro.getStorageSyncteamId',Taro.getStorageSync('teamId'));
+
     // Taro.navigateTo({url:'/pages/gather/gatherDetail/gatherDetail'})
     Taro.navigateTo({
       url: '/pages/gather/gatherDetail/gatherDetail',
@@ -286,7 +289,7 @@ export default function Gather() {
         </View>
       </View>
       {/* <View className='imgContainer'> */}
-        <Image src={require('../../assets/简洁.png')} style={{ width: '95vw', height: '18vh' }}/>
+        <Image src={require('../../assets/简洁.png')} style={{ width: '95vw', height: '14vh' }}/>
       {/* </View> */}
       <View className='joinAndInitiate'>
         <AtButton className='join-button' type='primary' circle onClick={goJoinedGather}>

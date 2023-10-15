@@ -23,10 +23,11 @@ $text: $lenmon-yellow;
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
-  background-color: #fff;
+  background-color: #FFF9DE;
   z-index: 100;
 
   input {
+    background-color: white;
     margin-left: 4vw;
     flex: 1;
     padding: 10px;
@@ -220,12 +221,13 @@ $text: $lenmon-yellow;
 }
 .container {
   background-color: #FFF9DE;
-  height: 100vh;
+  // height: 100vh;
   width: 100vw;
   display: flex;
   // justify-content: space-around;
   align-items: center;
   flex-direction: column;
+  padding-bottom: 2vh;
   .detailContainer{
     display: flex;
     flex-direction: column;
@@ -266,6 +268,7 @@ $text: $lenmon-yellow;
     padding-top: 2vh 0 2vh 0;
     border-radius: 20px;
     width: 90vw;
+    min-height: 25vh;
     // height: 60vh;
     border-style: solid;
     border-width:1px;
