@@ -2,7 +2,7 @@
   "name": "lemon",
   "version": "1.0.0",
   "private": true,
-  "description": "",
+  "description": "柠檬校园, 基于taro搭建的微信小程序",
   "templateInfo": {
     "name": "taro-ui",
     "typescript": true,
@@ -35,7 +35,7 @@
     "Android >= 4.1",
     "ios >= 8"
   ],
-  "author": "",
+  "author": "Argrule, Reborn115, KaedeSAMA",
   "dependencies": {
     "@babel/runtime": "^7.7.7",
     "@tarojs/components": "3.6.8",
