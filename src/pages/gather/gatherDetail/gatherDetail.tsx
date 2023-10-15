@@ -74,7 +74,7 @@ export default function GatherDetail() {
     let shareData = {
       title: "柠檬校园",
       path: `/pages/forum/forum`, // 分享的路径
-      // imageUrl: share_img, // 分享的图片链接
+      imageUrl: '../../../assets/info/share.png', // 分享的图片链接
     };
     // if (res.from === "button") {
     //   // 来自页面内分享按钮
