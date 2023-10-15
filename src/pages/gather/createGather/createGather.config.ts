@@ -1,5 +1,5 @@
 export default definePageConfig({
-    navigationBarTitleText: '',
+    navigationBarTitleText: '发起攒局',
     // navigationBarBackgroundColor: '#fff',
     navigationBarTextStyle: 'black',
     enablePullDownRefresh: true,

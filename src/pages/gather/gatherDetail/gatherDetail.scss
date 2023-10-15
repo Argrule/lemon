@@ -1,4 +1,150 @@
 @import "~taro-ui/dist/style/components/message.scss";
+@import "~taro-ui/dist/style/components/tag.scss";
+@import "~taro-ui/dist/style/components/avatar.scss";
+@import "~taro-ui/dist/style/components/action-sheet.scss";
+@import "../../../app.scss";
+$forum-fontSize-s: 36px; //input,button,post-content,interaction-button
+$forum-fontSize: 30rpx; //content
+$forum-fontSize-author: 35rpx; //author
+$forum-fontSize-author-2: 30rpx; //author-小号-回复
+// $button-color: #ffc701;
+// $btn-color: #ffaa00;
+$button-color: $lenmon-yellow;
+$btn-color: $lenmon-green;
+$bgc-green: #e1e6bc;
+$text: $lenmon-yellow;
+.new-post {
+  height: 8vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #FFF9DE;
+  z-index: 100;
+
+  input {
+    background-color: white;
+    margin-left: 4vw;
+    flex: 1;
+    padding: 10px;
+    padding-left: 4vw;
+    border: 1px solid #ccc;
+    border-radius: 60px;
+    font-size: 32px;
+    // width: 60vw !important;
+    height: 4vh;
+  }
+
+  button {
+    margin-left: 4vw;
+    margin-right: 4vw;
+    // padding: 10px 20px;
+    background-color: #FE3666;
+    color: #fff;
+    border: none;
+    border-radius: 60px; /* Increase the border radius for a more rounded button */
+    font-size: 36px; /* Slightly larger font size for better readability */
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: 20vw !important;
+    &:hover {
+      background-color: #a0aa25;
+    }
+  }
+}
+.input-container {
+  z-index: 105;
+  .textarea {
+    color: black;
+    border: $text;
+    font-size: 40px;
+    background: #fff;
+    width: 100%;
+    // min-height: 80rpx;//无效
+
+    border-radius: 15rpx;
+    height: 15vh;
+    width: 90%;
+    margin: 0 auto;
+    text-align: start;
+    padding: 28rpx;
+    opacity: 1;
+    .textarea-placeholder {
+      color: #898989;
+    }
+  }
+  .textarea[value=""] {
+    opacity: 0.5;
+  }
+
+  .rely-main {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20rpx;
+    height: 60rpx;
+    background-color: #fff;
+
+    // .rely-input {
+    //   // flex: 1;
+    //   padding: 0 20rpx;
+    //   border: none;
+    //   outline: none;
+    //   font-size: $forum-fontSize;
+    // }
+    .rely-btn {
+      padding: 0.5em 1em;
+      background-color: #FE3666;
+      color: white;
+      border: 1px solid transparent;
+      border-radius: 15rpx;
+      font-size: $forum-fontSize-s;
+    }
+  }
+  .at-action-sheet__container {
+    height: 24vh;
+    border-radius: 15rpx 15rpx 0 0;
+  }
+  // 去除指示器下划线
+  .at-action-sheet__item::after {
+    content: none;
+  }
+}
+
+.commentContainer{
+  .title{
+    margin-left: 5vw;
+    font-weight: bold;
+    margin-bottom: 2vh;
+    margin-top: 2vh;
+    font-size: 36px;
+  }
+  .content{
+    // margin-left: 5vw;
+    font-size: 26px;
+    // margin-bottom: 0vh;
+  }
+}
+.commentItem{
+  .commentContent{
+    margin-left: 14vw;
+    font-size: 32px;
+    margin-bottom: 2vh;
+  }
+  .commentorInfo{
+    height: 8vh;
+    display: flex;
+    align-items: center;
+    font-size: 26px;
+  }
+.commentName{
+  margin-bottom: 0;
+}
+}
 .userInfo{
   display: flex;
   flex-direction: column;
@@ -16,7 +162,27 @@
   }
 }
 .joinButton{
-  width: 90vw;
+  bottom: -11vh;
+  left: 10vw;
+  position: relative;
+  width: 40vw;
+  // background-color: #FE3666;
+  .at-button{
+    background-color: #FE3666;
+  }
+  .buttonItem{
+    margin-bottom: 2vh;
+  }
+}
+.shareButton{
+  bottom: -3vh;
+  left: 58vw;
+  position: relative;
+  width: 20vw;
+  // background-color: #FE3666;
+  .at-button{
+    background-color: #FE3666;
+  }
   .buttonItem{
     margin-bottom: 2vh;
   }
@@ -26,10 +192,12 @@
     margin-left: 5vw;
     font-weight: bold;
     margin-bottom: 2vh;
+    font-size: 36px;
   }
   .content{
     margin-left: 5vw;
-    font-size: 26px;
+    font-size: 32px;
+    // margin-bottom: 0vh;
   }
 }
 
@@ -41,6 +209,7 @@
   // justify-content: center;
   .name{
     margin-right: 5vw;
+    margin-bottom: 1vh;
   }
   .avator{
     margin-left: 5vw;
@@ -52,41 +221,60 @@
 }
 .container {
   background-color: #FFF9DE;
-  height: 100vh;
+  // height: 100vh;
   width: 100vw;
   display: flex;
   // justify-content: space-around;
   align-items: center;
   flex-direction: column;
+  padding-bottom: 2vh;
   .detailContainer{
     display: flex;
     flex-direction: column;
     // align-items: center;
     padding-top: 2vh 0 2vh 0;
-    border-radius: 5px;
+    border-radius: 20px;
     width: 90vw;
-    height: 60vh;
+    // height: 60vh;
     border-style: solid;
     border-width:1px;
-    margin-bottom: 3vh;
+    margin-bottom: 6vh;
+    background-color: white;
   }
   .membersContainer{
     display: flex;
     flex-direction: column;
     // align-items: center;
     padding-top: 2vh 0 2vh 0;
-    border-radius: 5px;
+    border-radius: 20px;
     width: 90vw;
     height: 16vh;
     border-style: solid;
     border-width:1px;
     margin-bottom: 3vh;
+    background-color: white;
     .title{
       margin-top: 2vh;
       margin-left: 5vw;
       font-weight: bold;
       margin-bottom: 2vh;
+      font-size: 36px;
     }
+  }
+  .commentContainer{
+    display: flex;
+    flex-direction: column;
+    // align-items: center;
+    padding-top: 2vh 0 2vh 0;
+    border-radius: 20px;
+    width: 90vw;
+    min-height: 25vh;
+    // height: 60vh;
+    border-style: solid;
+    border-width:1px;
+    // margin-bottom: 30vh;
+    background-color: white;
+    padding-bottom: 8vh;
   }
 
 }

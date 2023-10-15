@@ -1,11 +1,15 @@
-import { View, Image, ScrollView } from '@tarojs/components';
-import { AtButton,AtMessage,AtFloatLayout } from 'taro-ui';
-import { useState,useEffect, } from 'react';
+import { View, Image, ScrollView,Input,Button } from '@tarojs/components';
+import { Textarea } from "@tarojs/components";
+import { AtButton,AtMessage,AtFloatLayout,AtIcon } from 'taro-ui';
+import { AtActionSheet, AtActionSheetItem } from "taro-ui";
+import { useState,useEffect,useRef } from 'react';
+import { FormatTimeFromNow } from "$/utils/dayjs";
+
 
 
 // import { getGatherList,getTagList } from "$/api/gather";
-import { joinGather,quitGather,deleteGather,getUserInfo} from "$/api/gather";
-import Taro from "@tarojs/taro";
+import { joinGather,quitGather,deleteGather,getUserInfo,getComment,publishComment} from "$/api/gather";
+import Taro, { useDidShow,useShareAppMessage } from "@tarojs/taro";
 
 // import request from '$/utils/request'
 
@@ -15,6 +19,7 @@ import "taro-ui/dist/style/components/fab.scss";
 import "taro-ui/dist/style/components/icon.scss";
 import "taro-ui/dist/style/components/progress.scss"
 import "taro-ui/dist/style/components/float-layout.scss";
+import "taro-ui/dist/style/components/icon.scss";
 import './gatherDetail.scss';
 
 
@@ -28,36 +33,149 @@ export default function GatherDetail() {
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [selectedProfile, setSelectedProfile] = useState(null);
   const [createTime, setCreateTime] = useState(null);
+  const [commentList, setCommentList] = useState([]);
 
-
-
+  const [newCommentContent, setNewCommentContent] = useState<string>("");
+  const [isInputDialogOpen, setIsInputDialogOpen] = useState<boolean>(false);
+  const [isCommentDialogOpen, setIsCommentDialogOpen] =
+    useState<boolean>(false);
+  const [placeholderStr, setPlaceholderStr] = useState("在此输入公开讨论的内容");
+  const [replyToPerson, setReplyToPerson] = useState<string>("");
 
   useEffect(() => {
     const eventChannel = Taro.getCurrentInstance().page.getOpenerEventChannel();
-
-    eventChannel.on('acceptDataFromOpenerPage', (data) => {
-      console.log('Received data:', data.gather);
-      setIsGather(data.isJoined)
-      setisLeader(data.isLeader)
-      // 将接收到的数据存储到组件状态中
-      setGatherData(data.gather);
-      getInfo(data.gather.uid);
-      getAvator(data.gather.uidArray)
-      setCreateTime(data.gather.createTime)
-      // console.log(data.gather.uid);
-      // console.log(data.gather.uidArray);
-      console.log('gatherData',gatherData);
-
-    });
-
-
+    if(eventChannel) {
+      eventChannel.on('acceptDataFromOpenerPage', (data) => {
+        console.log('Received data:', data.gather);
+        setIsGather(data.isJoined)
+        setisLeader(data.isLeader)
+        // 将接收到的数据存储到组件状态中
+        setGatherData(data.gather);
+        getInfo(data.gather.uid);
+        getAvator(data.gather.uidArray)
+        setCreateTime(data.gather.createTime)
+        // console.log(data.gather.uid);
+        // console.log(data.gather.uidArray);
+        console.log('gatherData',gatherData);
+        getCommentList(data.gather.id)
+      });
+    }
     // 返回函数用于清除监听器，以避免内存泄漏
     return () => {
-      eventChannel.off('acceptDataFromOpenerPage');
+      if (eventChannel) {
+        eventChannel.off('acceptDataFromOpenerPage');
+      }
     };
-
   }, []);
+  /**
+   * @description 分享小程序给好友
+   */
+  useShareAppMessage((res) => {
+    let shareData = {
+      title: "柠檬校园",
+      path: `/pages/forum/forum`, // 分享的路径
+      imageUrl: '../../../assets/info/share.png', // 分享的图片链接
+    };
+    // if (res.from === "button") {
+    //   // 来自页面内分享按钮
+    // } else {
+    //   // 右上角分享好友
+    // }
+    return shareData;
+  });
 
+  function scrollToBottom() {
+    // 获取页面高度
+    Taro.createSelectorQuery()
+      .selectViewport()
+      .scrollOffset((res) => {
+        const scrollTop = res.scrollTop;
+        console.log(scrollTop);
+        // 设置滚动位置为页面底部
+        Taro.pageScrollTo({
+          scrollTop: 100000, // 10000 是一个足够大的值，确保能滚动到页面底部
+          duration: 300, // 滚动持续时间
+        });
+      })
+      .exec();
+  }
+  const handleInputBlur = (nickname: string, id?: number) => {
+    scrollToBottom();
+    // 打开输入框
+    switch (id) {
+      case undefined:
+        // ## 还没拿到 用户名
+        setPlaceholderStr("在此输入公开讨论内容");
+        setReplyToPerson(nickname);
+        setIsCommentDialogOpen(true);
+        break;
+
+      default:
+        setPlaceholderStr("发送你的回复哦~");
+        CommentIdMark.current = id;
+        setReplyToPerson(nickname);
+        setIsInputDialogOpen(true);
+        break;
+    }
+  };
+  const handleNewCommentChange = (e: any) => {
+    setNewCommentContent(e.target.value);
+  };
+  const handleNewCommentSubmit = async () => {
+    if (!newCommentContent) {
+      console.log("请输入评论内容");
+      //@ts-ignore
+      Taro.atMessage({
+        message: "请输入评论内容",
+        type: "error",
+        duration: 800,
+      });
+      return;
+    }
+    console.log('gatherData',gatherData);
+
+    const res = await publishComment({
+      teamId: gatherData.id,
+      content: newCommentContent,
+    });
+    if (res.code != "00000") {
+      console.log("发布评论失败");
+      return;
+    }
+    setNewCommentContent("");
+
+    // 直接重新获取评论列表
+    getCommentList(gatherData.id)
+    // setCommentList(res2.data.list);
+    // 关闭输入弹窗
+    setIsCommentDialogOpen(false);
+
+    //不触发全部重新获取,需要后端返回新评论的数据
+    // post.current = post.current;
+    // const newComment: Comment = {
+    //   id: 0,
+    //   uid: 0,
+    //   postId: 0,
+    //   content: newCommentContent,
+    //   createTime: "",
+    // };
+    // setCommentList([newComment, ...commentsList]);
+  };
+  const getCommentList = async (teamId) => {
+    try {
+      let response;
+      response = await getComment({
+        teamId:teamId
+      });
+      console.log('commentList',response.list);
+      // 将接收到的数据存储到组件状态中
+      setCommentList(response.list);
+      console.log('commentList',commentList);
+      // return response.list;
+    } catch (error) {
+      console.error('Error fetching gather list', error);
+    }
+  };
   const getAvator = async (uidArray) => {
     let mergeAvator =[];
     for(let i = 0; i < uidArray.length; i++) {
@@ -268,35 +386,110 @@ export default function GatherDetail() {
               style='width: 50px; height: 50px; border-radius: 50%;margin-left: 4vw; margin-right: 5vw'
             />
           </View>
-          <View className='name'>{userInfo?.nickname}</View>
-          <View className='time'>{createTime}</View>
+          <View>
+            <View className='name'>{userInfo?.nickname}</View>
+            <View className='time'>{FormatTimeFromNow(createTime)}</View>
+          </View>
+
         </View>
         <View className='detail'>
           <View className='title'>局情</View>
-        <View className='content'>{gatherData?.description}</View>
-        </View>
-      </View>
-      <View className='joinButton'>
-        {isGather ? (
-          isLeader ? (
-            <><AtButton type='primary' circle onClick={handleQuit} className='buttonItem'>
-              我要出局
-            </AtButton><AtButton type='primary' circle onClick={handleDelete} className='buttonItem'>
-                我要炸局
-              </AtButton></>
-          ) : (
-            <AtButton type='primary' circle onClick={handleQuit} className='buttonItem'>
-              我要出局
+          <View className='content'>{gatherData?.description}</View>
+          <View className='joinButton'>
+            {isGather ? (
+              isLeader ? (
+                <AtButton type='primary' circle onClick={handleQuit} className='buttonItem'>
+                  我要出局
+                </AtButton>
+              ) : (
+                <AtButton type='primary' circle onClick={handleQuit} className='buttonItem'>
+                  我要出局
+                </AtButton>
+              )
+            ) : (
+              <AtButton type='primary' circle onClick={handleSubmit} className='buttonItem'>
+                我想去
+              </AtButton>
+            )}
+            <AtMessage />
+          </View>
+          <View className='shareButton'>
+            <AtButton type='primary' circle openType="share">
+              <AtIcon value='external-link' size='20' color='white'></AtIcon>
             </AtButton>
-          )
-        ) : (
-          <AtButton type='primary' circle onClick={handleSubmit} className='buttonItem'>
-            申请入局
-          </AtButton>
-        )}
-        <AtMessage />
+          </View>
+        </View>
+
+      </View>
+      <View className='commentContainer'>
+
+          <View className='title'>公开讨论</View>
+          <View className='content'>
+            {commentList.map((comment, index) => (
+              <View className='commentItem'>
+                <View className='commentorInfo'>
+                  <View className='avatar'>
+                    <Image
+                      mode='widthFix'
+                      src={comment?.avatarUrl}
+                      style='width: 40px; height: 50px; border-radius: 50%;margin-left: 2vw; margin-right: 2vw'
+                    />
+                  </View>
+                  <View>
+                    <View className='commentName'>{comment?.nickname}</View>
+                    <View className='time'>{FormatTimeFromNow(comment?.createTime)}</View>
+                  </View>
+
+                </View>
+                <View className='commentContent'>{comment?.content}</View>
+              </View>
+            ))}
+          </View>
+
       </View>
 
+      {/* 用于输入评论 */}
+      <AtActionSheet
+        isOpened={isCommentDialogOpen}
+        className="input-container"
+        onClose={() => setIsCommentDialogOpen(false)}
+      >
+        <Textarea
+          value={newCommentContent}
+          maxlength={200}
+          placeholder={`评论 @${replyToPerson}`}
+          className="textarea"
+          onInput={handleNewCommentChange}
+          style="min-height:200rpx"
+          cursor-spacing={150}
+          show-confirm-bar={false}
+          autoHeight
+        />
+        <AtActionSheetItem>
+          <View className="rely-main">
+            {/* <Button
+              className="rely-btn"
+              onClick={() => setIsCommentDialogOpen(false)}
+            >
+              预留其他功能
+            </Button> */}
+            <Button className="rely-btn" onClick={handleNewCommentSubmit}>
+              发布评论
+            </Button>
+          </View>
+        </AtActionSheetItem>
+      </AtActionSheet>
+      {/* 评论输入区域 */}
+      <View className="new-post">
+        <Input
+          value={newCommentContent}
+          disabled
+          onClick={() => handleInputBlur(gatherData.nickname)}
+          onInput={handleNewCommentChange}
+          placeholder={placeholderStr}
+        />
+        <Button onClick={handleNewCommentSubmit}>发布</Button>
+      </View>
     </View>
   );
 }

@@ -1,8 +1,9 @@
 import { View,Image } from '@tarojs/components';
 import { AtButton, AtTag,AtFab,AtIcon,AtProgress,AtMessage } from 'taro-ui';
 import { useState,useEffect,} from 'react';
+import { FormatTimeFromNow } from "$/utils/dayjs";
 
-import { getGatherList,getTagList } from "$/api/gather";
+import { getGatherList,getTagList,getCount } from "$/api/gather";
 
 import Taro, { useDidShow } from "@tarojs/taro";
 
@@ -33,6 +34,7 @@ interface GatherItemType {
 
 export default function Gather() {
   const [selectedTagIndex, setSelectedTagIndex] = useState<number>(0);
+  const [count, setCount] = useState<number>(0);
   const [gatherList, setGatherList] = useState<GatherItemType[]>([]); // 初始化为空数组
   const [classification, setClassification] = useState<ClassificationItem[]>([
     { name: '全部', checked: false },
@@ -51,6 +53,7 @@ export default function Gather() {
   useEffect(() => {
     getTagList({});
     fetchGatherList(0,1)
+    getNum()
 
   }, []);
   useDidShow(() => {
@@ -84,6 +87,23 @@ export default function Gather() {
   const refreshData = () => {
     // 在这里触发下拉刷新
     fetchGatherList(0,1);
+  };
+
+  const getNum = async () => {
+
+    try {
+      let response;
+
+        response = await getCount({
+        });
+        console.log('getNum',response);
+
+
+        setCount(response.totalNum); // Update the gatherList state
+
+    } catch (error) {
+      console.error('Error fetching gather list', error);
+    }
   };
 
   const fetchGatherList = async (tagId,initPageNum) => {
@@ -222,6 +242,9 @@ export default function Gather() {
 
   const cardClick = (gather) => {
     console.log('gather',gather);
+    Taro.setStorageSync('teamId', gather.id);
+    console.log('Taro.getStorageSyncteamId',Taro.getStorageSync('teamId'));
+
     // Taro.navigateTo({url:'/pages/gather/gatherDetail/gatherDetail'})
     Taro.navigateTo({
       url: '/pages/gather/gatherDetail/gatherDetail',
@@ -259,14 +282,14 @@ export default function Gather() {
           已攒
         </View>
         <View className='big'>
-          99999
+            {count}
         </View>
         <View className='little'>
           人
         </View>
       </View>
       {/* <View className='imgContainer'> */}
-        <Image src={require('../../assets/简洁.png')} style={{ width: '95vw', height: '18vh' }}/>
+        <Image src={require('../../assets/简洁.png')} style={{ width: '95vw', height: '14vh' }}/>
       {/* </View> */}
       <View className='joinAndInitiate'>
         <AtButton className='join-button' type='primary' circle onClick={goJoinedGather}>
@@ -308,7 +331,7 @@ export default function Gather() {
                   </View>
                   <View className='others'>
                     <View className='director'>局长：{gather.nickname}</View>
-                    <View className='time'>{gather.createTime}</View>
+                    <View className='time'>{FormatTimeFromNow(gather.createTime)}</View>
                   </View>
 
                 </View>
