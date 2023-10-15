@@ -9,12 +9,14 @@ import lenmon_regular from "../../assets/post/lemonR.svg";
 import lenmon_solid from "../../assets/post/lemonS.svg";
 import star_regular from "../../assets/post/starR.svg";
 import star_solid from "../../assets/post/starS.svg";
+import dollar_sign from "../../assets/post/dollarSign.svg";
 
 interface PostComponentProps {
   post: Item;
   onLike: (postId: number, likeStatus: boolean) => void;
   onCollect: (postId: number, collectStatus: boolean) => void;
   onDelete?: (postId: number) => void;
+  onReward?: (postId: number) => void;
   onShowComments: (postItem: Item) => void;
 }
 type FunctionComponent<P = {}> = React.FunctionComponent<P>;
@@ -31,6 +33,7 @@ const PostComponent: FunctionComponent<PostComponentProps> = ({
   onLike,
   onCollect,
   onShowComments,
+  onReward,
   // onDelete,
 }) => {
   return (
@@ -70,7 +73,9 @@ const PostComponent: FunctionComponent<PostComponentProps> = ({
       </View>
       {/* 交互按钮 */}
       <View className="interaction-buttons">
-        <Text className="post-time post-main">{FormatTimeFromNow(post.createTime)}</Text>
+        <Text className="post-time post-main">
+          {FormatTimeFromNow(post.createTime)}
+        </Text>
         <View
           onClick={() => onLike(post.id, post.likeStatus)}
           className="interaction-button like-button"
@@ -110,6 +115,16 @@ const PostComponent: FunctionComponent<PostComponentProps> = ({
           )}
           {/* {post.collectStatus ? "已收藏" : "收藏"} */}
           {post.collectNum}
+        </View>
+        <View
+          className="interaction-button collect-button"
+          onClick={() => onReward!(post.id)}
+        >
+          <Image
+            src={dollar_sign}
+            mode="scaleToFill"
+            style="width: 20px; height: 20px;"
+          ></Image>
         </View>
         {/* <Button
           style={"display:none"}

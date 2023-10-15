@@ -260,3 +260,16 @@ export const getHotPost = async (): Promise<BaseResponse<{ list: Item[] }>> => {
   const res = (await o.get("/post/hot")) as any;
   return res;
 }
+
+/**
+ * @description 打赏帖子
+ * @param postId 帖子id
+ * @param amount 打赏金额
+ */
+export const rewardPost = async (data: {
+  postId: number;
+  amount: number;
+}): Promise<BaseResponse> => {
+  const res = (await o.post("/post/reward", data)) as any;
+  return res;
+}
