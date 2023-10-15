@@ -9,7 +9,7 @@ import { FormatTimeFromNow } from "$/utils/dayjs";
 
 // import { getGatherList,getTagList } from "$/api/gather";
 import { joinGather,quitGather,deleteGather,getUserInfo,getComment,publishComment} from "$/api/gather";
-import Taro, { useDidShow } from "@tarojs/taro";
+import Taro, { useDidShow,useShareAppMessage } from "@tarojs/taro";
 
 // import request from '$/utils/request'
 
@@ -44,29 +44,45 @@ export default function GatherDetail() {
 
   useEffect(() => {
     const eventChannel = Taro.getCurrentInstance().page.getOpenerEventChannel();
-
-    eventChannel.on('acceptDataFromOpenerPage', (data) => {
-      console.log('Received data:', data.gather);
-      setIsGather(data.isJoined)
-      setisLeader(data.isLeader)
-      // 将接收到的数据存储到组件状态中
-      setGatherData(data.gather);
-      getInfo(data.gather.uid);
-      getAvator(data.gather.uidArray)
-      setCreateTime(data.gather.createTime)
-      // console.log(data.gather.uid);
-      // console.log(data.gather.uidArray);
-      console.log('gatherData',gatherData);
-      getCommentList(data.gather.id)
-    });
-
-
+    if(eventChannel) {
+      eventChannel.on('acceptDataFromOpenerPage', (data) => {
+        console.log('Received data:', data.gather);
+        setIsGather(data.isJoined)
+        setisLeader(data.isLeader)
+        // 将接收到的数据存储到组件状态中
+        setGatherData(data.gather);
+        getInfo(data.gather.uid);
+        getAvator(data.gather.uidArray)
+        setCreateTime(data.gather.createTime)
+        // console.log(data.gather.uid);
+        // console.log(data.gather.uidArray);
+        console.log('gatherData',gatherData);
+        getCommentList(data.gather.id)
+      });
+    }
     // 返回函数用于清除监听器，以避免内存泄漏
     return () => {
-      eventChannel.off('acceptDataFromOpenerPage');
+      if (eventChannel) {
+        eventChannel.off('acceptDataFromOpenerPage');
+      }
     };
-
   }, []);
+  /**
+   * @description 分享小程序给好友
+   */
+  useShareAppMessage((res) => {
+    let shareData = {
+      title: "柠檬校园",
+      path: `/pages/forum/forum`, // 分享的路径
+      // imageUrl: share_img, // 分享的图片链接
+    };
+    // if (res.from === "button") {
+    //   // 来自页面内分享按钮
+    // } else {
+    //   // 右上角分享好友
+    // }
+    return shareData;
+  });
 
   function scrollToBottom() {
     // 获取页面高度
