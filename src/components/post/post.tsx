@@ -1,6 +1,6 @@
 import { AtAvatar } from "taro-ui";
 import { View, Text, Image } from "@tarojs/components";
-// import { Button} from "@tarojs/components";
+import { previewImage } from "@tarojs/taro";
 import { AtTag } from "taro-ui";
 import { Item } from "$/pages/forum/data";
 import "./post.scss";
@@ -44,6 +44,13 @@ const PostComponent: FunctionComponent<PostComponentProps> = ({
   onReward,
   // onDelete,
 }) => {
+  // 预览图片
+  const handleShowImgPreview = (image: string) => {
+    previewImage({
+      current: image, // 当前显示图片的http链接
+      urls: post.images!, // 需要预览的图片http链接列表
+    });
+  };
   return (
     <View className="post" key={post.id}>
       {/* 头像/作者，预留位置 */}
@@ -69,6 +76,10 @@ const PostComponent: FunctionComponent<PostComponentProps> = ({
             <Image
               src={image}
               style="width: 80px;height: 80px;background: #fff;"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleShowImgPreview(image);
+              }}
             />
           )
         )}
