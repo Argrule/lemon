@@ -1,12 +1,12 @@
 @import "~taro-ui/dist/style/components/tag.scss";
 @import "~taro-ui/dist/style/components/avatar.scss";
 @import "../../app.scss";
-$forum-fontSize: 25rpx; //input,button,post-content,interaction-button
-$forum-fontSize-b: 30rpx; //content
-$forum-fontSize-author: 35rpx; //author
-// $lenmon-yellow: #ffc701;
-// $btn-color: #ffaa00;
-
+@import "~taro-ui/dist/style/components/float-layout.scss";
+@import "~taro-ui/dist/style/components/input-number.scss";
+@import "~taro-ui/dist/style/components/icon.scss";
+$forum-fontSize: 25rpx;
+$forum-fontSize-b: 30rpx;
+$forum-fontSize-author: 35rpx;
 $btn-color: $lenmon-yellow;
 
 // 论坛页面的背景色，样式污染
@@ -99,16 +99,6 @@ $btn-color: $lenmon-yellow;
       display: flex;
       align-items: center;
       gap: 10px;
-
-      // &.like-button {
-      // background-color: #fff;
-      // color: #000;
-      // }
-
-      // &.collect-button {
-      // background-color: #fff;
-      // color: #fff;
-      // }
 
       &:hover {
         opacity: 0.8;
