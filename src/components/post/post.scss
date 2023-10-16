@@ -55,7 +55,7 @@ $btn-color: $lenmon-yellow;
   }
   .post-content {
     font-size: $forum-fontSize-b;
-    padding: 0 20rpx;
+    padding: 0 20rpx 0 0;
   }
   .text-ellipsis {
     display: -webkit-box;
@@ -101,13 +101,13 @@ $btn-color: $lenmon-yellow;
       gap: 10px;
 
       // &.like-button {
-        // background-color: #fff;
-        // color: #000;
+      // background-color: #fff;
+      // color: #000;
       // }
 
       // &.collect-button {
-        // background-color: #fff;
-        // color: #fff;
+      // background-color: #fff;
+      // color: #fff;
       // }
 
       &:hover {
