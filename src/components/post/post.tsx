@@ -13,6 +13,8 @@ import dollar_sign from "../../assets/post/dollarSign.svg";
 
 interface PostComponentProps {
   post: Item;
+  showDetail?: boolean;
+  showImgNum?: number;
   onLike: (postId: number, likeStatus: boolean) => void;
   onCollect: (postId: number, collectStatus: boolean) => void;
   onDelete?: (postId: number) => void;
@@ -24,12 +26,18 @@ type FunctionComponent<P = {}> = React.FunctionComponent<P>;
 /**
  * @description 帖子组件
  * @param post 帖子
+ * @param showDetail 是否展示详情
+ * @param showImgNum 省略模式展示图片数量
  * @param onLike 点赞函数
  * @param onCollect 收藏函数
+ * @param onShowComments 展示评论函数
+ * @param onReward 打赏函数
  * @param onDelete 删除函数
  */
 const PostComponent: FunctionComponent<PostComponentProps> = ({
   post,
+  showDetail = false,
+  showImgNum = 6,
   onLike,
   onCollect,
   onShowComments,
@@ -56,12 +64,14 @@ const PostComponent: FunctionComponent<PostComponentProps> = ({
       </View>
       {/* 帖子图片 */}
       <View className="flex post-main" onClick={() => onShowComments(post)}>
-        {post.images?.map((image) => (
-          <Image
-            src={image}
-            style="width: 80px;height: 80px;background: #fff;"
-          />
-        ))}
+        {(showDetail ? post.images?.slice(0, showImgNum) : post.images)?.map(
+          (image) => (
+            <Image
+              src={image}
+              style="width: 80px;height: 80px;background: #fff;"
+            />
+          )
+        )}
       </View>
       {/* 帖子标签 */}
       <View className="post-tags post-main">
