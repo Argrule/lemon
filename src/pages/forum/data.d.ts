@@ -11,6 +11,10 @@
  * @param {number} collectStatus 收藏状态
  * @param {string} createTime 创建时间
  * @param {string[]} tagName 标签名
+ * @param {string[]} images 图片列表
+ * @param {string} nickname 昵称
+ * @param {string} avatarUrl 头像
+ * @interface Item
  */
 export interface Item {
   id: number;
