@@ -2,10 +2,15 @@ import { View, Text, Swiper, SwiperItem, Image } from "@tarojs/components";
 import { Item } from "$/pages/forum/data";
 import "./hp.scss";
 import { useEffect, useState } from "react";
-import detail_look from "../../assets/detailLook.svg";
+import { navigateTo } from "@tarojs/taro";
+import { useDispatch } from "react-redux";
+import { updatePost } from "../../store/use/post";
+import detail_look from "$/assets/detailLook.svg";
 
 export const HotPost = ({ hotPosts }) => {
   const [showPost, setShowPost] = useState<Array<Item[]>>([]);
+  // redux dispatch hook
+  const dispatch = useDispatch();
 
   useEffect(() => {
     let temp: Item[][] = [];
@@ -14,6 +19,18 @@ export const HotPost = ({ hotPosts }) => {
     }
     setShowPost(temp);
   }, [hotPosts]);
+
+  /**
+   * @description 展示评论
+   * @param postId 帖子id
+   */
+  const handleShowComments = async (postItem: Item) => {
+    // 更新redux
+    dispatch(updatePost(postItem));
+    navigateTo({
+      url: `/pages/comment/c`,
+    });
+  };
 
   return (
     <View
@@ -48,7 +65,10 @@ export const HotPost = ({ hotPosts }) => {
               style={{ borderRadius: "0 10px 10px 0" }}
               key={item[0].id}
             >
-              <View className="hp-swiper-item">
+              <View
+                className="hp-swiper-item"
+                onClick={() => handleShowComments(item[0])}
+              >
                 <Text className="hp-swiper-item-seq">{"0" + index}</Text>
                 <Text
                   style={{
@@ -63,7 +83,10 @@ export const HotPost = ({ hotPosts }) => {
                   {item[0].content?.replace(/[\n]/g, " ")}
                 </Text>
               </View>
-              <View className="hp-swiper-item">
+              <View
+                className="hp-swiper-item"
+                onClick={() => handleShowComments(item[1])}
+              >
                 <Text className="hp-swiper-item-seq">
                   {index === 9 ? "" + (index + 1) : "0" + (index + 1)}
                 </Text>
