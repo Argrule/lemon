@@ -11,7 +11,6 @@ import { InputEventDetail } from "taro-ui/types/input";
 import {
   deletePost,
   getForumList,
-  // publishPost,
   likePost,
   cancelLikePost,
   collectPost,
@@ -20,9 +19,8 @@ import {
   getHotPost,
 } from "$/api/forum";
 import { Item, State } from "./data";
-// import { AtSearchBar } from "taro-ui";
+import { AtFloatLayout } from "taro-ui"
 import { HotPost } from "$/components/hotPost/hp";
-// import { FormatTimeFromNow } from "$/utils/dayjs";
 import PostComponent from "$/components/post/post";
 import SpecialDeal from "./special";
 import NavCustomBar from "$/components/NavCustomBar/nav";
@@ -222,7 +220,42 @@ class Forum extends Component<{}, State> {
       posts: newPosts,
     });
   };
-
+  /**
+   * @description 打赏帖子
+   * @param postId 帖子id
+   */
+  handleRewardPost = async (postId: number) => {
+    // const res = await rewardPost(postId);
+    // if (res.code != "00000") {
+    //   // @ts-ignore
+    //   Taro.atMessage({
+    //     message: "打赏失败",
+    //     type: "error",
+    //     duration: 800,
+    //   });
+    //   return;
+    // }
+    // // @ts-ignore
+    // Taro.atMessage({
+    //   message: "打赏成功",
+    //   type: "success",
+    //   duration: 800,
+    // });
+    Taro.showModal({      
+      content: "打赏1",
+      success: async (res1) => {
+        if (res1.confirm) {
+          console.log("用户点击确定");         
+        } else if (res1.cancel) {
+          console.log("用户点击取消");
+        }
+      },
+    });
+  }
+  /**
+   * @description 删除帖子
+   * @param postId 帖子id   
+   */
   handleDeletePost = async (postId: number) => {
     const { posts } = this.state;
     const res = await deletePost(postId);
@@ -245,7 +278,7 @@ class Forum extends Component<{}, State> {
    * @param postId 帖子id
    */
   handleShowComments = async (postItem: Item) => {
-    // ts-ignore
+    // @ts-ignore
     this.props.updatePostStore(postItem);
 
     // redux存储当前帖子，跳转到评论页面
@@ -351,6 +384,7 @@ class Forum extends Component<{}, State> {
                   onLike={this.handleLikePost}
                   onDelete={this.handleDeletePost}
                   onCollect={this.handleCollectPost}
+                  onReward={this.handleRewardPost}
                   onShowComments={this.handleShowComments}
                 />
               )
