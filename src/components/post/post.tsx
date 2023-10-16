@@ -10,6 +10,11 @@ import lenmon_solid from "../../assets/post/lemonS.svg";
 import star_regular from "../../assets/post/starR.svg";
 import star_solid from "../../assets/post/starS.svg";
 import dollar_sign from "../../assets/post/dollarSign.svg";
+import { AtFloatLayout } from "taro-ui";
+import { AtInputNumber } from "taro-ui";
+import { useState } from "react";
+import Taro from "@tarojs/taro";
+import { rewardPost } from "$/api/forum";
 
 interface PostComponentProps {
   post: Item;
@@ -36,6 +41,55 @@ const PostComponent: FunctionComponent<PostComponentProps> = ({
   onReward,
   // onDelete,
 }) => {
+  // 打赏弹窗开关
+  const [isOpened, setIsOpened] = useState(false);
+  const [amount, setAmount] = useState(1);
+  /**
+   * @description 打赏函数
+   * @param postId 帖子id
+   * @override onReward
+   * @todo 打赏功能, 使用页面过多, 如果全靠函数传进来冗余很多
+   */
+  onReward = async () => {
+    console.log("打赏", amount, post.id);
+    //校验
+    if (amount < 1) {
+      // @ts-ignore
+      Taro.atMessage({
+        message: "打赏金额不能小于1",
+        type: "error",
+        duration: 800,
+      });
+      return;
+    }
+    //请求
+    const res = await rewardPost({ postId: post.id, amount: amount });
+    if (res.code != "00000") {
+      // @ts-ignore
+      Taro.atMessage({
+        message: "打赏失败",
+        type: "error",
+        duration: 800,
+      });
+      return;
+    }
+    // @ts-ignore
+    Taro.atMessage({
+      message: "打赏成功",
+      type: "success",
+      duration: 800,
+    });
+  };
+  // 打赏弹窗开
+  const handleOpen = () => {
+    setIsOpened(true);
+    console.log("打开");
+  };
+  // 打赏弹窗关
+  const handleClose = () => {
+    setIsOpened(false);
+    console.log("关闭");
+  };
   return (
     <View className="post" key={post.id}>
       {/* 头像/作者，预留位置 */}
@@ -71,6 +125,45 @@ const PostComponent: FunctionComponent<PostComponentProps> = ({
           </AtTag>
         ))}
       </View>
+      {/* 打赏操作浮动弹层，每个都加弹层会多很多不必要的dom */}
+      <AtFloatLayout
+        isOpened={isOpened}
+        // title="这是个标题"
+        onClose={handleClose}
+      >
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-around",
+            alignItems: "center",
+            gap: "4em",
+          }}
+        >
+          <View>打赏金额</View>
+          <AtInputNumber
+            type="digit"
+            min={0}
+            max={100}
+            step={1}
+            value={amount}
+            onChange={setAmount}
+          />
+          <View
+            onClick={onReward as () => void}
+            style={{
+              lineHeight: "2em",
+              backgroundColor: "#fe3666",
+              color: "#fff",
+              textAlign: "center",
+              width: "30%",
+              borderRadius: "1em",
+            }}
+          >
+            打赏
+          </View>
+        </View>
+      </AtFloatLayout>
       {/* 交互按钮 */}
       <View className="interaction-buttons">
         <Text className="post-time post-main">
@@ -118,7 +211,7 @@ const PostComponent: FunctionComponent<PostComponentProps> = ({
         </View>
         <View
           className="interaction-button collect-button"
-          onClick={() => onReward!(post.id)}
+          onClick={handleOpen}
         >
           <Image
             src={dollar_sign}
