@@ -381,6 +381,7 @@ class Forum extends Component<{}, State> {
                 // {/* 帖子 */}
                 <PostComponent
                   post={post}
+                  showDetail={true}
                   onLike={this.handleLikePost}
                   onDelete={this.handleDeletePost}
                   onCollect={this.handleCollectPost}
