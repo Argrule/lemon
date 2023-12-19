@@ -14,12 +14,13 @@ export const HotPost = ({ hotPosts }) => {
 
   useEffect(() => {
     const temp: Item[][] = [];
-    const len = hotPosts.length;
+    const PostList = [...hotPosts];
+    const len = PostList.length;
     if (len & 1) {
-      hotPosts.push(false);// 奇数个，补一个false
+      PostList.push(false); // 奇数个，补一个false
     }
     for (let i = 0; i < len; i += 2) {
-      temp.push([hotPosts[i], hotPosts[i + 1]]);
+      temp.push([PostList[i], PostList[i + 1]]);
     }
     setShowPost(temp);
   }, [hotPosts]);
@@ -87,7 +88,7 @@ export const HotPost = ({ hotPosts }) => {
                   {item[0].content?.replace(/[\n]/g, " ")}
                 </Text>
               </View>
-              {item[1] && (
+              {item[1] ? (
                 <View
                   className="hp-swiper-item"
                   onClick={() => handleShowComments(item[1])}
@@ -108,6 +109,8 @@ export const HotPost = ({ hotPosts }) => {
                     {item[1].content?.replace(/[\n]/g, " ")}
                   </Text>
                 </View>
+              ) : (
+                <View className="hp-swiper-item" />
               )}
             </SwiperItem>
           );
