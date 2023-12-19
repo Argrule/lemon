@@ -11,6 +11,7 @@ import { Tag } from "../forum/data";
 import "./sp.scss";
 import { File } from "taro-ui/types/image-picker";
 import NavCustomBar from "$/components/NavCustomBar/nav";
+import canSend from "./canSend";
 
 function CommentInput() {
   const [postId, setPostId] = useState<number>(0);
@@ -221,7 +222,7 @@ function CommentInput() {
         </Text>
         ，如有违规会被删帖、禁言乃至封号
       </View>
-      <Button className="newpost-publish-button" onClick={handlePublish}>
+      <Button className="newpost-publish-button" disabled={canSend()} onClick={handlePublish}>
         发布
       </Button>
     </>
