@@ -289,7 +289,7 @@ export default function Gather() {
         </View>
       </View>
       {/* <View className='imgContainer'> */}
-        <Image src={require('../../assets/简洁.png')} style={{ width: '95vw', height: '14vh' }}/>
+        <Image src={require('../../assets/gameChannel.png')} style={{ width: '95vw', height: '14vh' }}/>
       {/* </View> */}
       <View className='joinAndInitiate'>
         <AtButton className='join-button' type='primary' circle onClick={goJoinedGather}>

@@ -19,7 +19,6 @@ import {
   getHotPost,
 } from "$/api/forum";
 import { Item, State } from "./data";
-import { AtFloatLayout } from "taro-ui"
 import { HotPost } from "$/components/hotPost/hp";
 import PostComponent from "$/components/post/post";
 import SpecialDeal from "./special";
@@ -34,11 +33,11 @@ import { updatePost } from "../../store/use/post";
  */
 // @ts-ignore
 @connect(
-  ({postInfo}:{postInfo:Item}) => ({
-  postInfo 
+  ({ postInfo }: { postInfo: Item }) => ({
+    postInfo,
   }),
   (dispatch) => ({
-    updatePostStore(postInfo:Item) {
+    updatePostStore(postInfo: Item) {
       dispatch(updatePost(postInfo));
     },
   })
@@ -59,7 +58,9 @@ class Forum extends Component<{}, State> {
   async componentDidShow() {
     // console.log("forum did show", this.props.postInfo,this.props.updatePostStore);
     getHotPost().then((res) => {
-      this.setState({ hotPosts: res.data.list.slice(0, 10) });
+      if (res.data.list.length >= 10)
+        this.setState({ hotPosts: res.data.list.slice(0, 10) });
+      else this.setState({ hotPosts: res.data.list });
     });
     this.pageNum = 1; // 重置页码
     const res = (await getForumList({
@@ -224,37 +225,10 @@ class Forum extends Component<{}, State> {
    * @description 打赏帖子
    * @param postId 帖子id
    */
-  handleRewardPost = async (postId: number) => {
-    // const res = await rewardPost(postId);
-    // if (res.code != "00000") {
-    //   // @ts-ignore
-    //   Taro.atMessage({
-    //     message: "打赏失败",
-    //     type: "error",
-    //     duration: 800,
-    //   });
-    //   return;
-    // }
-    // // @ts-ignore
-    // Taro.atMessage({
-    //   message: "打赏成功",
-    //   type: "success",
-    //   duration: 800,
-    // });
-    Taro.showModal({      
-      content: "打赏1",
-      success: async (res1) => {
-        if (res1.confirm) {
-          console.log("用户点击确定");         
-        } else if (res1.cancel) {
-          console.log("用户点击取消");
-        }
-      },
-    });
-  }
+  handleRewardPost = async (postId: number) => {};
   /**
    * @description 删除帖子
-   * @param postId 帖子id   
+   * @param postId 帖子id
    */
   handleDeletePost = async (postId: number) => {
     const { posts } = this.state;
