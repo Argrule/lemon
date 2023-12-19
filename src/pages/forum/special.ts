@@ -15,8 +15,8 @@ export default function SpecialDeal(post: Item): boolean {
     return true;
   }
   // 为了过审核，所以前两天不显示
-  if (new Date().getTime() < new Date(post.createTime).getTime() + delay) {
-    return true;
-  }
+  // if (new Date().getTime() < new Date(post.createTime).getTime() + delay) {
+  //   return true;
+  // }
   return false;
 }
