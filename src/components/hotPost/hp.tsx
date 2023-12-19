@@ -13,8 +13,12 @@ export const HotPost = ({ hotPosts }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    let temp: Item[][] = [];
-    for (let i = 0; i < hotPosts.length; i += 2) {
+    const temp: Item[][] = [];
+    const len = hotPosts.length;
+    if (len & 1) {
+      hotPosts.push(false);// 奇数个，补一个false
+    }
+    for (let i = 0; i < len; i += 2) {
       temp.push([hotPosts[i], hotPosts[i + 1]]);
     }
     setShowPost(temp);
@@ -83,26 +87,28 @@ export const HotPost = ({ hotPosts }) => {
                   {item[0].content?.replace(/[\n]/g, " ")}
                 </Text>
               </View>
-              <View
-                className="hp-swiper-item"
-                onClick={() => handleShowComments(item[1])}
-              >
-                <Text className="hp-swiper-item-seq">
-                  {index === 9 ? "" + (index + 1) : "0" + (index + 1)}
-                </Text>
-                <Text
-                  style={{
-                    display: "inline-block",
-                    overflow: "hidden",
-                    width: "90%",
-                    verticalAlign: "middle",
-                    textOverflow: "ellipsis",
-                    whiteSpace: "nowrap",
-                  }}
+              {item[1] && (
+                <View
+                  className="hp-swiper-item"
+                  onClick={() => handleShowComments(item[1])}
                 >
-                  {item[1].content?.replace(/[\n]/g, " ")}
-                </Text>
-              </View>
+                  <Text className="hp-swiper-item-seq">
+                    {index === 9 ? "" + (index + 1) : "0" + (index + 1)}
+                  </Text>
+                  <Text
+                    style={{
+                      display: "inline-block",
+                      overflow: "hidden",
+                      width: "90%",
+                      verticalAlign: "middle",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {item[1].content?.replace(/[\n]/g, " ")}
+                  </Text>
+                </View>
+              )}
             </SwiperItem>
           );
         })}
