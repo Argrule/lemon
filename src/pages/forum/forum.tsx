@@ -69,28 +69,28 @@ class Forum extends Component<{}, State> {
     })) as { list: Item[] };
 
     // 保存当前帖子列表的第一个帖子id，用于判断页面是否刷新
-    const cur_id = Taro.getStorageSync("current_posts_first_id");
-    Taro.setStorage({ key: "current_posts_first_id", data: res.list[0].id });
+    // const cur_id = Taro.getStorageSync("current_posts_first_id");
+    // Taro.setStorage({ key: "current_posts_first_id", data: res.list[0].id });
 
-    const cur_time = Taro.getStorageSync("current_posts_first_time");
-    if (
-      cur_time === undefined ||
-      new Date().getTime() - Number(cur_time) > 3000
-    ) {
-      Taro.setStorage({ key: "current_posts_first_id", data: 0 });
-      Taro.setStorage({
-        key: "current_posts_first_time",
-        data: new Date().getTime() + 3000,
-      });
-    }
+    // const cur_time = Taro.getStorageSync("current_posts_first_time");
+    // if (
+    //   cur_time === undefined ||
+    //   new Date().getTime() - Number(cur_time) > 3000
+    // ) {
+    //   Taro.setStorage({ key: "current_posts_first_id", data: 0 });
+    //   Taro.setStorage({
+    //     key: "current_posts_first_time",
+    //     data: new Date().getTime() + 3000,
+    //   });
+    // }
 
-    if (res.list[0].id !== cur_id) {
+    // if (res.list[0].id !== cur_id) {
       // 出于渲染滞后的问题，可能这个生命周期有坑
-      setTimeout(() => {
+      // setTimeout(() => {
         // console.log("刷新了",this);
         this.setState({ posts: res.list });
-      }, 0);
-    }
+      // }, 0);
+    // }
   }
 
   /**
