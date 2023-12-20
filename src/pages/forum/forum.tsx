@@ -85,11 +85,11 @@ class Forum extends Component<{}, State> {
     // }
 
     // if (res.list[0].id !== cur_id) {
-      // 出于渲染滞后的问题，可能这个生命周期有坑
-      // setTimeout(() => {
-        // console.log("刷新了",this);
-        this.setState({ posts: res.list });
-      // }, 0);
+    // 出于渲染滞后的问题，可能这个生命周期有坑
+    // setTimeout(() => {
+    // console.log("刷新了",this);
+    this.setState({ posts: res.list });
+    // }, 0);
     // }
   }
 
@@ -99,10 +99,12 @@ class Forum extends Component<{}, State> {
   async onReachBottom() {
     this.pageNum++;
     const { posts } = this.state;
+    Taro.showLoading();
     const res = (await getForumList({
       pageNum: this.pageNum,
       pageSize: this.pageSize,
     })) as { list: Item[] };
+    Taro.hideLoading();
     if (res.list.length === 0) {
       // @ts-ignore
       Taro.atMessage({
@@ -114,6 +116,25 @@ class Forum extends Component<{}, State> {
       return;
     }
     this.setState({ posts: [...posts, ...res.list] });
+  }
+  /**
+   * @description 触顶刷新，因为下拉刷新需要nav bar,但是这里nav bar是自定义的，用不了
+   */
+  timer = null;
+  onPageScroll(e: { scrollTop: number }) {
+    if (this.timer) clearTimeout(this.timer);
+    this.timer = setTimeout(async () => {      
+      if (e.scrollTop === 0) {
+        Taro.showLoading();
+        this.pageNum = 1; // 重置页码
+        const res = (await getForumList({
+          pageNum: this.pageNum,
+          pageSize: this.pageSize,
+        })) as { list: Item[] };
+        this.setState({ posts: res.list });
+        Taro.hideLoading();
+      }
+    }, 100) as any;
   }
   /**
    * @description 输入框内容变化
