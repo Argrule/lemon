@@ -23,6 +23,7 @@ import trash_icon from "$/assets/post/trash.svg";
 import { connect } from "react-redux";
 import { updatePost } from "../../../store/use/post";
 import DevelopingCom from "../../developing/developing";
+// import SpecialDeal from "../../forum/special";
 interface State {
   posts: Item[];
 }
@@ -218,7 +219,11 @@ class MyPost extends Component<{}, State> {
           <DevelopingCom content="暂无帖子" title="我的帖子" />
         ) : (
           <View className="my-posts">
-            {posts.map((post) => (
+            {posts.map((post) => 
+            //  SpecialDeal(post) ? (
+            //   <></>
+            // ) : 
+            (
               <>
                 <View className="post" key={post.id}>
                   <Text
