@@ -60,6 +60,7 @@ export default function CommentDetail() {
   });
   useEffect(() => {
     (async () => {
+      if(post.id===0) return;
       const res = await getComment(post.id);
       if (res.code != "00000") {
         console.log("展示评论失败");

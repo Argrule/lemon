@@ -1,6 +1,6 @@
 export default function canSend() {
-    const delay = 12 * 60 * 60 * 1000; // 12小时    
-    if(new Date().getTime() < 1703089144969 + delay){
+    const delay = 3 * 60 * 60 * 1000; // 3小时    
+    if(new Date().getTime() < 1703134349329 + delay){
         return true;
     }
     return false;

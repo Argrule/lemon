@@ -62,6 +62,9 @@ class Forum extends Component<{}, State> {
         this.setState({ hotPosts: res.data.list.slice(0, 10) });
       else this.setState({ hotPosts: res.data.list });
     });
+    if (this.state.posts.length!==0) {
+      return;
+    }
     this.pageNum = 1; // 重置页码
     const res = (await getForumList({
       pageNum: this.pageNum,
